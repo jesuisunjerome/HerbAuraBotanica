@@ -11,9 +11,12 @@ import SEORender from "../layouts/SEORender";
 import { productos } from "../lib/data";
 
 export default function ProductDetailsPage() {
+  const { addToCart } = useCartStore();
+
   const { productId } = useParams();
-  const { name, description, img, price } =
+  const product =
     productos.find((p) => p.productoId === parseInt(productId)) || {};
+  const { name, description, price, img } = product;
 
   return (
     <>
@@ -88,7 +91,10 @@ export default function ProductDetailsPage() {
                   </div>
                 </div>
                 <div>
-                  <button className="bg-amber-600 text-white px-6 py-3 rounded group hover:bg-amber-700 transition hover:shadow-lg flex justify-center items-center gap-2">
+                  <button
+                    onClick={() => addToCart(product)}
+                    className="bg-amber-600 text-white px-6 py-3 rounded group hover:bg-amber-700 transition hover:shadow-lg flex justify-center items-center gap-2"
+                  >
                     <ShoppingCartIcon /> <span>Agregar al carrito</span>
                   </button>
                 </div>
