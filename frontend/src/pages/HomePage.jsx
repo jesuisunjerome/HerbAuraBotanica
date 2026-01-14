@@ -327,14 +327,6 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* <div
-          className="absolute -top-1 left-0 z-10 w-full h-5 rotate-180"
-          style={{
-            background: "url(/images/vector.png)",
-            backgroundRepeat: "repeat",
-            backgroundSize: "cover",
-          }}
-        /> */}
         <img
           loading="lazy"
           src="/images/vector.png"
