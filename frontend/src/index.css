@@ -1,0 +1,61 @@
+@import "./globals.css";
+
+body,
+header.sticky {
+  background-color: #fdfcfb;
+  /* background-color: #f9f8f4; */
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Playfair Display", serif;
+  font-family: "Lora", serif;
+  line-height: 1.4;
+}
+
+.navbar a {
+  display: inline-block;
+}
+
+button {
+  transition: all 0.2s ease-in-out;
+}
+
+button:not(:disabled):hover {
+  cursor: pointer;
+}
+
+footer {
+  background-color: var(--color-brown);
+  color: var(--color-beige);
+}
+
+.embla {
+  position: relative;
+  overflow: hidden;
+}
+
+.embla__container {
+  display: flex;
+}
+
+.embla__slide {
+  flex: 0 0 45%;
+  min-width: 0;
+}
+
+@media (min-width: 992px) {
+  .embla__slide {
+    flex: 0 0 16.66%;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .embla__slide {
+    flex: 0 0 30%;
+  }
+}
