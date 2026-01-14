@@ -169,23 +169,23 @@ export default function HomePage() {
               <button
                 title="Agregar al carrito"
                 onClick={() => handleAddToCart(item)}
-                className="absolute group-hover:top-2 group-focus:top-2 -top-100 right-2 p-2 size-10 flex items-center justify-center rounded-xl bg-white/60 hover:shadow-lg backdrop-blur-sm"
+                className="absolute group-hover:top-2 top-2 lg:-top-100 right-2 p-2 size-10 flex items-center justify-center rounded-xl bg-white/60 hover:shadow-lg backdrop-blur-sm"
               >
                 <ShoppingCartIcon className="w-5 h-5" />
               </button>
               <Link
                 title="Ver detalles"
                 to={`/products/${item.productoId}`}
-                className="flex items-center group focus:-translate-y-0.5 hover:-translate-y-0.5 transition-all absolute left-1/2 transform -translate-x-1/2 w-[95%] rounded-xl overflow-hidden bottom-1 p-3 bg-white/60 backdrop-blur-sm"
+                className="flex items-center group hover:-translate-y-0.5 transition-all absolute left-1/2 transform -translate-x-1/2 w-[95%] rounded-xl overflow-hidden bottom-1 p-3 bg-white/60 backdrop-blur-sm"
               >
                 <span className="flex gap-1 flex-1 flex-col">
-                  <span className="block group-hover:hidden transition-all">
+                  <span className="hidden lg:block group-hover:hidden transition-all">
                     {item.name}
                   </span>
-                  <span className="hidden group-hover:block text-xl font-bold">
+                  <span className="block lg:hidden group-hover:block text-xl font-bold">
                     ${item.price}
                   </span>
-                  <small className="hidden group-hover:block">
+                  <small className="block lg:hidden group-hover:block">
                     {item.name}
                   </small>
                 </span>

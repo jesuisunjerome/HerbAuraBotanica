@@ -41,7 +41,7 @@ export default function Navbar() {
             <CartLink />
           </li>
         </ul>
-        <div className="flex items-center gap-3 lg:hidden">
+        <div className="flex items-center gap-3 md:hidden">
           <CartLink />
         </div>
       </nav>
