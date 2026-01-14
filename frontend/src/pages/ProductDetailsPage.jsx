@@ -88,7 +88,7 @@ export default function ProductDetailsPage() {
                   </div>
                 </div>
                 <div>
-                  <button className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg flex justify-center items-center gap-2">
+                  <button className="bg-amber-600 text-white px-6 py-3 rounded group hover:bg-amber-700 transition hover:shadow-lg flex justify-center items-center gap-2">
                     <ShoppingCartIcon /> <span>Agregar al carrito</span>
                   </button>
                 </div>

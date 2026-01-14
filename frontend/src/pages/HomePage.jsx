@@ -108,7 +108,7 @@ export default function HomePage() {
             <img
               loading="lazy"
               src="/images/vector-1.png"
-              className="absolute bottom-0 left-0 h-8 w-full"
+              className="absolute bottom-0 left-0 h-8 w-full pointer-events-none"
               alt=""
             />
           </div>
@@ -120,18 +120,18 @@ export default function HomePage() {
         <img
           loading="lazy"
           src="/images/vector.png"
-          className="absolute -top-4 left-0 h-8 w-full rotate-180"
+          className="absolute -top-4 left-0 h-8 w-full rotate-180 pointer-events-none"
           alt=""
         />
         <div
-          className="absolute -top-8 left-0 z-10 w-full h-8"
+          className="absolute -top-8 left-0 z-10 w-full h-8 pointer-events-none"
           style={{
             background: "url(/images/vector.png)",
             backgroundRepeat: "repeat",
             backgroundSize: "cover",
           }}
         />
-        <div className="flex gap-3 mb-15">
+        <div className="flex gap-3 mb-10">
           <div className="max-w-2xl">
             <h1 className="text-3xl lg:text-5xl">
               Nature's touch for{" "}
@@ -169,14 +169,14 @@ export default function HomePage() {
               <button
                 title="Agregar al carrito"
                 onClick={() => handleAddToCart(item)}
-                className="absolute group-hover:top-2 -top-100 right-2 p-2 size-10 flex items-center justify-center rounded-xl bg-white/60 hover:shadow-lg backdrop-blur-sm"
+                className="absolute group-hover:top-2 group-focus:top-2 -top-100 right-2 p-2 size-10 flex items-center justify-center rounded-xl bg-white/60 hover:shadow-lg backdrop-blur-sm"
               >
                 <ShoppingCartIcon className="w-5 h-5" />
               </button>
               <Link
                 title="Ver detalles"
                 to={`/products/${item.productoId}`}
-                className="flex items-center group hover:-translate-y-0.5 transition-all absolute left-1/2 transform -translate-x-1/2 w-[95%] rounded-xl overflow-hidden bottom-1 p-3 bg-white/60 backdrop-blur-sm"
+                className="flex items-center group focus:-translate-y-0.5 hover:-translate-y-0.5 transition-all absolute left-1/2 transform -translate-x-1/2 w-[95%] rounded-xl overflow-hidden bottom-1 p-3 bg-white/60 backdrop-blur-sm"
               >
                 <span className="flex gap-1 flex-1 flex-col">
                   <span className="block group-hover:hidden transition-all">
@@ -330,7 +330,7 @@ export default function HomePage() {
         <img
           loading="lazy"
           src="/images/vector.png"
-          className="absolute -top-4 left-0 h-8 w-full rotate-180"
+          className="absolute -top-4 left-0 h-8 w-full rotate-180 pointer-events-none"
           alt=""
         />
       </section>
@@ -340,7 +340,7 @@ export default function HomePage() {
         <img
           loading="lazy"
           src="/images/vector.png"
-          className="absolute -top-4 left-0 h-8 w-full rotate-180"
+          className="absolute -top-4 left-0 h-8 w-full rotate-180 pointer-events-none"
           alt=""
         />
 
@@ -384,7 +384,7 @@ export default function HomePage() {
         <img
           loading="lazy"
           src="/images/vector.png"
-          className="absolute -bottom-4 left-0 h-8 w-full rotate-180"
+          className="absolute -bottom-4 left-0 h-8 w-full rotate-180 z-10 pointer-events-none"
           alt=""
         />
       </section>

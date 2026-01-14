@@ -107,15 +107,15 @@ export default function CatalogPage() {
               <span className="absolute -bottom-1 left-0 w-full h-2 bg-amber-200 rounded-lg animate-pulse"></span>
             </span>
           </h1>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap sm:flex-nowrap items-center gap-4 w-full sm:w-auto">
             <p className="hidden lg:flex items-center gap-2">
               Filtros: <SlidersHorizontalIcon />{" "}
             </p>
-            <div className="relative">
+            <div className="relative w-full">
               <input
                 type="text"
                 placeholder="Buscar productos..."
-                className="border border-gray-300 rounded-md p-2"
+                className="border border-gray-300 rounded-md p-2 w-full"
                 value={searchTerm}
                 onChange={handleSearchChange}
               />
@@ -132,7 +132,7 @@ export default function CatalogPage() {
               )}
             </div>
             <select
-              className="border border-gray-300 rounded-md p-2 h-11"
+              className="border border-gray-300 rounded-md p-2 h-11 w-full"
               value={sortOption}
               onChange={handleSortChange}
             >
@@ -242,8 +242,8 @@ export default function CatalogPage() {
           </div>
         </div>
 
-        <div className="max-w-lg py-20 mx-auto text-center">
-          <h3 className="text-2xl font-semibold mb-1">
+        <div className="max-w-lg pt-30 pb-20 mx-auto text-center">
+          <h3 className="text-3xl font-semibold mb-1">
             ¡Suscríbete a nuestro boletín para las últimas actualizaciones y
             ofertas!
           </h3>
@@ -276,7 +276,7 @@ export default function CatalogPage() {
         <img
           loading="lazy"
           src="/images/vector.png"
-          className="absolute -bottom-4 left-0 h-8 w-full z-10"
+          className="absolute -bottom-4 left-0 h-8 w-full z-10 pointer-events-none"
           alt=""
         />
       </section>
