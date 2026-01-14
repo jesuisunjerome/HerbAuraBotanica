@@ -1,18 +1,42 @@
 import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
 
-export const useCartStore = create((set, get) => ({
-  items: [],
-  addItem: (item) => {
-    const exists = get().items.find((i) => i.productId === item.productId);
-    if (exists) return;
+export const useCartStore = create(
+  persist(
+    (set, get) => ({
+      cart: [],
 
-    set((state) => ({
-      items: [...state.items, { ...item, quantity: 1 }],
-    }));
-  },
-  removeItem: (itemId) =>
-    set((state) => ({
-      items: state.items.filter((item) => item.productId !== itemId),
-    })),
-  clearCart: () => set({ items: [] }),
-}));
+      addToCart: (product) => {
+        const exists = get().cart.find(
+          (p) => p.productId === product.productId,
+        );
+        if (exists) {
+          set((state) => ({
+            cart: state.cart.map((p) =>
+              p.productId === product.productId
+                ? { ...p, quantity: p.quantity + 1 }
+                : p,
+            ),
+          }));
+
+          return;
+        }
+
+        set((state) => ({
+          cart: [...state.cart, { ...product, quantity: 1 }],
+        }));
+      },
+
+      removeFromCart: (productId) =>
+        set((state) => ({
+          cart: state.cart.filter((p) => p.productId !== productId),
+        })),
+
+      clearCart: () => set({ cart: [] }),
+    }),
+    {
+      name: "cart-herbaura",
+      storage: createJSONStorage(() => localStorage),
+    },
+  ),
+);

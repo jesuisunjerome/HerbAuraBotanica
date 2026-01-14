@@ -50,19 +50,20 @@ export default function Navbar() {
 }
 
 function CartLink() {
-  const { items } = useCartStore();
+  const { cart } = useCartStore();
+  const quantity = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <NavLink
-      className="text-amber-600 relative bg-amber-50"
+      className="text-amber-600 relative"
       to="/cart"
       title="Carrito de Compras"
     >
       <span className="sr-only">Carrito de Compras</span>
       <ShoppingCartIcon className="w-6 h-6" />
-      {items.length > 0 && (
+      {cart.length > 0 && (
         <span className="absolute -top-3 -right-3 bg-amber-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
-          {items.length}
+          {quantity}
         </span>
       )}
     </NavLink>

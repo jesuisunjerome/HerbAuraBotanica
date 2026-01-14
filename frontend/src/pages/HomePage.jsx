@@ -16,7 +16,7 @@ import { featuredProducts, galleryImages, productos } from "../lib/data";
 import { useCartStore } from "../store/useCartStore";
 
 export default function HomePage() {
-  const { addItem } = useCartStore();
+  const { addToCart } = useCartStore();
 
   const sliderRef = useRef(null);
   const [emblaRef] = useEmblaCarousel(
@@ -33,7 +33,7 @@ export default function HomePage() {
   };
 
   const handleAddToCart = (product) => {
-    addItem(product);
+    addToCart(product);
   };
 
   return (
@@ -164,7 +164,7 @@ export default function HomePage() {
                 loading="lazy"
                 src={item.img}
                 className="w-full h-80 bg-gray-200 object-contain group-hover:scale-90 transition-transform delay-100 duration-1000"
-                alt={item.title}
+                alt={item.name}
               />
               <button
                 title="Agregar al carrito"
@@ -175,18 +175,18 @@ export default function HomePage() {
               </button>
               <Link
                 title="Ver detalles"
-                to={`/productos/${item.productoId}`}
+                to={`/products/${item.productoId}`}
                 className="flex items-center group hover:-translate-y-0.5 transition-all absolute left-1/2 transform -translate-x-1/2 w-[95%] rounded-xl overflow-hidden bottom-1 p-3 bg-white/60 backdrop-blur-sm"
               >
                 <span className="flex gap-1 flex-1 flex-col">
                   <span className="block group-hover:hidden transition-all">
-                    {item.title}
+                    {item.name}
                   </span>
                   <span className="hidden group-hover:block text-xl font-bold">
                     ${item.price}
                   </span>
                   <small className="hidden group-hover:block">
-                    {item.title}
+                    {item.name}
                   </small>
                 </span>
                 <span className="block text-end p-2 h-10 w-10 rounded-full transition-all group-hover:translate-x-2">
@@ -218,7 +218,7 @@ export default function HomePage() {
               >
                 <div className="flex flex-col gap-2">
                   <p className="text-lg text-amber-600 font-medium">
-                    ✨ {product.title}
+                    ✨ {product.name}
                   </p>
                   <h2 className="text-4xl">{product.description}</h2>
                   <div className="mt-auto">
@@ -236,7 +236,7 @@ export default function HomePage() {
                     loading="lazy"
                     src={product.img}
                     className="h-140 object-cover w-full lg:w-[90%] rounded-2xl bg-gray-200"
-                    alt={product.title}
+                    alt={product.name}
                   />
                 </div>
               </div>
@@ -297,7 +297,7 @@ export default function HomePage() {
                   <button
                     title="Agregar al carrito"
                     onClick={() =>
-                      addItem({
+                      addToCart({
                         productId: 1,
                         name: "Shampoo Natural de Aloe Vera y Jengibre",
                         price: 12.99,

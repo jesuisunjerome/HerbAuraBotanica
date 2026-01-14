@@ -2,7 +2,7 @@ import SEORender from "../layouts/SEORender";
 import { useCartStore } from "../store/useCartStore";
 
 export default function CartPage() {
-  const { items, addItem, removeItem, clearCart } = useCartStore();
+  const { cart, addToCart, removeFromCart, clearCart } = useCartStore();
 
   return (
     <>

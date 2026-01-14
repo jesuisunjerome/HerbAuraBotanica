@@ -21,7 +21,7 @@ export default function CatalogPage() {
   const filteredProducts = productos
     .filter(
       (product) =>
-        product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         product.price?.toString().includes(searchTerm) ||
         product.description?.toLowerCase().includes(searchTerm.toLowerCase()),
     )
@@ -36,9 +36,9 @@ export default function CatalogPage() {
       return 0;
     });
 
-  const { addItem } = useCartStore();
+  const { addToCart } = useCartStore();
   const handleAddToCart = (product) => {
-    addItem(product);
+    addToCart(product);
   };
 
   const updateSearchParams = (key, value) => {
@@ -93,7 +93,7 @@ export default function CatalogPage() {
         </div>
       </header>
 
-      <section className="py-20 px-3 lg:px-20 md:px-5 bg-white relative">
+      <section className="py-20 lg:px-20 px-3 md:px-5 bg-white relative">
         <div className="flex flex-wrap justify-between gap-8 mb-15">
           <h1 className="text-3xl lg:text-5xl">
             🍃Catálogo de{" "}
@@ -150,7 +150,7 @@ export default function CatalogPage() {
               <img
                 src="/images/no-data.png"
                 className="h-60 bg-gray-200"
-                alt="No results found"
+                alt="Sin resultados"
               />
               <p className="text-xl text-gray-500">
                 Intenta con otros términos o elimina los filtros.
@@ -159,14 +159,14 @@ export default function CatalogPage() {
           )}
           {filteredProducts.map((item) => (
             <div
-              key={item.id}
+              key={item.productoId}
               className="rounded-2xl overflow-hidden group relative bg-gray-200 p-3 hover:scale-105 transition-transform duration-400"
             >
               <img
                 loading="lazy"
                 src={item.img}
                 className="w-full h-80 bg-gray-200 object-contain group-hover:scale-90 transition-transform delay-100 duration-1000"
-                alt={item.title}
+                alt={item.name}
               />
               <button
                 title="Agregar al carrito"
@@ -177,7 +177,7 @@ export default function CatalogPage() {
               </button>
               <Link
                 title="Ver detalles"
-                to={`/productos/${item.productoId}`}
+                to={`/products/${item.productoId}`}
                 className="flex items-center group -translate-y-0.5 transition-all absolute left-1/2 transform -translate-x-1/2 w-[95%] rounded-xl overflow-hidden bottom-1 p-3 bg-white/60 backdrop-blur-sm"
               >
                 <span className="flex gap-1 flex-1 flex-col">
@@ -185,7 +185,7 @@ export default function CatalogPage() {
                   <small className="block">
                     {searchTerm ? (
                       <>
-                        {item.title
+                        {item.name
                           .split(new RegExp(`(${searchTerm})`, "gi"))
                           .map((part, index) =>
                             part.toLowerCase() === searchTerm.toLowerCase() ? (
@@ -198,7 +198,7 @@ export default function CatalogPage() {
                           )}
                       </>
                     ) : (
-                      <>{item.title}</>
+                      <>{item.name}</>
                     )}
                   </small>
                 </span>
@@ -211,18 +211,11 @@ export default function CatalogPage() {
         </div>
 
         {filteredProducts.length > 0 && <Pagination />}
-
-        <img
-          loading="lazy"
-          src="/images/vector.png"
-          className="absolute -bottom-4 left-0 h-8 w-full rotate-180 z-10"
-          alt=""
-        />
       </section>
 
-      <section className="py-20 px-3 lg:px-20 md:px-5">
+      <section className="px-3 py-20 lg:px-20 md:px-5 relative">
         <div
-          className="bg-amber-100 rounded-xl flex flex-col lg:flex-row items-center justify-between gap-6 overflow-hidden"
+          className="rounded-xl flex flex-col lg:flex-row items-center justify-between gap-6 overflow-hidden"
           style={{
             background: "url(/images/6.png) no-repeat center center",
             backgroundSize: "cover",
@@ -248,6 +241,44 @@ export default function CatalogPage() {
             </div>
           </div>
         </div>
+
+        <div className="max-w-lg py-20 mx-auto text-center">
+          <h3 className="text-2xl font-semibold mb-1">
+            ¡Suscríbete a nuestro boletín para las últimas actualizaciones y
+            ofertas!
+          </h3>
+          <p className="text-gray-500">
+            Únete a nuestra comunidad y sé el primero en conocer nuevos
+            productos y ofertas exclusivas.
+          </p>
+
+          <form className="mt-4 mb-2 flex gap-2">
+            <input
+              type="email"
+              placeholder="Ingresa tu correo electrónico"
+              className="flex-1 border border-gray-300 rounded-md p-2"
+            />
+            <button className="bg-amber-500 text-white px-4 py-2 rounded-md hover:bg-amber-600">
+              Suscribirse
+            </button>
+          </form>
+
+          <small>
+            Respetamos tu privacidad. Desuscríbete en cualquier momento. Lee
+            nuestra{" "}
+            <Link className="text-amber-600" to="/privacy-policy">
+              Política de Privacidad
+            </Link>
+            .
+          </small>
+        </div>
+
+        <img
+          loading="lazy"
+          src="/images/vector.png"
+          className="absolute -bottom-4 left-0 h-8 w-full z-10"
+          alt=""
+        />
       </section>
     </>
   );
