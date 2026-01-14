@@ -46,7 +46,7 @@ export default function HomePage() {
         <div className="flex flex-col items-center lg:items-start justify-center py-10 lg:py-0">
           <div className="max-w-xl">
             <h1 className="text-4xl lg:text-5xl mb-6">
-              🍃 Cuidado Natural del Cabello con{" "}
+              🍃 Cuidado natural del cabello con{" "}
               <span className="text-amber-600 relative">
                 HerbAura
                 <span className="absolute -bottom-1 left-0 w-full h-2 bg-amber-200 rounded-lg animate-pulse"></span>
@@ -133,15 +133,25 @@ export default function HomePage() {
         />
         <div className="flex gap-3 mb-10">
           <div className="max-w-2xl">
-            <h1 className="text-3xl lg:text-5xl">
-              Nature's touch for{" "}
+            <h1 className="text-3xl lg:text-4xl">
+              El toque de la{" "}
               <span
                 className="text-amber-600 relative"
                 style={{
                   fontFamily: "Playfair Display, serif",
                 }}
               >
-                Healthy
+                naturaleza
+                <span className="absolute -bottom-1 left-0 w-full h-2 bg-amber-200 rounded-lg animate-pulse"></span>
+              </span>{" "}
+              para{" "}
+              <span
+                className="text-amber-600 relative"
+                style={{
+                  fontFamily: "Playfair Display, serif",
+                }}
+              >
+                cabello
                 <span className="absolute -bottom-1 left-0 w-full h-2 bg-amber-200 rounded-lg animate-pulse"></span>
               </span>{" "}
               <span
@@ -150,11 +160,27 @@ export default function HomePage() {
                   fontFamily: "Playfair Display, serif",
                 }}
               >
-                Beautiful
+                saludable
                 <span className="absolute -bottom-1 left-0 w-full h-2 bg-amber-200 rounded-lg animate-pulse"></span>
               </span>{" "}
-              Hair 🌙
+              y{" "}
+              <span
+                className="text-amber-600 relative "
+                style={{
+                  fontFamily: "Playfair Display, serif",
+                }}
+              >
+                hermoso
+                <span className="absolute -bottom-1 left-0 w-full h-2 bg-amber-200 rounded-lg animate-pulse"></span>
+              </span>{" "}
+              🌙
             </h1>
+            <p className="mt-5">
+              Explora nuestra selección cuidada de productos naturales para el
+              cuidado del cabello, elaborados con ingredientes herbales para
+              nutrir y revitalizar tu melena. Abraza la belleza de la naturaleza
+              con HerbAura Botanica.
+            </p>
           </div>
         </div>
         <div className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-10">
@@ -220,7 +246,9 @@ export default function HomePage() {
                   <p className="text-lg text-amber-600 font-medium">
                     ✨ {product.name}
                   </p>
-                  <h2 className="text-4xl">{product.description}</h2>
+                  <h2 className="text-2xl md:text-4xl">
+                    {product.description}
+                  </h2>
                   <div className="mt-auto">
                     <Link
                       to={`/products/${product.productoId}`}
@@ -283,7 +311,7 @@ export default function HomePage() {
                 />
               </div>
               <div className="sm:col-span-3 lg:col-span-2 text-white">
-                <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                <h2 className="text-2xl md:text-4xl mb-4">
                   Shampoo Natural de Aloe Vera y Jengibre
                 </h2>
                 <p className="text-lg mb-6">
@@ -345,7 +373,7 @@ export default function HomePage() {
         />
 
         <div className="max-w-3xl mb-10">
-          <h2 className="text-4xl lg:text-4xl mb-6">
+          <h2 className="text-3xl lg:text-4xl">
             🌿 Galería de{" "}
             <span className="text-amber-600 relative">
               HerbAura
@@ -357,7 +385,7 @@ export default function HomePage() {
             </span>
           </h2>
 
-          <p>
+          <p className="mt-5">
             Explora nuestra galería visual que captura la esencia de HerbAura
             Botanica. Desde ingredientes naturales hasta resultados
             transformadores, cada imagen refleja nuestro compromiso con el

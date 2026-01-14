@@ -221,7 +221,7 @@ export default function CatalogPage() {
             backgroundSize: "cover",
           }}
         >
-          <div className="w-full md:w-[60%] p-10 bg-black ms-auto text-white">
+          <div className="w-full md:w-[60%] px-10 py-20 bg-black ms-auto text-white">
             <div className="max-w-xl">
               <div className="mb-4">
                 <h2 className="text-2xl lg:text-3xl mb-3">
@@ -279,6 +279,7 @@ export default function CatalogPage() {
           className="absolute -bottom-4 left-0 h-8 w-full z-10 pointer-events-none"
           alt=""
         />
+        <div className="absolute top-0 right-0 w-40 h-40 -z-10 opacity-10 blur-3xl bg-amber-100 rounded-lg animate-pulse" />
       </section>
     </>
   );
