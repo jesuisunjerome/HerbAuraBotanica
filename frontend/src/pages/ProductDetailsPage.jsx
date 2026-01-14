@@ -9,6 +9,7 @@ import {
 import { useParams } from "react-router";
 import SEORender from "../layouts/SEORender";
 import { productos } from "../lib/data";
+import { useCartStore } from "../store/useCartStore";
 
 export default function ProductDetailsPage() {
   const { addToCart } = useCartStore();
