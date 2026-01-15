@@ -63,7 +63,7 @@ export default function CartPage() {
             </div>
 
             {cart.length > 0 && (
-              <h1 className="text-2xl lg:text-3xl mb-5">
+              <h1 className="text-2xl lg:text-3xl mb-3 lg:mb-5">
                 Tu Carrito de Compras
               </h1>
             )}
@@ -230,7 +230,9 @@ export default function CartPage() {
               </button>
             </div>
 
-            <h1 className="text-2xl lg:text-3xl mb-5">Información de Envío</h1>
+            <h1 className="text-2xl lg:text-3xl mb-3 lg:mb-5">
+              Información de Envío
+            </h1>
             <form
               onSubmit={handleSubmit(onSubmit)}
               className="flex flex-col md:flex-row gap-10 xl:gap-20"
