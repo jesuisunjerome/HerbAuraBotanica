@@ -13,6 +13,7 @@ import "slick-carousel/slick/slick.css";
 import GradientBg from "../components/GradientBg";
 import SEORender from "../layouts/SEORender";
 import { featuredProducts, galleryImages, productos } from "../lib/data";
+import { formatCurrency } from "../lib/helper";
 import { useCartStore } from "../store/useCartStore";
 
 export default function HomePage() {
@@ -185,7 +186,10 @@ export default function HomePage() {
         </div>
         <div className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-10">
           {productos.slice(0, 5).map((item) => (
-            <div className="rounded-2xl group overflow-hidden relative bg-gray-200 p-3  hover:scale-105 transition-transform duration-400">
+            <div
+              key={item.productId}
+              className="rounded-2xl group overflow-hidden relative bg-gray-200 p-3  hover:scale-105 transition-transform duration-400"
+            >
               <img
                 loading="lazy"
                 src={item.img}
@@ -201,7 +205,7 @@ export default function HomePage() {
               </button>
               <Link
                 title="Ver detalles"
-                to={`/products/${item.productoId}`}
+                to={`/products/${item.productId}`}
                 className="flex items-center group hover:-translate-y-0.5 transition-all absolute left-1/2 transform -translate-x-1/2 w-[95%] rounded-xl overflow-hidden bottom-1 p-3 bg-white/60 backdrop-blur-sm"
               >
                 <span className="flex gap-1 flex-1 flex-col">
@@ -209,7 +213,7 @@ export default function HomePage() {
                     {item.name}
                   </span>
                   <span className="block lg:hidden group-hover:block text-xl font-bold">
-                    ${item.price}
+                    {formatCurrency(item.price)}
                   </span>
                   <small className="block lg:hidden group-hover:block">
                     {item.name}
@@ -239,7 +243,7 @@ export default function HomePage() {
           {featuredProducts.map((product) => (
             <div>
               <div
-                key={product.productoId}
+                key={product.productId}
                 className="grid lg:grid-cols-3 gap-10"
               >
                 <div className="flex flex-col gap-2">
@@ -251,7 +255,7 @@ export default function HomePage() {
                   </h2>
                   <div className="mt-auto">
                     <Link
-                      to={`/products/${product.productoId}`}
+                      to={`/products/${product.productId}`}
                       className="px-5 text-sm py-3 inline-flex items-center justify-between gap-3 rounded group bg-amber-600 text-white hover:bg-amber-700 transition"
                     >
                       Comprar Ahora
@@ -374,7 +378,7 @@ export default function HomePage() {
 
         <div className="max-w-3xl mb-10">
           <h2 className="text-3xl lg:text-4xl">
-            🌿 Galería de{" "}
+            📸 Galería de{" "}
             <span className="text-amber-600 relative">
               HerbAura
               <span className="absolute -bottom-1 left-0 w-full h-2 bg-amber-200 rounded-lg animate-pulse"></span>

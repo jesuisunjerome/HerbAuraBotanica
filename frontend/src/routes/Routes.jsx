@@ -11,7 +11,7 @@ import ProductDetailsPage from "../pages/ProductDetailsPage";
 const router = createBrowserRouter([
   {
     element: <MainLayout />,
-    errorElement: <div>Error loading page</div>,
+    errorElement: <div>Error page</div>,
     children: [
       {
         path: "/",

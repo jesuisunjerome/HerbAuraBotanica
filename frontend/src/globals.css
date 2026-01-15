@@ -28,6 +28,20 @@
     @apply translate-y-1;
   }
 
+  button {
+    @apply disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-0;
+  }
+
+  p {
+    @apply leading-7;
+  }
+
+  @media (max-width: 576px) {
+    button:hover {
+      @apply translate-0;
+    }
+  }
+
   .text-white {
     color: var(--color-beige) !important;
   }

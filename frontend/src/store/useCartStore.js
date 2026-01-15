@@ -27,6 +27,25 @@ export const useCartStore = create(
         }));
       },
 
+      decreaseQuantity: (productId) => {
+        const product = get().cart.find((p) => p.productId === productId);
+        if (product) {
+          if (product.quantity === 1) {
+            set((state) => ({
+              cart: state.cart.filter((p) => p.productId !== productId),
+            }));
+          } else {
+            set((state) => ({
+              cart: state.cart.map((p) =>
+                p.productId === productId
+                  ? { ...p, quantity: p.quantity - 1 }
+                  : p,
+              ),
+            }));
+          }
+        }
+      },
+
       removeFromCart: (productId) =>
         set((state) => ({
           cart: state.cart.filter((p) => p.productId !== productId),

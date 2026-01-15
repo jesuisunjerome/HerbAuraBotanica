@@ -1,22 +1,21 @@
 import {
+  ChevronLeftIcon,
   DotIcon,
   HandshakeIcon,
-  MinusIcon,
-  PlusIcon,
   ShoppingCartIcon,
   TruckElectricIcon,
 } from "lucide-react";
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import SEORender from "../layouts/SEORender";
 import { productos } from "../lib/data";
 import { useCartStore } from "../store/useCartStore";
 
 export default function ProductDetailsPage() {
   const { addToCart } = useCartStore();
-
   const { productId } = useParams();
+
   const product =
-    productos.find((p) => p.productoId === parseInt(productId)) || {};
+    productos.find((p) => p.productId === parseInt(productId)) || {};
   const { name, description, price, img } = product;
 
   return (
@@ -26,6 +25,16 @@ export default function ProductDetailsPage() {
         description={description}
       />
       <section className="md:px-5 px-3 lg:px-20 pt-10 pb-20 relative">
+        <div className="mb-5">
+          <Link
+            to="/products"
+            className="text-amber-600 hover:underline flex items-center gap-1 group"
+          >
+            <ChevronLeftIcon className="h-4 w-4 group-hover:-translate-x-1 transition-all" />
+            <span>Volver a Productos</span>
+          </Link>
+        </div>
+
         <div className="flex flex-col lg:flex-row gap-20">
           <div className="w-full sm:w-9/12 md:w-8/12 mx-auto lg:w-5/12">
             <div className="sticky top-20">
@@ -60,7 +69,7 @@ export default function ProductDetailsPage() {
           <div className="w-full mx-auto sm:w-9/12 md:w-8/12 lg:w-7/12">
             <div className="mx-auto lg:mx-0 lg:max-w-lg">
               <div className="pb-5 mb-5 border-b border-gray-300/50">
-                <h1 className="text-3xl font-semibold">{name}</h1>
+                <h1 className="text-3xl">{name}</h1>
                 <p>⭐ 4.9 (120 reseñas)</p>
                 <h3 className="text-3xl mb-5">${price}</h3>
                 <div className="flex flex-wrap gap-0.5 text-sm font-semibold">
@@ -70,11 +79,11 @@ export default function ProductDetailsPage() {
                   <DotIcon />
                   <span>Libre de Sulfatos</span>
                 </div>
-                <p className="text-gray-700 leading-7">{description}</p>
+                <p className="text-gray-700">{description}</p>
               </div>
 
               <div className="flex flex-wrap items-end gap-5 pb-5 mb-5 border-b border-gray-300/50">
-                <div>
+                {/* <div>
                   <label
                     htmlFor="quantity"
                     className="block mb-2 font-semibold"
@@ -85,18 +94,19 @@ export default function ProductDetailsPage() {
                     <button className="bg-gray-200 rounded-md p-1 h-10 w-10 flex items-center justify-center">
                       <MinusIcon className="h-5 w-5 text-gray-600" />
                     </button>
-                    <span className="text-2xl px-3">1</span>
+                    <span className="text-2xl px-3">{quantityInCart}</span>
                     <button className="bg-gray-200 rounded-md p-1 h-10 w-10 flex items-center justify-center">
                       <PlusIcon className="h-5 w-5 text-gray-600" />
                     </button>
                   </div>
-                </div>
+                </div> */}
                 <div>
                   <button
                     onClick={() => addToCart(product)}
                     className="bg-amber-600 text-white px-6 py-3 rounded group hover:bg-amber-700 transition hover:shadow-lg flex justify-center items-center gap-2"
                   >
-                    <ShoppingCartIcon /> <span>Agregar al carrito</span>
+                    <ShoppingCartIcon className="group-hover:-translate-x-2 transition-all" />{" "}
+                    <span>Agregar al carrito</span>
                   </button>
                 </div>
               </div>

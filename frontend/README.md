@@ -17,7 +17,7 @@ If you are developing a production application, we recommend using TypeScript wi
 
 # LIBRARIES
 
-- npm install prettier prettier-plugin-organize-imports --save-dev
+- npm i prettier prettier-plugin-organize-imports --save-dev
 - npm i react-router
 - npm i tailwindcss @tailwindcss/vite
 - npm i react-helmet-async
@@ -26,3 +26,6 @@ If you are developing a production application, we recommend using TypeScript wi
 - npm i zustand
 - npm i embla-carousel-react embla-carousel-autoplay
 - npm i lucide lucide-react
+- npm i react-hook-form
+- npm i -D @hookform/devtools
+- npm i @hookform/resolvers zod

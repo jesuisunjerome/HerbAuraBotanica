@@ -7,8 +7,10 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { Link, useSearchParams } from "react-router";
+import NoData from "../components/NoData";
 import SEORender from "../layouts/SEORender";
 import { productos, sortByOptions } from "../lib/data";
+import { formatCurrency } from "../lib/helper";
 import { useCartStore } from "../store/useCartStore";
 
 export default function CatalogPage() {
@@ -115,7 +117,7 @@ export default function CatalogPage() {
               <input
                 type="text"
                 placeholder="Buscar productos..."
-                className="border border-gray-300 rounded-md p-2 w-full"
+                className="border border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-amber-500"
                 value={searchTerm}
                 onChange={handleSearchChange}
               />
@@ -132,7 +134,7 @@ export default function CatalogPage() {
               )}
             </div>
             <select
-              className="border border-gray-300 rounded-md p-2 h-11 w-full"
+              className="border border-gray-300 rounded-md p-2 h-11 w-full focus:outline-none focus:ring-2 focus:ring-amber-500"
               value={sortOption}
               onChange={handleSortChange}
             >
@@ -146,20 +148,11 @@ export default function CatalogPage() {
         </div>
         <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-10">
           {filteredProducts.length === 0 && (
-            <div className="col-span-full text-center py-20 min-h-80 flex flex-col justify-center items-center gap-4">
-              <img
-                src="/images/no-data.png"
-                className="h-60 bg-gray-200"
-                alt="Sin resultados"
-              />
-              <p className="text-xl text-gray-500">
-                Intenta con otros términos o elimina los filtros.
-              </p>
-            </div>
+            <NoData message="No se encontraron productos." />
           )}
           {filteredProducts.map((item) => (
             <div
-              key={item.productoId}
+              key={item.productId}
               className="rounded-2xl overflow-hidden group relative bg-gray-200 p-3 hover:scale-105 transition-transform duration-400"
             >
               <img
@@ -177,11 +170,13 @@ export default function CatalogPage() {
               </button>
               <Link
                 title="Ver detalles"
-                to={`/products/${item.productoId}`}
+                to={`/products/${item.productId}`}
                 className="flex items-center group -translate-y-0.5 transition-all absolute left-1/2 transform -translate-x-1/2 w-[95%] rounded-xl overflow-hidden bottom-1 p-3 bg-white/60 backdrop-blur-sm"
               >
                 <span className="flex gap-1 flex-1 flex-col">
-                  <span className="block text-xl font-bold">${item.price}</span>
+                  <span className="block text-xl font-bold">
+                    {formatCurrency(item.price)}
+                  </span>
                   <small className="block">
                     {searchTerm ? (
                       <>
