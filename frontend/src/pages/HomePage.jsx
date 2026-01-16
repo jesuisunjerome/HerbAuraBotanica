@@ -1,10 +1,6 @@
 import Autoplay from "embla-carousel-autoplay";
 import useEmblaCarousel from "embla-carousel-react";
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  ShoppingCartIcon,
-} from "lucide-react";
+import { ChevronLeftIcon, ChevronRightIcon, HandbagIcon } from "lucide-react";
 import { useRef } from "react";
 import { Link } from "react-router";
 import Slider from "react-slick";
@@ -201,7 +197,7 @@ export default function HomePage() {
                 onClick={() => handleAddToCart(item)}
                 className="absolute group-hover:top-2 top-2 lg:-top-100 right-2 p-2 size-10 flex items-center justify-center rounded-xl bg-white/60 hover:shadow-lg backdrop-blur-sm"
               >
-                <ShoppingCartIcon className="w-5 h-5" />
+                <HandbagIcon className="w-5 h-5" />
               </button>
               <Link
                 title="Ver detalles"
@@ -337,7 +333,7 @@ export default function HomePage() {
                     }
                     className="w-14 h-14 rounded-full bg-white/30 text-white backdrop-blur-sm hover:text-white px-4 py-2 group hover:bg-amber-700 transition hover:shadow-lg hover:-translate-y-0.5 flex items-center justify-center"
                   >
-                    <ShoppingCartIcon className="w-5 h-5" />
+                    <HandbagIcon className="w-5 h-5" />
                   </button>
                 </div>
               </div>

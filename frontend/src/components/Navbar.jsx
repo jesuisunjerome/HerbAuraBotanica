@@ -1,4 +1,4 @@
-import { MenuIcon, ShoppingCartIcon } from "lucide-react";
+import { HandbagIcon, MenuIcon } from "lucide-react";
 import { Link, NavLink } from "react-router";
 import { useCartStore } from "../store/useCartStore";
 
@@ -60,7 +60,7 @@ function CartLink() {
       title="Carrito de Compras"
     >
       <span className="sr-only">Carrito de Compras</span>
-      <ShoppingCartIcon className="w-6 h-6" />
+      <HandbagIcon className="w-6 h-6" />
       {cart.length > 0 && (
         <span className="absolute -top-3 -right-3 bg-amber-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
           {quantity}

@@ -1,11 +1,12 @@
 import {
+  BadgeDollarSignIcon,
   ChevronLeftIcon,
   DotIcon,
+  HandbagIcon,
   HandshakeIcon,
-  ShoppingCartIcon,
   TruckElectricIcon,
 } from "lucide-react";
-import { Link, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import SEORender from "../layouts/SEORender";
 import { productos } from "../lib/data";
 import { useCartStore } from "../store/useCartStore";
@@ -13,6 +14,7 @@ import { useCartStore } from "../store/useCartStore";
 export default function ProductDetailsPage() {
   const { addToCart } = useCartStore();
   const { productId } = useParams();
+  const navigate = useNavigate();
 
   const product =
     productos.find((p) => p.productId === parseInt(productId)) || {};
@@ -83,30 +85,25 @@ export default function ProductDetailsPage() {
               </div>
 
               <div className="flex flex-wrap items-end gap-5 pb-5 mb-5 border-b border-gray-300/50">
-                {/* <div>
-                  <label
-                    htmlFor="quantity"
-                    className="block mb-2 font-semibold"
-                  >
-                    Cantidad:
-                  </label>
-                  <div className="flex items-center border border-gray-300 rounded-lg w-max p-1 gap-3">
-                    <button className="bg-gray-200 rounded-md p-1 h-10 w-10 flex items-center justify-center">
-                      <MinusIcon className="h-5 w-5 text-gray-600" />
-                    </button>
-                    <span className="text-2xl px-3">{quantityInCart}</span>
-                    <button className="bg-gray-200 rounded-md p-1 h-10 w-10 flex items-center justify-center">
-                      <PlusIcon className="h-5 w-5 text-gray-600" />
-                    </button>
-                  </div>
-                </div> */}
                 <div>
                   <button
                     onClick={() => addToCart(product)}
                     className="bg-amber-600 text-white px-6 py-3 rounded group hover:bg-amber-700 transition hover:shadow-lg flex justify-center items-center gap-2"
                   >
-                    <ShoppingCartIcon className="group-hover:-translate-x-2 transition-all" />{" "}
+                    <HandbagIcon className="group-hover:-translate-x-2 transition-all" />{" "}
                     <span>Agregar al carrito</span>
+                  </button>
+                </div>
+                <div>
+                  <button
+                    onClick={() => {
+                      addToCart(product);
+                      navigate("/cart");
+                    }}
+                    className="bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700 transition hover:shadow-lg flex justify-center items-center gap-2"
+                  >
+                    <BadgeDollarSignIcon className="group:hover:translate-x-2 transition-all" />
+                    <span>Comprar ahora</span>
                   </button>
                 </div>
               </div>

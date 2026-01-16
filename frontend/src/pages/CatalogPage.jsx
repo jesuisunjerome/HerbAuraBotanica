@@ -1,7 +1,7 @@
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
-  ShoppingCartIcon,
+  HandbagIcon,
   SlidersHorizontalIcon,
   XIcon,
 } from "lucide-react";
@@ -166,7 +166,7 @@ export default function CatalogPage() {
                 onClick={() => handleAddToCart(item)}
                 className="absolute top-2 right-2 p-2 size-10 flex items-center justify-center rounded-xl bg-white/60 hover:shadow-lg backdrop-blur-sm"
               >
-                <ShoppingCartIcon className="w-5 h-5" />
+                <HandbagIcon className="w-5 h-5" />
               </button>
               <Link
                 title="Ver detalles"
