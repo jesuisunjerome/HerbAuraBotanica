@@ -7,15 +7,11 @@ export const useCartStore = create(
       cart: [],
 
       addToCart: (product) => {
-        const exists = get().cart.find(
-          (p) => p.productId === product.productId,
-        );
+        const exists = get().cart.find((p) => p._id === product._id);
         if (exists) {
           set((state) => ({
             cart: state.cart.map((p) =>
-              p.productId === product.productId
-                ? { ...p, quantity: p.quantity + 1 }
-                : p,
+              p._id === product._id ? { ...p, quantity: p.quantity + 1 } : p,
             ),
           }));
 
@@ -27,28 +23,26 @@ export const useCartStore = create(
         }));
       },
 
-      decreaseQuantity: (productId) => {
-        const product = get().cart.find((p) => p.productId === productId);
+      decreaseQuantity: (_id) => {
+        const product = get().cart.find((p) => p._id === _id);
         if (product) {
           if (product.quantity === 1) {
             set((state) => ({
-              cart: state.cart.filter((p) => p.productId !== productId),
+              cart: state.cart.filter((p) => p._id !== _id),
             }));
           } else {
             set((state) => ({
               cart: state.cart.map((p) =>
-                p.productId === productId
-                  ? { ...p, quantity: p.quantity - 1 }
-                  : p,
+                p._id === _id ? { ...p, quantity: p.quantity - 1 } : p,
               ),
             }));
           }
         }
       },
 
-      removeFromCart: (productId) =>
+      removeFromCart: (_id) =>
         set((state) => ({
-          cart: state.cart.filter((p) => p.productId !== productId),
+          cart: state.cart.filter((p) => p._id !== _id),
         })),
 
       clearCart: () => set({ cart: [] }),

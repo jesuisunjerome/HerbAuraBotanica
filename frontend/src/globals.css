@@ -12,6 +12,12 @@
 }
 
 @layer components {
+  .admin-layout {
+    @apply bg-gray-50;
+    display: flex;
+    min-height: 100vh;
+  }
+
   nav.navbar {
     @apply mx-auto mb-3 flex items-center justify-between gap-3 border-b border-(--color-beige) px-4 py-5 text-gray-900;
   }

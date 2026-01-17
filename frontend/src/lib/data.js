@@ -164,10 +164,3 @@ export const featuredProducts = [
     price: 18.99,
   },
 ];
-
-export const sortByOptions = [
-  { value: "", label: "Todos los productos" },
-  { value: "price-low-high", label: "Precio: Bajo a Alto" },
-  { value: "price-high-low", label: "Precio: Alto a Bajo" },
-  { value: "newest", label: "Novedades" },
-];

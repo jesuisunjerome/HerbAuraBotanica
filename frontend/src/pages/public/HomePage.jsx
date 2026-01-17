@@ -6,11 +6,12 @@ import { Link } from "react-router";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
-import GradientBg from "../components/GradientBg";
-import SEORender from "../layouts/SEORender";
-import { featuredProducts, galleryImages, productos } from "../lib/data";
-import { formatCurrency } from "../lib/helper";
-import { useCartStore } from "../store/useCartStore";
+import GradientBg from "../../components/public/GradientBg";
+import { useFetchActiveProducts } from "../../hooks/products/queries";
+import SEORender from "../../layouts/SEORender";
+import { featuredProducts, galleryImages, productos } from "../../lib/data";
+import { formatCurrency } from "../../lib/helper";
+import { useCartStore } from "../../store/useCartStore";
 
 export default function HomePage() {
   const { addToCart } = useCartStore();
@@ -32,6 +33,8 @@ export default function HomePage() {
   const handleAddToCart = (product) => {
     addToCart(product);
   };
+
+  const { isPending, products } = useFetchActiveProducts();
 
   return (
     <>

@@ -19,6 +19,7 @@ If you are developing a production application, we recommend using TypeScript wi
 
 - npm i prettier prettier-plugin-organize-imports --save-dev
 - npm i react-router
+- npm i react-hot-toast
 - npm i tailwindcss @tailwindcss/vite
 - npm i react-helmet-async
 - npm i react-meta-elements
@@ -29,3 +30,7 @@ If you are developing a production application, we recommend using TypeScript wi
 - npm i react-hook-form
 - npm i -D @hookform/devtools
 - npm i @hookform/resolvers zod
+- npm i axios
+- npm i @tanstack/react-query
+- npm i -D @tanstack/eslint-plugin-query
+- npm i @tanstack/react-query-devtools -D

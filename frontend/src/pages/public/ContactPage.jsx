@@ -1,4 +1,4 @@
-import SEORender from "../layouts/SEORender";
+import SEORender from "../../layouts/SEORender";
 
 export default function ContactPage() {
   return (
