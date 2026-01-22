@@ -14,24 +14,27 @@ export const useRenderCatalog = () => {
 
   const { isPending, products } = useFetchActiveProducts();
 
-  const filteredProducts =
-    products
-      ?.filter(
-        (product) =>
-          product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          product.price?.toString().includes(searchTerm) ||
-          product.description?.toLowerCase().includes(searchTerm.toLowerCase()),
-      )
-      ?.sort((a, b) => {
-        if (sortOption === "price-low-high") {
-          return parseFloat(a.price) - parseFloat(b.price);
-        } else if (sortOption === "price-high-low") {
-          return parseFloat(b.price) - parseFloat(a.price);
-        } else if (sortOption === "newest") {
-          return b.createdAt.localeCompare(a.createdAt);
-        }
-        return 0;
-      }) || [];
+  const filteredProducts = Array.isArray(products)
+    ? products
+        ?.filter(
+          (product) =>
+            product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            product.price?.toString().includes(searchTerm) ||
+            product.description
+              ?.toLowerCase()
+              .includes(searchTerm.toLowerCase()),
+        )
+        ?.sort((a, b) => {
+          if (sortOption === "price-low-high") {
+            return parseFloat(a.price) - parseFloat(b.price);
+          } else if (sortOption === "price-high-low") {
+            return parseFloat(b.price) - parseFloat(a.price);
+          } else if (sortOption === "newest") {
+            return b.createdAt.localeCompare(a.createdAt);
+          }
+          return 0;
+        })
+    : [];
 
   const { addToCart } = useCartStore();
   const handleAddToCart = (product) => {

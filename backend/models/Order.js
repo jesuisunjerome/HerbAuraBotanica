@@ -63,9 +63,9 @@ const orderSchema = new mongoose.Schema(
       default: "Pendiente",
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-const Order = mongoose.model("Order", orderSchema);
+const Order = mongoose.models.Order || mongoose.model("Order", orderSchema);
 
 export default Order;
