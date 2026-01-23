@@ -87,7 +87,7 @@ export default function Navbar() {
       </header>
 
       <aside
-        className={`md:hidden fixed top-0 h-screen left-0 w-1/2 sm:w-2/5 bg-white z-50 border-r border-gray-100 flex flex-col transition-transform duration-300 ${
+        className={`md:hidden fixed top-0 h-full left-0 w-1/2 sm:w-2/5 bg-white z-50 border-r border-gray-100 flex flex-col transition-transform duration-300 shadow-lg ${
           showNav ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -181,7 +181,7 @@ function CartLinkMobile({ showCart, handleToggleCart }) {
 
   return (
     <aside
-      className={`fixed top-0 right-0 h-lvh flex flex-col border-l border-gray-100 bg-white z-50 w-3/4 sm:w-md md:hidden transition-transform duration-300 shadow-lg ${
+      className={`fixed top-0 right-0 h-full flex flex-col border-l border-gray-100 bg-white z-50 w-3/4 sm:w-md md:hidden transition-transform duration-300 shadow-lg ${
         showCart ? "translate-x-0" : "translate-x-full"
       }`}
     >
