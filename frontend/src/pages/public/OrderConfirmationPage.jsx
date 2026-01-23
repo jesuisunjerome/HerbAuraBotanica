@@ -10,13 +10,14 @@ import {
   MessageCircleIcon,
   TruckIcon,
 } from "lucide-react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import GradientBg from "../../components/common/GradientBg";
 import SEORender from "../../layouts/SEORender";
 import { calculateCartTotals, formatCurrency } from "../../lib/helper";
 import { useCartStore } from "../../store/useCartStore";
 
 export default function OrderConfirmationPage() {
+  const navigate = useNavigate();
   const { cart } = useCartStore();
   const { subtotal, tax, shipping, total } = calculateCartTotals(cart);
 
@@ -316,7 +317,10 @@ export default function OrderConfirmationPage() {
               Cada compra que realizas nos ayuda a crecer y mejorar. ¡Gracias
               por elegirnos!
             </span>
-            <button className="mt-3 px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600">
+            <button
+              onClick={() => navigate("/products")}
+              className="mt-3 px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600"
+            >
               Continue Shopping
             </button>
           </div>
