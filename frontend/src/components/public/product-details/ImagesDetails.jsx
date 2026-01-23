@@ -1,5 +1,18 @@
+import { useEffect, useState } from "react";
+
 export default function ImagesDetails({ product, isPending }) {
   const { images, name } = product;
+  const [selectedImage, setSelectedImage] = useState(images?.[0] || null);
+
+  const handleToggleImage = (imageUrl) => {
+    setSelectedImage(imageUrl);
+  };
+
+  useEffect(() => {
+    if (images && images.length > 0) {
+      setSelectedImage(images[0]);
+    }
+  }, [images]);
 
   if (isPending) {
     return <LoadingSkeleton />;
@@ -11,28 +24,27 @@ export default function ImagesDetails({ product, isPending }) {
         <div className="p-3 rounded-2xl overflow-hidden bg-gray-100">
           <img
             loading="lazy"
-            src={images?.[0]}
+            src={selectedImage || images?.[0]}
             className="w-full object-contain h-100 bg-gray-100 rounded-2xl"
             alt={name}
           />
         </div>
-        <div className="mt-5 flex justify-center gap-3">
-          <div className="bg-gray-100 overflow-hidden rounded-2xl p-2">
-            <img
-              loading="lazy"
-              src={images?.[0]}
-              className="w-24 h-24 object-contain bg-gray-100 rounded-2xl"
-              alt={name}
-            />
-          </div>
-          <div className="bg-gray-100 overflow-hidden rounded-2xl p-2">
-            <img
-              loading="lazy"
-              src={images?.[1]}
-              className="w-24 h-24 object-contain bg-gray-100 rounded-2xl"
-              alt={name}
-            />
-          </div>
+        <div className="mt-5 flex gap-3 overflow-x-scroll p-1 pb-2 scrollbar-hide">
+          {images?.map((image) => (
+            <button
+              key={image}
+              onClick={() => handleToggleImage(image)}
+              className={`bg-gray-100 overflow-hidden rounded-2xl p-2  shrink-0 ${selectedImage === image ? "ring-2 ring-offset-2 ring-gray-200" : ""}`}
+            >
+              <img
+                loading="lazy"
+                src={image}
+                className="w-24 h-24 object-contain bg-gray-100 rounded-2xl"
+                alt={name}
+                draggable={false}
+              />
+            </button>
+          ))}
         </div>
       </div>
     </div>

@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
@@ -15,12 +16,15 @@ export const useCartStore = create(
             ),
           }));
 
+          toast.success("Producto agregado al carrito");
           return;
         }
 
         set((state) => ({
           cart: [...state.cart, { ...product, quantity: 1 }],
         }));
+
+        toast.success("Producto agregado al carrito");
       },
 
       decreaseQuantity: (_id) => {

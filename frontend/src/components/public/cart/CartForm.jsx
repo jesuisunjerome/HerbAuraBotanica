@@ -173,10 +173,10 @@ export default function CartForm({
                   <button
                     type="button"
                     onClick={() => handlePaymentMethodSelect(method.name)}
-                    className={`w-1/${CART.PAYMENT_METHODS.length} p-2 bg-white rounded-lg border border-gray-200 flex items-center justify-center cursor-pointer ${
+                    className={`w-1/${CART.PAYMENT_METHODS.length} p-2 rounded-lg border border-gray-200 flex items-center justify-center cursor-pointer ${
                       selectedPaymentMethod === method.name
-                        ? "ring-2 ring-amber-500"
-                        : ""
+                        ? "ring-2 bg-amber-100 ring-amber-500"
+                        : "bg-white"
                     }`}
                     key={method.id}
                   >

@@ -6,6 +6,10 @@ header.sticky {
   /* background-color: #f9f8f4; */
 }
 
+body {
+  overflow-x: hidden;
+}
+
 h1,
 h2,
 h3,
@@ -32,6 +36,14 @@ button:not(:disabled):hover {
 footer {
   background-color: var(--color-brown);
   color: var(--color-beige);
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 .embla {

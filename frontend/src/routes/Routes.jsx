@@ -13,7 +13,14 @@ import ProductDetailsPage from "../pages/public/ProductDetailsPage";
 const router = createBrowserRouter([
   {
     element: <MainLayout />,
-    errorElement: <div>Error page</div>,
+    errorElement: (
+      <div>
+        Error page
+        <button onClick={() => localStorage.removeItem("cart-herbaura")}>
+          clear cart
+        </button>
+      </div>
+    ),
     children: [
       {
         path: "/",
