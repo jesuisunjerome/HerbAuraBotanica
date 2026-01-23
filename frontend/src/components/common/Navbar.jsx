@@ -181,7 +181,7 @@ function CartLinkMobile({ showCart, handleToggleCart }) {
 
   return (
     <aside
-      className={`fixed top-0 right-0 h-dvh flex flex-col border-l border-gray-100 bg-white z-50 w-3/4 sm:w-md md:hidden transition-transform duration-300 shadow-lg ${
+      className={`fixed top-0 bottom-0 right-0 flex flex-col border-l border-gray-100 bg-white z-50 w-3/4 sm:w-md md:hidden transition-transform duration-300 shadow-lg ${
         showCart ? "translate-x-0" : "translate-x-full"
       }`}
     >
