@@ -21,6 +21,21 @@ export function base64ToFile(base64String, filename) {
   return new File([u8arr], filename, { type: mime });
 }
 
+export function calculateCartTotals(
+  cartItems,
+  ivaRate = 0.19,
+  shippingCost = 19.0,
+) {
+  const subtotal = cartItems.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0,
+  );
+  const tax = subtotal * ivaRate;
+  const shipping = cartItems.length > 0 ? shippingCost : 0;
+  const total = subtotal + tax + shipping;
+  return { subtotal, tax, shipping, total };
+}
+
 export const CART = {
   PAYMENT_METHODS: [
     {
@@ -57,7 +72,7 @@ export const SORT_BY_OPTIONS = [
 ];
 
 // Esquema de validación para la información del carrito de compras
-export const cartInfoSchema = z.object({
+export const checkoutSchema = z.object({
   firstName: z
     .string("El nombre es obligatorio")
     .min(1, "El nombre es obligatorio")
@@ -93,13 +108,18 @@ export const cartInfoSchema = z.object({
     .min(1, "El código postal es obligatorio")
     .nonempty("El código postal es obligatorio")
     .trim(),
+  state: z
+    .string("El estado es obligatorio")
+    .min(1, "El estado es obligatorio")
+    .nonempty("El estado es obligatorio")
+    .trim(),
   country: z
     .string("El país es obligatorio")
     .min(1, "El país es obligatorio")
     .nonempty("El país es obligatorio")
     .trim(),
   paymentMethod: z.enum(
-    ["Paypal", "MercadoPago", "Stripe"],
+    ["PayPal", "MercadoPago", "Stripe"],
     "El método de pago es obligatorio",
   ),
 });

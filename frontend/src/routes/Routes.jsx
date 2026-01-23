@@ -3,10 +3,11 @@ import AdminLayout from "../layouts/admin/AdminLayout";
 import MainLayout from "../layouts/public/MainLayout";
 import ProductPage from "../pages/admin/ProductPage";
 import AboutPage from "../pages/public/AboutPage";
-import CartPage from "../pages/public/CartPage";
 import CatalogPage from "../pages/public/CatalogPage";
+import CheckoutPage from "../pages/public/CheckoutPage";
 import ContactPage from "../pages/public/ContactPage";
 import HomePage from "../pages/public/HomePage";
+import OrderConfirmationPage from "../pages/public/OrderConfirmationPage";
 import PolicyPage from "../pages/public/PolicyPage";
 import ProductDetailsPage from "../pages/public/ProductDetailsPage";
 
@@ -37,8 +38,12 @@ const router = createBrowserRouter([
         element: <ProductDetailsPage />,
       },
       {
-        path: "/cart",
-        element: <CartPage />,
+        path: "/checkout",
+        element: <CheckoutPage />,
+      },
+      {
+        path: "/order-confirmation",
+        element: <OrderConfirmationPage />,
       },
       {
         path: "/about",

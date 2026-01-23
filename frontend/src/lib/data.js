@@ -164,3 +164,16 @@ export const featuredProducts = [
     price: 18.99,
   },
 ];
+
+export const mocckCheckoutClientData = {
+  firstName: "Juan",
+  lastName: "Pérez",
+  email: "juan.perez@example.com",
+  phone: "1234567890",
+  address: "Calle Falsa 123",
+  city: "Ciudad Ejemplo",
+  country: "País Ejemplo",
+  postalCode: "12345",
+  state: "Estado Ejemplo",
+  paymentMethod: "MercadoPago",
+};

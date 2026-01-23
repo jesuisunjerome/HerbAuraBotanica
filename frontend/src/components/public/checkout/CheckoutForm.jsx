@@ -1,24 +1,26 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronLeftIcon } from "lucide-react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { CART, cartInfoSchema, formatCurrency } from "../../../lib/helper";
+import { useNavigate } from "react-router";
+import { mocckCheckoutClientData } from "../../../lib/data";
+import {
+  calculateCartTotals,
+  CART,
+  checkoutSchema,
+  formatCurrency,
+} from "../../../lib/helper";
 import { useCartStore } from "../../../store/useCartStore";
 import RHFInput from "../../common/form/RHFInput";
 
-export default function CartForm({
-  setCartStep,
-  setSelectedPaymentMethod,
-  selectedPaymentMethod,
-}) {
+export default function CheckoutForm() {
   const { cart } = useCartStore();
-  const IVA = 0.19; // 19% IVA
-  const subtotal = cart.reduce(
-    (total, item) => total + item.price * item.quantity,
-    0,
+  const navigate = useNavigate();
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(
+    mocckCheckoutClientData.paymentMethod,
   );
-  const tax = subtotal * IVA;
-  const shipping = cart.length > 0 ? 19.0 : 0;
-  const total = subtotal + tax + shipping;
+
+  const { subtotal, tax, shipping, total } = calculateCartTotals(cart);
 
   const {
     register,
@@ -26,7 +28,8 @@ export default function CartForm({
     handleSubmit,
     formState: { errors, isValid },
   } = useForm({
-    resolver: zodResolver(cartInfoSchema),
+    defaultValues: mocckCheckoutClientData,
+    resolver: zodResolver(checkoutSchema),
     mode: "all",
   });
 
@@ -43,7 +46,7 @@ export default function CartForm({
     <>
       <div className="mb-5">
         <button
-          onClick={() => setCartStep(CART.STEPS.CART_INFO)}
+          onClick={() => navigate(-1)}
           className="text-amber-600 hover:underline flex items-center gap-1 group"
         >
           <ChevronLeftIcon className="h-4 w-4 group-hover:-translate-x-1 transition-all" />
