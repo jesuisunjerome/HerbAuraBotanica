@@ -6,7 +6,7 @@ import { Link } from "react-router";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
-import GradientBg from "../../components/public/GradientBg";
+import GradientBg from "../../components/common/GradientBg";
 import { useFetchActiveProducts } from "../../hooks/products/queries";
 import SEORender from "../../layouts/SEORender";
 import { featuredProducts, galleryImages, productos } from "../../lib/data";
