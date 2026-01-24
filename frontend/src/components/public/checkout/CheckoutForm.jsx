@@ -2,16 +2,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronLeftIcon } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router";
 import { mocckCheckoutClientData } from "../../../lib/data";
-import {
-  calculateCartTotals,
-  CART,
-  checkoutSchema,
-  formatCurrency,
-} from "../../../lib/helper";
+import { calculateCartTotals, CART, formatCurrency } from "../../../lib/helper";
+import { checkoutSchema } from "../../../lib/schemas";
 import { useCartStore } from "../../../store/useCartStore";
 import RHFInput from "../../common/form/RHFInput";
+import PayPalButton from "./PayPalButton";
 
 export default function CheckoutForm() {
   const { cart } = useCartStore();
@@ -38,19 +36,32 @@ export default function CheckoutForm() {
     setValue("paymentMethod", name);
   };
 
+  const handlePaymentSuccess = (details) => {
+    console.log("Payment Successful:", details);
+    navigate("/order-confirmation");
+  };
+
   const onSubmit = (data) => {
     console.log(data);
+    handlePaymentSuccess();
+  };
+
+  const handlePaymentError = (error) => {
+    console.error("Payment Error:", error);
+    toast.error(
+      "There was an error processing your payment. Please try again.",
+    );
   };
 
   return (
     <>
       <div className="mb-5">
         <button
-          onClick={() => navigate(-1)}
-          className="text-amber-600 hover:underline flex items-center gap-1 group"
+          onClick={() => navigate("/products")}
+          className="text-amber-600 hover:underline inline-flex items-center gap-1 group"
         >
           <ChevronLeftIcon className="h-4 w-4 group-hover:-translate-x-1 transition-all" />
-          <span>Regresar</span>
+          <span>Volver a Productos</span>
         </button>
       </div>
 
@@ -203,6 +214,11 @@ export default function CheckoutForm() {
               >
                 Continuar al Pago
               </button>
+              <PayPalButton
+                amount={total.toFixed(2)}
+                onSuccess={handlePaymentSuccess}
+                onError={handlePaymentError}
+              />
             </div>
           </div>
         </div>

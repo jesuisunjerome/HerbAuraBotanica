@@ -3,13 +3,16 @@ import toast from "react-hot-toast";
 import { axiosInstance } from "../../lib/axios";
 
 export const useCreateProduct = () => {
-  const { isPending, mutate: createProduct } = useMutation({
+  const { isPending: isCreating, mutate: createProduct } = useMutation({
     mutationFn: async (newProduct) => {
       const response = await axiosInstance.post("/products", newProduct);
+      toast.loading("Guardando...", { duration: 2000 });
       return response.data;
     },
     onSuccess: () => {
-      toast.success("Producto creado con éxito");
+      setTimeout(() => {
+        toast.success("Producto creado con éxito");
+      }, 2000);
     },
     onError: (error) => {
       toast.error(
@@ -18,5 +21,5 @@ export const useCreateProduct = () => {
     },
   });
 
-  return { isPending, createProduct };
+  return { isCreating, createProduct };
 };

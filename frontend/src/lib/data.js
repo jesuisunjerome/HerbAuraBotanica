@@ -138,7 +138,7 @@ export const galleryImages = [
   "/images/modelo-11.jpeg",
 ];
 
-export const featuredProducts = [
+export const bestSellerProducts = [
   {
     productId: 100,
     img: "/images/7.png",
@@ -176,4 +176,16 @@ export const mocckCheckoutClientData = {
   postalCode: "12345",
   state: "Estado Ejemplo",
   paymentMethod: "MercadoPago",
+};
+
+export const newProduct = {
+  isActive: true,
+  name: "Producto de Ejemplo",
+  description:
+    "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quia dicta officia inventore hic officiis ratione unde fugiat eligendi laudantium architecto!",
+  price: 9.99,
+  category: "categoria1",
+  stockQuantity: 100,
+  discountPercentage: 0,
+  tags: "ejemplo, producto",
 };

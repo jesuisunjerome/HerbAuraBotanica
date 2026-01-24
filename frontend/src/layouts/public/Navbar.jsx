@@ -1,8 +1,8 @@
 import { HandbagIcon, MenuIcon } from "lucide-react";
 import { useState } from "react";
 import { Link, NavLink } from "react-router";
+import CartInfo from "../../components/public/checkout/CartInfo";
 import { useCartStore } from "../../store/useCartStore";
-import CartInfo from "../public/checkout/CartInfo";
 import NavMobile from "./NavMobile";
 
 export default function Navbar() {

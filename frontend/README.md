@@ -34,3 +34,4 @@ If you are developing a production application, we recommend using TypeScript wi
 - npm i @tanstack/react-query
 - npm i -D @tanstack/eslint-plugin-query
 - npm i @tanstack/react-query-devtools -D
+- npm i @paypal/react-paypal-js

@@ -20,7 +20,7 @@ export default function RHFCheckbox({
           {...register(id)}
         />
         {children && (
-          <label htmlFor={id} className="block font-medium">
+          <label htmlFor={id} className="block text-gray-700">
             {children}
           </label>
         )}

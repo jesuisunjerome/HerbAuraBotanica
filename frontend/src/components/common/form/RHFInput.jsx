@@ -15,7 +15,7 @@ export default function RHFInput({
   return (
     <>
       {label && (
-        <label htmlFor={id} className="block mb-2 font-medium">
+        <label htmlFor={id} className="block mb-2 text-gray-700">
           {label} {required && <span className="text-red-400">*</span>}
         </label>
       )}

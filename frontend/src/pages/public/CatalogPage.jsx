@@ -1,3 +1,4 @@
+import SEORender from "../../components/common/SEORender";
 import Banner from "../../components/public/catalog/Banner";
 import BannerCTA from "../../components/public/catalog/BannerCTA";
 import FilterProducts from "../../components/public/catalog/FilterProducts";
@@ -5,7 +6,6 @@ import LoadingSkeletonProduct from "../../components/public/catalog/LoadingSkele
 import NewsLetter from "../../components/public/catalog/NewsLetter";
 import ProductList from "../../components/public/catalog/ProductList";
 import { useRenderCatalog } from "../../hooks/products/queries";
-import SEORender from "../../layouts/SEORender";
 
 export default function CatalogPage() {
   const {

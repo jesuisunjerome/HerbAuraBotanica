@@ -1,10 +1,10 @@
-import { z } from "zod";
-
-export function formatCurrency(amount, locale, currency = "MXN") {
-  return Intl.NumberFormat(locale || navigator.language, {
-    style: "currency",
-    currency: currency,
-  }).format(amount);
+export function formatCurrency(amount, locale = "es-MX", currency = "MXN") {
+  return (
+    Intl.NumberFormat(locale || navigator.language, {
+      style: "currency",
+      currency,
+    }).format(amount) + " MXN"
+  );
 }
 
 export function base64ToFile(base64String, filename) {
@@ -34,6 +34,51 @@ export function calculateCartTotals(
   const shipping = cartItems.length > 0 ? shippingCost : 0;
   const total = subtotal + tax + shipping;
   return { subtotal, tax, shipping, total };
+}
+
+export function formatLongDateToString(date, time = false) {
+  return new Intl.DateTimeFormat(navigator.language, {
+    year: "numeric",
+    month: "long",
+    day: "2-digit",
+    ...(time && { hour: "2-digit", minute: "2-digit" }),
+  }).format(date);
+}
+
+export function formatShortDateToString(date, time = false) {
+  return new Intl.DateTimeFormat(navigator.language, {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    ...(time && { hour: "2-digit", minute: "2-digit" }),
+  }).format(date);
+}
+
+export function updateSearchParams(key, value, searchParams, setSearchParams) {
+  const params = new URLSearchParams(searchParams);
+  if (value) params.set(key, value);
+  else params.delete(key);
+  setSearchParams(params);
+}
+
+export function getFirstAndLastDayOfMonth(year, month) {
+  const firstDay = new Date(year, month, 1);
+  const lastDay = new Date(year, month + 1, 0);
+  return { firstDay, lastDay };
+}
+
+export function getMinAndMaxDates(dates) {
+  if (dates.length === 0) return { minDate: null, maxDate: null };
+
+  let minDate = new Date(dates[0]);
+  let maxDate = new Date(dates[0]);
+  dates.forEach((dateStr) => {
+    const date = new Date(dateStr);
+    if (date < minDate) minDate = date;
+    if (date > maxDate) maxDate = date;
+  });
+
+  return { minDate, maxDate };
 }
 
 export const CART = {
@@ -70,56 +115,3 @@ export const SORT_BY_OPTIONS = [
   { value: "price-high-low", label: "Precio: Alto a Bajo" },
   { value: "newest", label: "Novedades" },
 ];
-
-// Esquema de validación para la información del carrito de compras
-export const checkoutSchema = z.object({
-  firstName: z
-    .string("El nombre es obligatorio")
-    .min(1, "El nombre es obligatorio")
-    .nonempty("El nombre es obligatorio")
-    .trim(),
-  lastName: z
-    .string("El apellido es obligatorio")
-    .min(1, "El apellido es obligatorio")
-    .nonempty("El apellido es obligatorio")
-    .trim(),
-  email: z
-    .email("El correo no es válido")
-    .min(1, "El correo es obligatorio")
-    .nonempty("El correo es obligatorio")
-    .trim(),
-  phone: z
-    .string("El teléfono es obligatorio")
-    .min(1, "El teléfono es obligatorio")
-    .nonempty("El teléfono es obligatorio")
-    .trim(),
-  address: z
-    .string("La dirección es obligatoria")
-    .min(1, "La dirección es obligatoria")
-    .nonempty("La dirección es obligatoria")
-    .trim(),
-  city: z
-    .string("La ciudad es obligatoria")
-    .min(1, "La ciudad es obligatoria")
-    .nonempty("La ciudad es obligatoria")
-    .trim(),
-  postalCode: z
-    .string("El código postal es obligatorio")
-    .min(1, "El código postal es obligatorio")
-    .nonempty("El código postal es obligatorio")
-    .trim(),
-  state: z
-    .string("El estado es obligatorio")
-    .min(1, "El estado es obligatorio")
-    .nonempty("El estado es obligatorio")
-    .trim(),
-  country: z
-    .string("El país es obligatorio")
-    .min(1, "El país es obligatorio")
-    .nonempty("El país es obligatorio")
-    .trim(),
-  paymentMethod: z.enum(
-    ["PayPal", "MercadoPago", "Stripe"],
-    "El método de pago es obligatorio",
-  ),
-});

@@ -1,5 +1,5 @@
 import {
-  BadgeDollarSignIcon,
+  CreditCardIcon,
   DotIcon,
   HandbagIcon,
   HandshakeIcon,
@@ -11,7 +11,9 @@ import { useCartStore } from "../../../store/useCartStore";
 export default function ProductDetails({ product, isPending }) {
   const { addToCart } = useCartStore();
   const navigate = useNavigate();
-  const { name, price, description } = product;
+  const { name, price, description, tags } = product;
+
+  console.log(tags);
 
   if (isPending) {
     return <LoadingSkeleton />;
@@ -24,38 +26,39 @@ export default function ProductDetails({ product, isPending }) {
           <h1 className="text-3xl">{name}</h1>
           <p>⭐ 4.9 (120 reseñas)</p>
           <h3 className="text-3xl mb-5">${price}</h3>
-          <div className="flex flex-wrap gap-0.5 text-sm font-semibold">
-            <span>Cuidado Natural</span>
-            <DotIcon />
-            <span>Vegano</span>
-            <DotIcon />
-            <span>Libre de Sulfatos</span>
-          </div>
+          {tags && (
+            <div className="flex flex-wrap gap-0.5 text-sm font-semibold">
+              {tags.split(",").map((tag, index) => (
+                <>
+                  <span className="text-amber-700" key={index}>
+                    {tag.trim()}
+                  </span>
+                  {index < tags.split(",").length - 1 && <DotIcon />}
+                </>
+              ))}
+            </div>
+          )}
           <p className="text-gray-700">{description}</p>
         </div>
 
-        <div className="flex flex-wrap items-end gap-5 pb-5 mb-5 border-b border-gray-300/50">
-          <div>
-            <button
-              onClick={() => addToCart(product)}
-              className="bg-amber-600 text-white px-6 py-3 rounded group hover:bg-amber-700 transition hover:shadow-lg flex justify-center items-center gap-2"
-            >
-              <HandbagIcon className="group-hover:-translate-x-2 transition-all" />{" "}
-              <span>Agregar al carrito</span>
-            </button>
-          </div>
-          <div>
-            <button
-              onClick={() => {
-                addToCart(product);
-                navigate("/cart");
-              }}
-              className="bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700 transition hover:shadow-lg flex justify-center items-center gap-2"
-            >
-              <BadgeDollarSignIcon className="group:hover:translate-x-2 transition-all" />
-              <span>Comprar ahora</span>
-            </button>
-          </div>
+        <div className="flex sm:flex-wrap items-end gap-5 pb-5 mb-5 border-b border-gray-300/50">
+          <button
+            onClick={() => addToCart(product)}
+            className="bg-amber-600 text-white px-6 py-3 rounded group hover:bg-amber-700 transition hover:shadow-lg flex w-full sm:w-auto justify-center items-center gap-2"
+          >
+            <HandbagIcon className="group-hover:-translate-x-2 transition-all" />{" "}
+            <span>Agregar al Carrito</span>
+          </button>
+          <button
+            onClick={() => {
+              addToCart(product);
+              navigate("/checkout");
+            }}
+            className="bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700 transition hover:shadow-lg flex w-full sm:w-auto justify-center items-center gap-2"
+          >
+            <CreditCardIcon className="group-hover:translate-x-2 transition-all" />
+            <span>Pagar Ahora</span>
+          </button>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-5">

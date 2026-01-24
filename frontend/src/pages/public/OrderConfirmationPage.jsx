@@ -1,10 +1,12 @@
 import {
   BoxIcon,
+  Calendar1Icon,
   CheckCircleIcon,
   CheckIcon,
   ChevronDownIcon,
   CreditCardIcon,
   ExternalLinkIcon,
+  LoaderIcon,
   MailCheckIcon,
   MapPinIcon,
   MessageCircleIcon,
@@ -12,8 +14,12 @@ import {
 } from "lucide-react";
 import { Link, useNavigate } from "react-router";
 import GradientBg from "../../components/common/GradientBg";
-import SEORender from "../../layouts/SEORender";
-import { calculateCartTotals, formatCurrency } from "../../lib/helper";
+import SEORender from "../../components/common/SEORender";
+import {
+  calculateCartTotals,
+  formatCurrency,
+  formatLongDateToString,
+} from "../../lib/helper";
 import { useCartStore } from "../../store/useCartStore";
 
 export default function OrderConfirmationPage() {
@@ -115,12 +121,27 @@ export default function OrderConfirmationPage() {
               <div className="flex gap-3">
                 <div className="shrink-0 flex flex-col items-center gap-1.5">
                   <div className="size-7 flex items-center justify-center rounded-lg bg-gray-200">
+                    <Calendar1Icon className="w-4 h-4 text-gray-500" />
+                  </div>
+                </div>
+                <div className="flex flex-col text-sm">
+                  <span className="font-medium leading-tight mb-1">
+                    Fecha de compra
+                  </span>
+                  <span className="text-gray-500 leading-tight">
+                    {formatLongDateToString(new Date(), true)}
+                  </span>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <div className="shrink-0 flex flex-col items-center gap-1.5">
+                  <div className="size-7 flex items-center justify-center rounded-lg bg-gray-200">
                     <MapPinIcon className="w-4 h-4 text-gray-500" />
                   </div>
                 </div>
                 <div className="flex flex-col text-sm">
                   <span className="font-medium leading-tight mb-1">
-                    Shipping to
+                    Enviar a
                   </span>
                   <span className="text-gray-500 leading-tight">
                     Juan Pérez
@@ -148,7 +169,7 @@ export default function OrderConfirmationPage() {
                 </div>
                 <div className="flex flex-col text-sm">
                   <span className="font-medium leading-tight mb-1">
-                    Shipping method
+                    Método de envío
                   </span>
                   <span className="text-gray-500 leading-tight">
                     Envío Estándar - {formatCurrency(19.0)}
@@ -178,18 +199,9 @@ export default function OrderConfirmationPage() {
                   Estimado de entrega
                 </span>
                 <span className="text-indigo-700 block">
-                  {new Date(2026, 0, 26).toLocaleDateString("es-ES", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}{" "}
-                  -{" "}
-                  {new Date(2026, 0, 31).toLocaleDateString("es-ES", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}{" "}
-                  (5-7 días hábiles)
+                  {formatLongDateToString(new Date(2026, 0, 26))} -{" "}
+                  {formatLongDateToString(new Date(2026, 0, 31))} (5-7 días
+                  hábiles)
                 </span>
                 <span className="text-indigo-700 leading-tight text-xs">
                   Ten en cuenta que los tiempos de entrega pueden variar según
@@ -218,13 +230,23 @@ export default function OrderConfirmationPage() {
                       Confirmado
                     </span>
                     <span className="text-gray-500 leading-tight">
-                      {new Date().toLocaleDateString("es-ES", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
+                      {formatLongDateToString(new Date(), true)}
+                    </span>
+                  </div>
+                </li>
+                <li className="flex items-start gap-3 relative">
+                  <div className="shrink-0 flex flex-col items-center gap-1.5">
+                    <div className="size-7 flex items-center justify-center rounded-full bg-indigo-500">
+                      <LoaderIcon className="w-4 h-4 text-indigo-100" />
+                    </div>
+                    <div className="h-7 w-px bg-gray-300" />
+                  </div>
+                  <div className="flex flex-col text-sm">
+                    <span className="font-medium leading-tight">
+                      Procesando
+                    </span>
+                    <span className="text-gray-500 leading-tight">
+                      Estamos preparando tu pedido para el envío.
                     </span>
                   </div>
                 </li>
@@ -311,7 +333,7 @@ export default function OrderConfirmationPage() {
 
           <div className="rounded-lg border border-gray-100 text-center p-4 text-sm">
             <span className="font-medium block">
-              We appreciate your business and hope you enjoy your purchase!
+              ¡Apreciamos tu compra y esperamos que disfrutes tus productos!
             </span>
             <span className="text-gray-500 text-xs block">
               Cada compra que realizas nos ayuda a crecer y mejorar. ¡Gracias
@@ -321,7 +343,7 @@ export default function OrderConfirmationPage() {
               onClick={() => navigate("/products")}
               className="mt-3 px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600"
             >
-              Continue Shopping
+              Continuar Comprando
             </button>
           </div>
         </div>

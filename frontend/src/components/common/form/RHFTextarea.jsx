@@ -17,7 +17,7 @@ export default function RHFTextarea({
       {label && (
         <label
           htmlFor={id}
-          className={`block mb-2 font-medium text-${labelSize}`}
+          className={`block mb-2 text-gray-700 text-${labelSize}`}
         >
           {label} {required && <span className="text-red-400"> *</span>}
         </label>

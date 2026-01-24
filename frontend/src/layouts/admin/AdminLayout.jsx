@@ -1,16 +1,27 @@
+import { useState } from "react";
 import { Outlet } from "react-router";
+import Navbar from "./Navbar";
+import Sidebar from "./Sidebar";
 
 export default function AdminLayout() {
+  const [showNavMobile, setShowNavMobile] = useState(false);
+  const handleToggleNav = () => {
+    setShowNavMobile(!showNavMobile);
+  };
+
   return (
     <div className="admin-layout">
-      <aside className="w-70 border-r h-dvh fixed hidden">Admin Sidebar</aside>
-      <div className="flex-1 min-h-dvh ms-7s0">
-        <main className="px-7 mb-10">
-          <nav>Admin Navbar</nav>
+      <Sidebar
+        showNavMobile={showNavMobile}
+        handleToggleNav={handleToggleNav}
+      />
+
+      <main className="flex-1 flex flex-col md:ml-64">
+        <Navbar handleToggleNav={handleToggleNav} />
+        <div className="px-3 lg:px-8 py-5">
           <Outlet />
-        </main>
-        {/* <footer>Admin Footer</footer> */}
-      </div>
+        </div>
+      </main>
     </div>
   );
 }

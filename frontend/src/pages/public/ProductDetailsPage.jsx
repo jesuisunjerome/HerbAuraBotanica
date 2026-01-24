@@ -1,9 +1,9 @@
 import { ChevronLeftIcon } from "lucide-react";
 import { Link, useParams } from "react-router";
+import SEORender from "../../components/common/SEORender";
 import ImagesDetails from "../../components/public/product-details/ImagesDetails";
 import ProductDetails from "../../components/public/product-details/ProductDetails";
 import { useFetchProductById } from "../../hooks/products/queries";
-import SEORender from "../../layouts/SEORender";
 
 export default function ProductDetailsPage() {
   const { productId } = useParams();
@@ -20,7 +20,7 @@ export default function ProductDetailsPage() {
         <div className="mb-5">
           <Link
             to="/products"
-            className="text-amber-600 hover:underline flex items-center gap-1 group"
+            className="text-amber-600 hover:underline inline-flex items-center gap-1 group"
           >
             <ChevronLeftIcon className="h-4 w-4 group-hover:-translate-x-1 transition-all" />
             <span>Volver a Productos</span>

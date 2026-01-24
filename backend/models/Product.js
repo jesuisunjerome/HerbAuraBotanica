@@ -33,6 +33,16 @@ const productSchema = new mongoose.Schema(
       required: true,
       min: 0,
     },
+    discountPercentage: {
+      type: Number,
+      min: 0,
+      max: 100,
+      default: 0,
+    },
+    tags: {
+      type: String,
+      required: true,
+    },
     isActive: {
       type: Boolean,
       default: true,

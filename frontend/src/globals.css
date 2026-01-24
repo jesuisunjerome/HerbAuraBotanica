@@ -13,9 +13,7 @@
 
 @layer components {
   .admin-layout {
-    @apply bg-gray-50;
-    display: flex;
-    min-height: 100vh;
+    @apply flex min-h-screen bg-gray-50;
   }
 
   nav.navbar {
@@ -34,12 +32,21 @@
     @apply py-2;
   }
 
+  .admin-layout aside nav a.active,
+  .admin-layout aside nav a.active:hover {
+    @apply bg-green-200! text-white;
+  }
+
   button:hover {
     @apply translate-y-1;
   }
 
   button {
     @apply disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-0;
+  }
+
+  input {
+    @apply disabled:animate-pulse disabled:cursor-not-allowed disabled:bg-gray-50 disabled:opacity-50;
   }
 
   p {

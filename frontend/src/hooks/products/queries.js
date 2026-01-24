@@ -1,10 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useSearchParams } from "react-router";
 import { axiosInstance } from "../../lib/axios";
+import {
+  getFirstAndLastDayOfMonth,
+  getMinAndMaxDates,
+  updateSearchParams,
+} from "../../lib/helper";
 import { useCartStore } from "../../store/useCartStore";
 
+// Hook para renderizar el catálogo de productos con búsqueda y ordenamiento
 export const useRenderCatalog = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState(
@@ -13,7 +19,6 @@ export const useRenderCatalog = () => {
   const [sortOption, setSortOption] = useState(searchParams.get("sort") || "");
 
   const { isPending, products } = useFetchActiveProducts();
-
   const filteredProducts = Array.isArray(products)
     ? products
         ?.filter(
@@ -41,24 +46,14 @@ export const useRenderCatalog = () => {
     addToCart(product);
   };
 
-  const updateSearchParams = (key, value) => {
-    const params = new URLSearchParams(searchParams);
-    if (value) {
-      params.set(key, value);
-    } else {
-      params.delete(key);
-    }
-    setSearchParams(params);
-  };
-
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
-    updateSearchParams("search", e.target.value);
+    updateSearchParams("search", e.target.value, searchParams, setSearchParams);
   };
 
   const handleSortChange = (e) => {
     setSortOption(e.target.value);
-    updateSearchParams("sort", e.target.value);
+    updateSearchParams("sort", e.target.value, searchParams, setSearchParams);
   };
 
   return {
@@ -72,6 +67,49 @@ export const useRenderCatalog = () => {
   };
 };
 
+// Hook para filtrar el dashboard por rango de fechas
+export const useFilterDashboard = () => {
+  const { firstDay, lastDay } = getFirstAndLastDayOfMonth(
+    new Date().getFullYear(),
+    new Date().getMonth(),
+  );
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [dateFilter, setDateFilter] = useState({
+    from: searchParams.get("from") || firstDay.toISOString().split("T")[0],
+    to: searchParams.get("to") || lastDay.toISOString().split("T")[0],
+  });
+
+  const { minDate, maxDate } = getMinAndMaxDates([
+    dateFilter.from,
+    dateFilter.to,
+  ]);
+
+  // Validar si el rango de fechas es correcto
+  useEffect(() => {
+    if (new Date(dateFilter.from) > new Date(dateFilter.to)) {
+      toast.error("El rango de fechas no es válido");
+      setDateFilter((prev) => ({ ...prev, to: prev.from }));
+    }
+  }, [dateFilter]);
+
+  const handleDateChange = (e) => {
+    const { name, value } = e.target;
+
+    setDateFilter((prev) => ({ ...prev, [name]: value }));
+    updateSearchParams(name, value, searchParams, setSearchParams);
+  };
+
+  return {
+    from: dateFilter.from,
+    to: dateFilter.to,
+    minDate,
+    maxDate,
+    handleDateChange,
+  };
+};
+
+// Hook para obtener todos los productos
 export const useFetchProducts = () => {
   const {
     isPending,
@@ -88,6 +126,7 @@ export const useFetchProducts = () => {
   return { isPending, products, refetch };
 };
 
+// Hook para obtener productos activos
 export const useFetchActiveProducts = () => {
   const {
     isPending,
@@ -110,6 +149,7 @@ export const useFetchActiveProducts = () => {
   return { isPending, products, refetch };
 };
 
+// Hook para obtener un producto por ID
 export const useFetchProductById = (productId) => {
   const {
     isPending,

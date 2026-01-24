@@ -1,4 +1,4 @@
-import SEORender from "../../layouts/SEORender";
+import SEORender from "../../components/common/SEORender";
 
 export default function AboutPage() {
   return (
