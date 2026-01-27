@@ -111,7 +111,7 @@ export const CART = {
 
 export const SORT_BY_OPTIONS = [
   { value: "", label: "Todos los productos" },
-  { value: "price-low-high", label: "Precio: Bajo a Alto" },
-  { value: "price-high-low", label: "Precio: Alto a Bajo" },
+  { value: "priceAsc", label: "Precio: Bajo a Alto" },
+  { value: "priceDesc", label: "Precio: Alto a Bajo" },
   { value: "newest", label: "Novedades" },
 ];

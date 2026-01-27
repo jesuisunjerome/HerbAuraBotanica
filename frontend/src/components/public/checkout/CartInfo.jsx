@@ -43,7 +43,7 @@ export default function CartInfo({ showCart, handleToggleCart }) {
                 <div className="bg-gray-100 overflow-hidden rounded-xl p-2 shrink-0">
                   <img
                     loading="lazy"
-                    src={item.images[0]}
+                    src={item.images.find((img) => img.isMain)?.url}
                     className="w-17 h-17 object-contain bg-gray-100 rounded-xl"
                     alt={item.name}
                   />

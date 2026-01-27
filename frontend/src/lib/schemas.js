@@ -67,7 +67,14 @@ export const productSchema = z.object({
     .positive("El precio debe ser positivo")
     .min(0, "El precio no puede ser negativo"),
   images: z
-    .array(z.url("Cada imagen debe ser una URL válida"))
+    .array(
+      z.object({
+        url: z.url("Cada imagen debe ser una URL válida"),
+        isMain: z.boolean(
+          "Cada imagen debe tener el campo isPrimary como booleano",
+        ),
+      }),
+    )
     .min(2, "El producto debe tener al menos 2 imágenes"),
   category: z
     .string()

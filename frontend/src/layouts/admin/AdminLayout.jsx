@@ -16,9 +16,9 @@ export default function AdminLayout() {
         handleToggleNav={handleToggleNav}
       />
 
-      <main className="flex-1 flex flex-col md:ml-64">
+      <main className="flex-1 w-[calc(100vw-16rem)] transition-all duration-300 flex flex-col md:ml-64">
         <Navbar handleToggleNav={handleToggleNav} />
-        <div className="px-3 lg:px-8 py-5">
+        <div className="px-3 lg:px-8 pb-5">
           <Outlet />
         </div>
       </main>

@@ -11,9 +11,15 @@ import {
   ShoppingCartIcon,
   XIcon,
 } from "lucide-react";
-import { Link, NavLink } from "react-router";
+import { Link, NavLink, useNavigate } from "react-router";
 
 export default function Sidebar({ showNavMobile, handleToggleNav }) {
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    // navigate('/admin/login')
+    navigate("/");
+  };
+
   return (
     <aside
       className={`fixed top-0 left-0 h-full w-64 bg-white border-r border-slate-200 flex flex-col transform ${
@@ -38,7 +44,7 @@ export default function Sidebar({ showNavMobile, handleToggleNav }) {
         </button>
       </div>
 
-      <nav className="flex-1 overflow-y-auto px-2 py-4 space-y-1">
+      <nav className="flex-1 overflow-y-auto px-2 py-4 space-y-1 scrollbar-hide">
         <div className="space-y-1">
           <p className="px-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">
             Menú
@@ -63,7 +69,7 @@ export default function Sidebar({ showNavMobile, handleToggleNav }) {
             </span>
           </NavLink>
           <NavLink
-            to="/admin/products/all"
+            to="/admin/products"
             className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-slate-50"
           >
             <BoxIcon className="h-4 w-4" />
@@ -133,7 +139,10 @@ export default function Sidebar({ showNavMobile, handleToggleNav }) {
             <span>Soporte</span>
           </NavLink>
         </div>
-        <button className="flex w-full items-center text-amber-700 gap-3 px-3 py-2 rounded-md hover:bg-slate-50 hover:translate-y-0">
+        <button
+          onClick={handleLogout}
+          className="flex w-full items-center text-amber-700 gap-3 px-3 py-2 rounded-md hover:bg-slate-50 hover:translate-y-0"
+        >
           <LogOutIcon className="h-4 w-4" />
           <span>Logout</span>
         </button>

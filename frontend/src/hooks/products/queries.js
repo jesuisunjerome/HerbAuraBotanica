@@ -10,63 +10,7 @@ import {
 } from "../../lib/helper";
 import { useCartStore } from "../../store/useCartStore";
 
-// Hook para renderizar el catálogo de productos con búsqueda y ordenamiento
-export const useRenderCatalog = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [searchTerm, setSearchTerm] = useState(
-    searchParams.get("search") || "",
-  );
-  const [sortOption, setSortOption] = useState(searchParams.get("sort") || "");
-
-  const { isPending, products } = useFetchActiveProducts();
-  const filteredProducts = Array.isArray(products)
-    ? products
-        ?.filter(
-          (product) =>
-            product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            product.price?.toString().includes(searchTerm) ||
-            product.description
-              ?.toLowerCase()
-              .includes(searchTerm.toLowerCase()),
-        )
-        ?.sort((a, b) => {
-          if (sortOption === "price-low-high") {
-            return parseFloat(a.price) - parseFloat(b.price);
-          } else if (sortOption === "price-high-low") {
-            return parseFloat(b.price) - parseFloat(a.price);
-          } else if (sortOption === "newest") {
-            return b.createdAt.localeCompare(a.createdAt);
-          }
-          return 0;
-        })
-    : [];
-
-  const { addToCart } = useCartStore();
-  const handleAddToCart = (product) => {
-    addToCart(product);
-  };
-
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-    updateSearchParams("search", e.target.value, searchParams, setSearchParams);
-  };
-
-  const handleSortChange = (e) => {
-    setSortOption(e.target.value);
-    updateSearchParams("sort", e.target.value, searchParams, setSearchParams);
-  };
-
-  return {
-    isPending,
-    filteredProducts,
-    searchTerm,
-    sortOption,
-    handleSearchChange,
-    handleSortChange,
-    handleAddToCart,
-  };
-};
-
+//#region ADMIN HOOKS
 // Hook para filtrar el dashboard por rango de fechas
 export const useFilterDashboard = () => {
   const { firstDay, lastDay } = getFirstAndLastDayOfMonth(
@@ -125,9 +69,69 @@ export const useFetchProducts = () => {
 
   return { isPending, products, refetch };
 };
+//#endregion
+
+// Hook para renderizar el catálogo de productos con búsqueda y ordenamiento
+export const useRenderCatalog = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchTerm, setSearchTerm] = useState(
+    searchParams.get("search") || "",
+  );
+  const [sortOption, setSortOption] = useState(
+    searchParams.get("sortBy") || "",
+  );
+
+  const { isPending, products } = useFetchActiveProducts();
+  const filteredProducts = Array.isArray(products)
+    ? products
+        ?.filter(
+          (product) =>
+            product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            product.price?.toString().includes(searchTerm) ||
+            product.description
+              ?.toLowerCase()
+              .includes(searchTerm.toLowerCase()),
+        )
+        ?.sort((a, b) => {
+          if (sortOption === "priceAsc") {
+            return parseFloat(a.price) - parseFloat(b.price);
+          } else if (sortOption === "priceDesc") {
+            return parseFloat(b.price) - parseFloat(a.price);
+          } else if (sortOption === "newest") {
+            return b.createdAt.localeCompare(a.createdAt);
+          }
+          return 0;
+        })
+    : [];
+
+  const { addToCart } = useCartStore();
+  const handleAddToCart = (product) => {
+    addToCart(product);
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+    updateSearchParams("search", e.target.value, searchParams, setSearchParams);
+  };
+
+  const handleSortChange = (e) => {
+    setSortOption(e.target.value);
+    updateSearchParams("sortBy", e.target.value, searchParams, setSearchParams);
+  };
+
+  return {
+    isPending,
+    filteredProducts,
+    searchTerm,
+    sortOption,
+    handleSearchChange,
+    handleSortChange,
+    handleAddToCart,
+  };
+};
 
 // Hook para obtener productos activos
-export const useFetchActiveProducts = () => {
+export const useFetchActiveProducts = (enabled = true) => {
   const {
     isPending,
     data: products,
@@ -139,6 +143,7 @@ export const useFetchActiveProducts = () => {
       const response = await axiosInstance.get("/products/active");
       return response.data;
     },
+    enabled,
   });
 
   if (error)
@@ -149,12 +154,61 @@ export const useFetchActiveProducts = () => {
   return { isPending, products, refetch };
 };
 
+// Hook para obtener los nuevos productos
+export const useFetchNewArrivals = () => {
+  const {
+    isPending,
+    data: newProducts,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ["new-arrivals"],
+    queryFn: async () => {
+      const response = await axiosInstance.get("/products/new-arrivals");
+      return response.data;
+    },
+  });
+
+  if (error)
+    toast.error(
+      error.response?.data?.message || "Error al cargar los productos",
+    );
+
+  return { isPending, newProducts, refetch };
+};
+
+// Hook para obtener productos similares
+export const useFetchSimilarProducts = (productId) => {
+  const {
+    isPending,
+    data: similarProducts,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ["similar-products", productId],
+    queryFn: async () => {
+      const response = await axiosInstance.get(
+        `/products/similar/${productId}`,
+      );
+      return response.data;
+    },
+    enabled: !!productId,
+  });
+
+  if (error)
+    toast.error(
+      error.response?.data?.message ||
+        "Error al cargar los productos similares",
+    );
+
+  return { isPending, similarProducts, refetch };
+};
+
 // Hook para obtener un producto por ID
 export const useFetchProductById = (productId) => {
   const {
     isPending,
     data: product,
-    error,
     refetch,
   } = useQuery({
     queryKey: ["product", productId],
@@ -164,9 +218,6 @@ export const useFetchProductById = (productId) => {
     },
     enabled: !!productId,
   });
-
-  if (error)
-    toast.error(error.response?.data?.message || "Error al cargar el producto");
 
   return { isPending, product, refetch };
 };

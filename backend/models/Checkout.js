@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import { ORDER_STATUS, PAYMENT_STATUS } from "../lib/constants.js";
+import { CHECKOUT_STATUS, PAYMENT_STATUS } from "../lib/constants.js";
 
-const orderItemSchema = new mongoose.Schema(
+const checkoutItemSchema = new mongoose.Schema(
   {
     productId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -28,7 +28,7 @@ const orderItemSchema = new mongoose.Schema(
   { _id: false },
 );
 
-const orderSchema = new mongoose.Schema(
+const checkoutSchema = new mongoose.Schema(
   {
     shippingDetails: {
       user: {
@@ -49,12 +49,20 @@ const orderSchema = new mongoose.Schema(
           required: true,
         },
       },
+      status: {
+        type: String,
+        enum: Object.values(CHECKOUT_STATUS),
+        default: CHECKOUT_STATUS.PENDING,
+      },
     },
-    orderItems: [orderItemSchema],
+    checkoutItems: [checkoutItemSchema],
+    paymentMethod: {
+      type: String,
+      required: true,
+    },
     totalAmount: {
       type: Number,
       required: true,
-      min: 0,
     },
     isPaid: {
       type: Boolean,
@@ -63,31 +71,26 @@ const orderSchema = new mongoose.Schema(
     paidAt: {
       type: Date,
     },
-    isDelivered: {
-      type: Boolean,
-      default: false,
-    },
-    deliveredAt: {
-      type: Date,
-    },
-    paymentMethod: {
-      type: String,
-      required: true,
+    paymentDetails: {
+      type: mongoose.Schema.Types.Mixed, // To store various payment gateway responses (transaction ID, status, etc.)
     },
     paymentStatus: {
       type: String,
       enum: Object.values(PAYMENT_STATUS),
       default: PAYMENT_STATUS.PENDING,
     },
-    status: {
-      type: String,
-      enum: Object.values(ORDER_STATUS),
-      default: ORDER_STATUS.PROCESSING,
+    isFinalized: {
+      type: Boolean,
+      default: false,
+    },
+    finalizedAt: {
+      type: Date,
     },
   },
   { timestamps: true },
 );
 
-const Order = mongoose.models.Order || mongoose.model("Order", orderSchema);
+const Checkout =
+  mongoose.models.Checkout || mongoose.model("Checkout", checkoutSchema);
 
-export default Order;
+export default Checkout;

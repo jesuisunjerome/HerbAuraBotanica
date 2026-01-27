@@ -7,7 +7,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-export async function uploadImage(file, folder = "products") {
+export async function uploadImage(file, folder = "HerbAuraBotanica/products") {
   try {
     const result = await cloudinary.uploader.upload(file, { folder });
     return result.secure_url;

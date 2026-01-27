@@ -1,0 +1,358 @@
+[
+  {
+    "name": "HerbAura Shampoo Reparador de Keratina y Argán",
+    "description": "Shampoo reparador intensivo enriquecido con keratina hidrolizada y aceite de argán marroquí. Restaura el cabello dañado, repara las fibras capilares desde la raíz, sella las cutículas y devuelve la vitalidad al cabello maltratado por tratamientos químicos. Fórmula libre de sulfatos y parabenos.",
+    "price": 16.99,
+    "images": [
+      {
+        "url": "https://res.cloudinary.com/dhfoantq0/image/upload/v1768635550/HerbAuraBotanica/products/mmwrdsotpcyvvidvm9hc.png",
+        "isMain": true
+      }
+    ],
+    "category": "Shampoos",
+    "stockQuantity": 150,
+    "discountPercentage": 0,
+    "tags": "Keratina, Argán, Reparador, Sin sulfatos, Cabello dañado",
+    "isActive": true
+  },
+  {
+    "name": "HerbAura Acondicionador Nutritivo de Coco y Macadamia",
+    "description": "Acondicionador ultra nutritivo con extractos de coco orgánico y aceite de macadamia. Proporciona hidratación profunda, desenreda sin esfuerzo, controla el frizz y aporta brillo sedoso. Su fórmula ligera no apelmaza y deja el cabello suave y manejable. Ideal para cabellos secos y rizados.",
+    "price": 15.99,
+    "images": [
+      {
+        "url": "https://res.cloudinary.com/dhfoantq0/image/upload/v1769464651/products/tehwhfymcsydycare5xb.jpg",
+        "isMain": false
+      },
+      {
+        "url": "https://res.cloudinary.com/dhfoantq0/image/upload/v1769464652/products/nwyzduvymcal2wuzpqjb.png",
+        "isMain": true
+      }
+    ],
+    "category": "Acondicionadores",
+    "stockQuantity": 180,
+    "isActive": true,
+    "discountPercentage": 10,
+    "tags": "Coco, Macadamia, Nutritivo, Anti-frizz, Hidratante"
+  },
+  {
+    "name": "HerbAura Mascarilla Intensiva de Aguacate y Karité",
+    "description": "Tratamiento capilar intensivo con aguacate orgánico y manteca de karité africana. Penetra profundamente en la fibra capilar, restaura el daño severo, aporta elasticidad y resistencia. Transforma el cabello seco y quebradizo en melena suave y radiante. Uso semanal recomendado. 250ml.",
+    "price": 19.99,
+    "images": [
+      {
+        "url": "https://res.cloudinary.com/dhfoantq0/image/upload/v1768636442/HerbAuraBotanica/products/ldmxasxpwzvawf00ker9.png",
+        "isMain": true
+      },
+      {
+        "url": "https://res.cloudinary.com/dhfoantq0/image/upload/v1768636442/HerbAuraBotanica/products/bcc0uc62bilfi4bddqy0.png",
+        "isMain": false
+      }
+    ],
+    "category": "Mascarillas y Tratamientos",
+    "stockQuantity": 95,
+    "discountPercentage": 0,
+    "tags": "Aguacate, Karité, Mascarilla, Reparación intensiva, Tratamiento",
+    "isActive": true
+  },
+  {
+    "name": "HerbAura Kit Reparación Total (Shampoo + Acondicionador + Mascarilla)",
+    "description": "Kit completo de reparación capilar de la línea HerbAura. Incluye shampoo reparador de keratina (300ml), acondicionador nutritivo de coco (300ml) y mascarilla intensiva de aguacate (250ml). Rutina completa para transformar el cabello dañado en 4 semanas. Ahorra 20% comprando el kit completo.",
+    "price": 42.99,
+    "images": [
+      {
+        "url": "https://res.cloudinary.com/dhfoantq0/image/upload/v1769463448/products/yac7zncxfk1axjhmyxy1.png",
+        "isMain": true
+      },
+      {
+        "url": "https://res.cloudinary.com/dhfoantq0/image/upload/v1769463448/products/hmdhi7w58qsxnib6p9te.png",
+        "isMain": false
+      },
+      {
+        "url": "https://res.cloudinary.com/dhfoantq0/image/upload/v1769463448/products/fnmfgtiw2xiv9o0qsbz4.png",
+        "isMain": false
+      }
+    ],
+    "category": "Kits y Combos",
+    "stockQuantity": 75,
+    "isActive": true,
+    "discountPercentage": 20,
+    "tags": "Kit completo, Reparación, Ahorro, Combo, Tratamiento completo"
+  },
+  {
+    "name": "HerbAura Tónico Estimulante de Romero y Menta",
+    "description": "Tónico capilar estimulante con extracto concentrado de romero y aceite esencial de menta piperita. Activa la circulación del cuero cabelludo, estimula los folículos pilosos, promueve el crecimiento de cabello nuevo y reduce la caída. Sensación refrescante y revitalizante. Aplicación diaria sin enjuague.",
+    "price": 17.99,
+    "images": [
+      {
+        "url": "https://res.cloudinary.com/dhfoantq0/image/upload/v1768641017/HerbAuraBotanica/products/undaqilannacoc3izdeo.png",
+        "isMain": true
+      }
+    ],
+    "category": "Tónicos y Lociones",
+    "stockQuantity": 120,
+    "discountPercentage": 0,
+    "tags": "Romero, Menta, Crecimiento, Anticaída, Estimulante",
+    "isActive": true
+  },
+  {
+    "name": "HerbAura Shampoo Revitalizante de Aloe Vera y Jengibre",
+    "description": "Shampoo revitalizante con gel puro de aloe vera orgánico y extracto de jengibre asiático. Limpia suavemente sin resecar, equilibra el pH del cuero cabelludo, fortalece las raíces débiles y aporta volumen natural. Ideal para uso frecuente en todo tipo de cabello. Libre de sulfatos agresivos.",
+    "price": 14.99,
+    "images": [
+      {
+        "url": "https://res.cloudinary.com/dhfoantq0/image/upload/v1768641058/HerbAuraBotanica/products/ubrqz0l7xcg3yhnl6vrj.png",
+        "isMain": true
+      }
+    ],
+    "category": "Shampoos",
+    "stockQuantity": 200,
+    "discountPercentage": 0,
+    "tags": "Aloe vera, Jengibre, Natural, Sin sulfatos, Todo tipo de cabello",
+    "isActive": true
+  },
+  {
+    "name": "HerbAura Aceite de Argán Marroquí 100% Puro",
+    "description": "Aceite capilar premium extraído en frío de las nueces de argán marroquí. Rico en vitamina E, ácidos grasos omega-6 y antioxidantes naturales. Hidrata intensamente, repara puntas abiertas, elimina el frizz y aporta brillo diamantino. Multiusos: pre-shampoo, finalizador o tratamiento nocturno. Certificado orgánico.",
+    "price": 22.99,
+    "images": [
+      {
+        "url": "https://res.cloudinary.com/dhfoantq0/image/upload/v1768641088/HerbAuraBotanica/products/fv4pdsfdqj8wj9pshjai.png",
+        "isMain": true
+      }
+    ],
+    "category": "Aceites Capilares",
+    "stockQuantity": 150,
+    "discountPercentage": 0,
+    "tags": "Argán, Marroquí, Orgánico, Puro, Vitamina E",
+    "isActive": true
+  },
+  {
+    "name": "HerbAura Mascarilla Nutritiva de Aguacate y Miel de Manuka",
+    "description": "Mascarilla ultra nutritiva con aguacate hass orgánico y miel de manuka neozelandesa. Fórmula cremosa que sella la cutícula, aporta nutrición profunda, elimina la opacidad y devuelve la elasticidad perdida. Perfecta para cabellos muy secos, porosos o con tratamientos químicos. Resultados visibles desde la primera aplicación.",
+    "price": 18.99,
+    "images": [
+      {
+        "url": "https://res.cloudinary.com/dhfoantq0/image/upload/v1768641121/HerbAuraBotanica/products/ftvthtcz7yqgk3qv6x6u.png",
+        "isMain": true
+      }
+    ],
+    "category": "Mascarillas y Tratamientos",
+    "stockQuantity": 165,
+    "discountPercentage": 5,
+    "tags": "Aguacate, Miel de Manuka, Nutritiva, Cabello seco, Orgánico",
+    "isActive": true
+  },
+  {
+    "name": "HerbAura Spray Desenredante de Manzanilla y Proteína de Seda",
+    "description": "Spray bifásico desenredante con infusión de manzanilla romana y proteína de seda hidrolizada. Desenreda instantáneamente sin tirones, suaviza el cabello rebelde, facilita el peinado y protege contra el calor hasta 230°C. Textura ligera no grasa. Ideal para niños y adultos. Aroma delicado y natural.",
+    "price": 12.99,
+    "images": [
+      {
+        "url": "https://res.cloudinary.com/dhfoantq0/image/upload/v1768641150/HerbAuraBotanica/products/ixyqgqvthtuk3J7jrmxq.png",
+        "isMain": true
+      }
+    ],
+    "category": "Finalizadores y Protectores",
+    "stockQuantity": 200,
+    "discountPercentage": 0,
+    "tags": "Manzanilla, Desenredante, Proteína de seda, Protección térmica, Para toda la familia",
+    "isActive": true
+  },
+  {
+    "name": "HerbAura Sérum Reparador de Puntas con Vitamina E y Ceramidas",
+    "description": "Sérum concentrado para puntas con complejo de vitamina E, ceramidas vegetales y pantenol. Sella instantáneamente las puntas abiertas, previene el quiebre, aporta brillo espejo y controla el frizz por 48 horas. Textura ultra ligera de rápida absorción. Puede usarse en cabello húmedo o seco. Sin enjuague.",
+    "price": 19.99,
+    "images": [
+      {
+        "url": "https://res.cloudinary.com/dhfoantq0/image/upload/v1768641182/HerbAuraBotanica/products/kthivcsnb8rp0gzmu3il.png",
+        "isMain": true
+      }
+    ],
+    "category": "Finalizadores y Protectores",
+    "stockQuantity": 180,
+    "discountPercentage": 0,
+    "tags": "Sérum, Vitamina E, Ceramidas, Puntas abiertas, Anti-frizz",
+    "isActive": true
+  },
+  {
+    "name": "HerbAura Shampoo Sólido Detox de Lavanda y Té Verde",
+    "description": "Shampoo sólido ecológico con aceite esencial de lavanda francesa y extracto de té verde matcha. Fórmula concentrada zero waste equivalente a 3 botellas plásticas. Limpia profundamente, desintoxica el cuero cabelludo de impurezas y productos acumulados. Libre de sulfatos, siliconas y conservantes. Vegano y cruelty-free. 100g.",
+    "price": 16.99,
+    "images": [
+      {
+        "url": "https://res.cloudinary.com/dhfoantq0/image/upload/v1768641208/HerbAuraBotanica/products/oqxgqv3ywhiwh7zv6v6u.png",
+        "isMain": true
+      }
+    ],
+    "category": "Shampoos",
+    "stockQuantity": 140,
+    "discountPercentage": 0,
+    "tags": "Shampoo sólido, Lavanda, Té verde, Zero waste, Vegano",
+    "isActive": true
+  },
+  {
+    "name": "HerbAura Acondicionador Hidratante de Leche de Coco y Manteca de Karité",
+    "description": "Acondicionador cremoso con leche de coco orgánica y manteca de karité virgen. Hidratación profunda que transforma cabellos secos en melenas sedosas. Desenreda sin pesar, sella la cutícula y controla el volumen rebelde. Su fórmula rica penetra en las fibras más dañadas. Aroma tropical natural. 300ml.",
+    "price": 16.49,
+    "images": [
+      {
+        "url": "https://res.cloudinary.com/dhfoantq0/image/upload/v1768641242/HerbAuraBotanica/products/wvrtfrzsfwd0reokqeis.png",
+        "isMain": true
+      }
+    ],
+    "category": "Acondicionadores",
+    "stockQuantity": 190,
+    "discountPercentage": 0,
+    "tags": "Leche de coco, Karité, Hidratante, Cabello seco, Orgánico",
+    "isActive": true
+  },
+  {
+    "name": "HerbAura Tónico Anticaída Fortalecedor de Ortiga y Biotina",
+    "description": "Tónico capilar anticaída con extracto concentrado de ortiga verde, biotina, zinc y complejo de aminoácidos. Reduce la caída hasta un 70% en 8 semanas de uso continuo. Fortalece los folículos débiles, aumenta el grosor del cabello y estimula el crecimiento de nuevas hebras. Clínicamente probado. Aplicación tópica sin enjuague.",
+    "price": 24.99,
+    "images": [
+      {
+        "url": "https://res.cloudinary.com/dhfoantq0/image/upload/v1768641266/HerbAuraBotanica/products/wix6gx2msbmw5lutrbj7.png",
+        "isMain": true
+      }
+    ],
+    "category": "Tónicos y Lociones",
+    "stockQuantity": 110,
+    "discountPercentage": 0,
+    "tags": "Ortiga, Biotina, Anticaída, Fortalecedor, Crecimiento",
+    "isActive": true
+  },
+  {
+    "name": "HerbAura Gel Definidor de Rizos con Aloe y Romero",
+    "description": "Gel modelador especial para rizos y ondas con gel puro de aloe vera y extracto de romero. Define y controla los rizos sin endurecerlos, elimina el frizz, aporta movimiento natural y brillo. Fórmula libre de alcohol que no reseca ni deja residuos blancos. Fijación media flexible. Técnica scrunch-friendly.",
+    "price": 14.99,
+    "images": [
+      {
+        "url": "https://res.cloudinary.com/dhfoantq0/image/upload/v1768641296/HerbAuraBotanica/products/qbs1g8bwmwxoxtwulzgw.png",
+        "isMain": true
+      }
+    ],
+    "category": "Finalizadores y Protectores",
+    "stockQuantity": 155,
+    "discountPercentage": 0,
+    "tags": "Gel, Aloe vera, Romero, Rizos, Definidor",
+    "isActive": true
+  },
+  {
+    "name": "HerbAura Scrub Detox Capilar de Sal del Himalaya y Jojoba",
+    "description": "Exfoliante capilar purificante con cristales de sal rosa del Himalaya y aceite de jojoba orgánico. Elimina la acumulación de productos, grasa, caspa y células muertas. Estimula la microcirculación, oxigena los folículos y prepara el cuero cabelludo para absorber mejor los tratamientos. Uso quincenal. 200ml.",
+    "price": 18.99,
+    "images": [
+      {
+        "url": "https://res.cloudinary.com/dhfoantq0/image/upload/v1768641321/HerbAuraBotanica/products/s8uw57kobjirvfavayju.png",
+        "isMain": true
+      }
+    ],
+    "category": "Mascarillas y Tratamientos",
+    "stockQuantity": 85,
+    "discountPercentage": 0,
+    "tags": "Exfoliante, Sal del Himalaya, Jojoba, Detox, Cuero cabelludo",
+    "isActive": true
+  },
+  {
+    "name": "HerbAura Spray Voluminizador de Castaño de Indias y Colágeno",
+    "description": "Spray texturizante voluminizador con extracto de castaño de indias y colágeno marino hidrolizado. Levanta las raíces, aporta cuerpo y densidad al cabello fino y sin vida. Crea textura y volumen duradero sin apelmazar. Ideal para pre-secado o retoque durante el día. Fórmula ligera sin alcohol. 200ml.",
+    "price": 15.99,
+    "images": [
+      {
+        "url": "https://res.cloudinary.com/dhfoantq0/image/upload/v1768641344/HerbAuraBotanica/products/gfpbefhroyrcw4ggnc3g.png",
+        "isMain": true
+      }
+    ],
+    "category": "Finalizadores y Protectores",
+    "stockQuantity": 130,
+    "discountPercentage": 0,
+    "tags": "Volumen, Castaño de indias, Colágeno, Cabello fino, Texturizante",
+    "isActive": true
+  },
+  {
+    "name": "HerbAura Mascarilla Suavizante de Plátano Tropical y Miel Orgánica",
+    "description": "Mascarilla suavizante con extracto de plátano tropical rico en potasio y miel orgánica multifloral. Restaura la suavidad extrema, sella las cutículas levantadas, aporta elasticidad y brillo duradero. Perfecta para cabellos ásperos, rebeldes o con frizz. Su textura cremosa se distribuye fácilmente. Resultados tipo salón en casa.",
+    "price": 17.99,
+    "images": [
+      {
+        "url": "https://res.cloudinary.com/dhfoantq0/image/upload/v1768641370/HerbAuraBotanica/products/hpmwz2y9rcub6ttjmsra.png",
+        "isMain": true
+      }
+    ],
+    "category": "Mascarillas y Tratamientos",
+    "stockQuantity": 145,
+    "discountPercentage": 0,
+    "tags": "Plátano, Miel orgánica, Suavizante, Anti-frizz, Brillo",
+    "isActive": true
+  },
+  {
+    "name": "HerbAura Aceite Terapéutico Capilar de Lavanda de Provenza",
+    "description": "Aceite esencial terapéutico 100% puro de lavanda de Provenza, Francia. Calma el cuero cabelludo irritado, reduce la inflamación, combate la caspa y equilibra la producción de grasa. Promueve un crecimiento saludable y aporta aroma relajante. Ideal para masajes nocturnos del cuero cabelludo. Envase con gotero de precisión. 15ml.",
+    "price": 21.99,
+    "images": [
+      {
+        "url": "https://res.cloudinary.com/dhfoantq0/image/upload/v1768641398/HerbAuraBotanica/products/qamg0wiyblpvtlawkmou.png",
+        "isMain": true
+      }
+    ],
+    "category": "Aceites Capilares",
+    "stockQuantity": 90,
+    "discountPercentage": 0,
+    "tags": "Lavanda, Provenza, Aceite esencial, Terapéutico, Cuero cabelludo",
+    "isActive": true
+  },
+  {
+    "name": "HerbAura Crema de Peinar Multifuncional con Extractos Botánicos",
+    "description": "Crema de peinar leave-in con complejo de 7 extractos botánicos (caléndula, hibisco, bambú, loto, ginseng, algas marinas y árbol de té). Hidrata, desenreda, controla el frizz, protege del calor, sella puntas y aporta brillo natural. Textura cremosa no grasa para todo tipo de cabello. El aliado perfecto para tu rutina diaria. 250ml.",
+    "price": 18.99,
+    "images": [
+      {
+        "url": "https://res.cloudinary.com/dhfoantq0/image/upload/v1769230423/HerbAuraBotanica/products/wopuotgjjtsmkeoenznj.png",
+        "isMain": true
+      },
+      {
+        "url": "https://res.cloudinary.com/dhfoantq0/image/upload/v1769230422/HerbAuraBotanica/products/ebiaorlclwdja0fbjf7s.png",
+        "isMain": false
+      },
+      {
+        "url": "https://res.cloudinary.com/dhfoantq0/image/upload/v1769230422/HerbAuraBotanica/products/ffflmud26s01dzyxwegw.png",
+        "isMain": false
+      }
+    ],
+    "category": "Finalizadores y Protectores",
+    "stockQuantity": 160,
+    "discountPercentage": 15,
+    "tags": "Crema de peinar, Leave-in, Extractos botánicos, Multifuncional, Protección",
+    "isActive": true
+  },
+  {
+    "name": "HerbAura Ampollas Intensivas de Rescate Capilar con Keratina",
+    "description": "Tratamiento de choque en ampollas con keratina líquida, colágeno vegetal, vitaminas del complejo B y proteínas de trigo. Recupera el cabello extremadamente dañado en tratamiento de 4 semanas. Cada ampolla contiene una dosis concentrada que penetra hasta la médula del cabello. Resultados profesionales visibles desde la primera aplicación. Caja con 12 ampollas de 10ml.",
+    "price": 34.99,
+    "images": [
+      {
+        "url": "https://res.cloudinary.com/dhfoantq0/image/upload/v1769472927/HerbAuraBotanica/products/p4lfcjn0y7k5k0wwt5c0.png",
+        "isMain": true
+      },
+      {
+        "url": "https://res.cloudinary.com/dhfoantq0/image/upload/v1769472927/HerbAuraBotanica/products/cbv6b4sefzb17jt3qpfm.png",
+        "isMain": false
+      },
+      {
+        "url": "https://res.cloudinary.com/dhfoantq0/image/upload/v1769472927/HerbAuraBotanica/products/fh9vsbjykrxwgnaaccfa.png",
+        "isMain": false
+      },
+      {
+        "url": "https://res.cloudinary.com/dhfoantq0/image/upload/v1769472927/HerbAuraBotanica/products/x0rumg12mx2sf7yjxtnn.png",
+        "isMain": false
+      }
+    ],
+    "category": "Mascarillas y Tratamientos",
+    "stockQuantity": 75,
+    "discountPercentage": 20,
+    "tags": "Ampollas, Keratina, Tratamiento intensivo, Rescate capilar, Profesional",
+    "isActive": true
+  }
+]

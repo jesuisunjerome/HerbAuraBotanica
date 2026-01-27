@@ -7,13 +7,13 @@ import LoadingSkeletonProduct from "../../components/public/catalog/LoadingSkele
 import Banner from "../../components/public/home/Banner";
 import BestSeller from "../../components/public/home/BestSeller";
 import Gallery from "../../components/public/home/Gallery";
-import { useFetchActiveProducts } from "../../hooks/products/queries";
-import { formatCurrency } from "../../lib/helper";
+import NewProductCard from "../../components/public/home/NewProductCard";
+import { useFetchNewArrivals } from "../../hooks/products/queries";
 import { useCartStore } from "../../store/useCartStore";
 
 export default function HomePage() {
   const { addToCart } = useCartStore();
-  const { isPending, products } = useFetchActiveProducts();
+  const { isPending, newProducts } = useFetchNewArrivals();
 
   return (
     <>
@@ -95,48 +95,19 @@ export default function HomePage() {
         {isPending ? (
           <LoadingSkeletonProduct />
         ) : (
-          <div className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-10">
-            {products.slice(0, 5).map((item) => (
-              <div
-                key={item._id}
-                className="rounded-2xl group overflow-hidden relative bg-gray-200 p-3  hover:scale-105 transition-transform duration-400"
-              >
-                <img
-                  loading="lazy"
-                  src={item.images[0]}
-                  className="w-full h-80 bg-gray-200 object-contain group-hover:scale-90 transition-transform delay-100 duration-1000"
-                  alt={item.name}
-                />
-                <button
-                  title="Agregar al carrito"
-                  onClick={() => addToCart(item)}
-                  className="absolute group-hover:top-2 top-2 lg:-top-100 right-2 p-2 size-10 flex items-center justify-center rounded-xl bg-white/60 hover:shadow-lg backdrop-blur-sm"
-                >
-                  <HandbagIcon className="w-5 h-5" />
-                </button>
-                <Link
-                  title="Ver detalles"
-                  to={`/products/${item._id}`}
-                  className="flex items-center group hover:-translate-y-0.5 transition-all absolute left-1/2 transform -translate-x-1/2 w-[95%] rounded-xl overflow-hidden bottom-1 p-3 bg-white/60 backdrop-blur-sm"
-                >
-                  <span className="flex gap-1 flex-1 flex-col">
-                    <span className="hidden lg:block group-hover:hidden transition-all">
-                      {item.name}
-                    </span>
-                    <span className="block lg:hidden group-hover:block text-xl font-bold">
-                      {formatCurrency(item.price)}
-                    </span>
-                    <small className="block lg:hidden group-hover:block">
-                      {item.name}
-                    </small>
-                  </span>
-                  <span className="block text-end p-2 h-10 w-10 rounded-full transition-all group-hover:translate-x-2">
-                    <ChevronRightIcon className="w-6 h-6 group-hover:animate-bounce ml-auto" />
-                  </span>
-                </Link>
+          <>
+            {newProducts.length > 0 && (
+              <div className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-10">
+                {newProducts.map((item) => (
+                  <NewProductCard
+                    key={item._id}
+                    item={item}
+                    addToCart={addToCart}
+                  />
+                ))}
               </div>
-            ))}
-          </div>
+            )}
+          </>
         )}
 
         <div className="text-center">

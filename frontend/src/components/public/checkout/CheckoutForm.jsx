@@ -180,9 +180,10 @@ export default function CheckoutForm() {
               <span className="font-medium">Total</span>
               <span className="font-semibold">{formatCurrency(total)}</span>
             </div>
+
             <div>
               <p className="mb-2">Selecciona un método de pago:</p>
-              <div className="flex gap-2 items-center text-sm mb-3">
+              <div className="flex gap-2 items-center text-sm mb-7">
                 {CART.PAYMENT_METHODS.map((method) => (
                   <button
                     type="button"
@@ -207,18 +208,22 @@ export default function CheckoutForm() {
                   </button>
                 ))}
               </div>
-              <button
+              {/* <button
                 type="submit"
                 disabled={!isValid}
                 className="w-full bg-amber-500 hover:bg-amber-600 text-white py-3 rounded-lg transition-colors disabled:hover:bg-amber-500"
               >
                 Continuar al Pago
-              </button>
-              <PayPalButton
-                amount={total.toFixed(2)}
-                onSuccess={handlePaymentSuccess}
-                onError={handlePaymentError}
-              />
+              </button> */}
+
+              {isValid && (
+                <RenderPaymentMethods
+                  method={selectedPaymentMethod}
+                  total={total}
+                  handlePaymentSuccess={handlePaymentSuccess}
+                  handlePaymentError={handlePaymentError}
+                />
+              )}
             </div>
           </div>
         </div>
@@ -226,3 +231,41 @@ export default function CheckoutForm() {
     </>
   );
 }
+
+const RenderPaymentMethods = ({
+  method,
+  total,
+  handlePaymentSuccess,
+  handlePaymentError,
+}) => {
+  switch (method) {
+    case "PayPal":
+      return (
+        <PayPalButton
+          amount={total.toFixed(2)}
+          onSuccess={handlePaymentSuccess}
+          onError={handlePaymentError}
+        />
+      );
+    case "MercadoPago":
+      return (
+        <button
+          type="button"
+          className="w-full bg-indigo-500 hover:bg-indigo-600 text-white py-3 rounded-lg transition-colors disabled:hover:bg-indigo-500"
+        >
+          MercadoPago Button
+        </button>
+      );
+    case "Stripe":
+      return (
+        <button
+          type="button"
+          className="w-full bg-violet-500 hover:bg-violet-600 text-white py-3 rounded-lg transition-colors disabled:hover:bg-violet-500"
+        >
+          Stripe Button
+        </button>
+      );
+    default:
+      return null;
+  }
+};

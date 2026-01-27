@@ -1,8 +1,11 @@
+import { ORDER_STATUS } from "../lib/constants.js";
 import Order from "../models/Order.js";
 
 export const getAllOrders = async (_, res) => {
   try {
-    const orders = await Order.find();
+    console.log("getAllOrders controller");
+
+    const orders = await Order.find().sort({ createdAt: -1 }); // Sort by most recent
     res.json(orders);
   } catch (error) {
     console.log("Server error in getAllOrders controller", error.message);
@@ -14,9 +17,11 @@ export const getOrderById = async (req, res) => {
   const { id } = req.params;
 
   try {
+    console.log("getOrderById controller");
+
     const order = await Order.findById(id);
     if (!order) {
-      return res.status(404).json({ message: "Order not found" });
+      return res.status(404).json({ message: "Orden no encontrada" });
     }
 
     res.json(order);
@@ -26,90 +31,27 @@ export const getOrderById = async (req, res) => {
   }
 };
 
-export const getOrderByConfirmationNumber = async (req, res) => {
-  const { confirmationNumber } = req.params;
-
-  try {
-    const order = await Order.findOne({ confirmationNumber });
-    if (!order) {
-      return res.status(404).json({ message: "Order not found" });
-    }
-
-    res.json(order);
-  } catch (error) {
-    console.log(
-      "Server error in getOrderByConfirmationNumber controller",
-      error.message
-    );
-    res.status(500).json({ message: error.message });
-  }
-};
-
-export const createOrder = async (req, res) => {
-  const orderData = req.body;
-
-  try {
-    if (orderData.products.length === 0) {
-      return res
-        .status(400)
-        .json({ message: "An order must have at least one product." });
-    }
-
-    const orderConfirmationNumber = `#HERB-${Date.now()}-${Math.floor(
-      Math.random() * 1000
-    )}-AURA`;
-    orderData.confirmationNumber = orderConfirmationNumber;
-
-    const newOrder = await Order.create(orderData);
-    res.status(201).json(newOrder);
-  } catch (error) {
-    console.log("Server error in createOrder controller", error.message);
-    res.status(500).json({ message: error.message });
-  }
-};
-
-export const updateOrderStatusById = async (req, res) => {
+export const updateOrderStatus = async (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
 
   try {
-    const updatedOrder = await Order.findByIdAndUpdate(
-      id,
-      { status },
-      { new: true }
-    );
+    console.log("updateOrderStatus controller");
 
-    if (!updatedOrder) {
-      return res.status(404).json({ message: "Order not found" });
-    }
+    const order = await Order.findById(id);
+    if (!order) return res.status(404).json({ message: "Orden no encontrada" });
 
-    res.json(updatedOrder);
+    order.status = status || order.status;
+    order.isDelivered =
+      status === ORDER_STATUS.DELIVERED ? true : order.isDelivered;
+    order.deliveredAt =
+      status === ORDER_STATUS.DELIVERED ? new Date() : order.deliveredAt;
+
+    await order.save();
+
+    res.json({ message: "Estado de la orden actualizado", order });
   } catch (error) {
-    console.log(
-      "Server error in updateOrderStatusById controller",
-      error.message
-    );
-    res.status(500).json({ message: error.message });
-  }
-};
-
-export const deleteOrderById = async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    const order = await Order.findByIdAndUpdate(
-      id,
-      { status: "Cancelado" },
-      { new: true }
-    );
-
-    if (!order) {
-      return res.status(404).json({ message: "Order not found" });
-    }
-
-    res.json({ message: "Order deleted successfully" });
-  } catch (error) {
-    console.log("Server error in deleteOrderById controller", error.message);
+    console.log("Server error in updateOrderStatus controller", error.message);
     res.status(500).json({ message: error.message });
   }
 };

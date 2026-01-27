@@ -13,11 +13,7 @@ export default function ProductDetails({ product, isPending }) {
   const navigate = useNavigate();
   const { name, price, description, tags } = product;
 
-  console.log(tags);
-
-  if (isPending) {
-    return <LoadingSkeleton />;
-  }
+  if (isPending) return <LoadingSkeleton />;
 
   return (
     <div className="w-full mx-auto sm:w-9/12 md:w-8/12 lg:w-7/12">
@@ -41,7 +37,7 @@ export default function ProductDetails({ product, isPending }) {
           <p className="text-gray-700">{description}</p>
         </div>
 
-        <div className="flex sm:flex-wrap items-end gap-5 pb-5 mb-5 border-b border-gray-300/50">
+        <div className="flex flex-col sm:flex-row flex-wrap items-end gap-2 pb-5 mb-5 border-b border-gray-300/50">
           <button
             onClick={() => addToCart(product)}
             className="bg-amber-600 text-white px-6 py-3 rounded group hover:bg-amber-700 transition hover:shadow-lg flex w-full sm:w-auto justify-center items-center gap-2"

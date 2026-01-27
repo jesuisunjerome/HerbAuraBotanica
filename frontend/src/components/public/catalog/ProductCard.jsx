@@ -7,7 +7,7 @@ export default function ProductCard({ item, handleAddToCart, searchTerm }) {
     <div className="rounded-2xl overflow-hidden group relative bg-gray-200 p-3 hover:scale-105 transition-transform duration-400">
       <img
         loading="lazy"
-        src={item.images[0]}
+        src={item.images.find((img) => img.isMain)?.url}
         className="w-full h-80 bg-gray-200 object-contain group-hover:scale-90 transition-transform delay-100 duration-1000"
         alt={item.name}
       />

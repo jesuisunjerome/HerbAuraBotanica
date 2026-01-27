@@ -4,7 +4,9 @@ import "dotenv/config";
 import connectDB from "./lib/db.js";
 
 import productRoutes from "./routes/product.route.js";
+import checkoutRoutes from "./routes/checkout.route.js";
 import orderRoutes from "./routes/order.route.js";
+import subscriberRoutes from "./routes/subscriber.route.js";
 
 // Initialize Express app
 const app = express();
@@ -26,7 +28,9 @@ app.use(
 
 // Routes
 app.use("/api/products", productRoutes);
+app.use("/api/checkout", checkoutRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/subscribe", subscriberRoutes);
 
 // Global error handler (try catch no longer needed in controllers)
 app.use((err, req, res, next) => {

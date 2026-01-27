@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 
 export default function ImagesDetails({ product, isPending }) {
   const { images, name } = product;
-  const [selectedImage, setSelectedImage] = useState(images?.[0] || null);
+  const [selectedImage, setSelectedImage] = useState(
+    images?.find((img) => img.isMain)?.url || null,
+  );
 
   const handleToggleImage = (imageUrl) => {
     setSelectedImage(imageUrl);
@@ -10,7 +12,7 @@ export default function ImagesDetails({ product, isPending }) {
 
   useEffect(() => {
     if (images && images.length > 0) {
-      setSelectedImage(images[0]);
+      setSelectedImage(images.find((img) => img.isMain)?.url || images[0]?.url);
     }
   }, [images]);
 
@@ -24,27 +26,29 @@ export default function ImagesDetails({ product, isPending }) {
         <div className="p-3 rounded-2xl overflow-hidden bg-gray-100">
           <img
             loading="lazy"
-            src={selectedImage || images?.[0]}
+            src={selectedImage || images?.find((img) => img.isMain)?.url}
             className="w-full object-contain h-100 bg-gray-100 rounded-2xl"
             alt={name}
           />
         </div>
         <div className="mt-5 flex gap-3 overflow-x-scroll p-1 pb-2 scrollbar-hide">
-          {images?.map((image) => (
-            <button
-              key={image}
-              onClick={() => handleToggleImage(image)}
-              className={`bg-gray-100 overflow-hidden rounded-2xl p-2  shrink-0 ${selectedImage === image ? "ring-2 ring-offset-2 ring-gray-200" : ""}`}
-            >
-              <img
-                loading="lazy"
-                src={image}
-                className="w-24 h-24 object-contain bg-gray-100 rounded-2xl"
-                alt={name}
-                draggable={false}
-              />
-            </button>
-          ))}
+          {images
+            ?.sort((a, b) => b.isMain - a.isMain)
+            .map((image) => (
+              <button
+                key={image.url}
+                onClick={() => handleToggleImage(image.url)}
+                className={`bg-gray-100 overflow-hidden rounded-2xl p-2  shrink-0 ${selectedImage === image.url ? "ring-2 ring-offset-2 ring-gray-200" : ""}`}
+              >
+                <img
+                  loading="lazy"
+                  src={image.url}
+                  className="w-24 h-24 object-contain bg-gray-100 rounded-2xl"
+                  alt={name}
+                  draggable={false}
+                />
+              </button>
+            ))}
         </div>
       </div>
     </div>
@@ -56,7 +60,7 @@ function LoadingSkeleton() {
     <div className="w-full sm:w-9/12 md:w-8/12 mx-auto lg:w-5/12 animate-pulse">
       <div className="sticky top-20">
         <div className="p-3 rounded-2xl overflow-hidden bg-gray-200 h-96" />
-        <div className="mt-5 flex justify-center gap-3">
+        <div className="mt-5 flex gap-3">
           <div className="bg-gray-200 overflow-hidden rounded-2xl p-2 w-24 h-24" />
           <div className="bg-gray-200 overflow-hidden rounded-2xl p-2 w-24 h-24" />
         </div>

@@ -11,7 +11,7 @@ createRoot(document.getElementById("root")).render(
     <ReactQueryDevtools />
     <App />
     <Toaster
-      position="top-right"
+      position="top-center"
       gutter={12}
       containerStyle={{ margin: "8px" }}
       toastOptions={{

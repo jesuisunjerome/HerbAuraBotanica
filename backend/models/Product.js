@@ -16,12 +16,17 @@ const productSchema = new mongoose.Schema(
       min: 0,
     },
     images: {
-      type: [String],
+      type: [
+        {
+          url: { type: String, required: true },
+          isMain: { type: Boolean, default: false },
+        },
+      ],
       validate: {
         validator: function (v) {
           return v.length > 0;
         },
-        message: "A product must have at least one image.",
+        message: "Un producto debe tener al menos una imagen.",
       },
     },
     category: {
