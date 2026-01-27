@@ -2,7 +2,8 @@ import { createBrowserRouter, Navigate } from "react-router";
 import AdminLayout from "../layouts/admin/AdminLayout";
 import MainLayout from "../layouts/public/MainLayout";
 import DashboardPage from "../pages/admin/DashboardPage";
-import ProductPage from "../pages/admin/ProductPage";
+import OrdersPage from "../pages/admin/OrdersPage";
+import ProductsPage from "../pages/admin/ProductsPage";
 import AboutPage from "../pages/public/AboutPage";
 import CatalogPage from "../pages/public/CatalogPage";
 import CheckoutPage from "../pages/public/CheckoutPage";
@@ -42,7 +43,7 @@ const router = createBrowserRouter([
         element: <CheckoutPage />,
       },
       {
-        path: "/order-confirmation",
+        path: "/order-confirmation/:orderId",
         element: <OrderConfirmationPage />,
       },
       {
@@ -82,8 +83,9 @@ const router = createBrowserRouter([
       },
       {
         path: "products/:tab?",
-        element: <ProductPage />,
+        element: <ProductsPage />,
       },
+      { path: "orders", element: <OrdersPage /> },
       {
         path: "*",
         element: <div>Admin 404 Not Found</div>,

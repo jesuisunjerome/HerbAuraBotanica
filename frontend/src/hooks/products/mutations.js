@@ -7,8 +7,8 @@ export const useCreateProduct = () => {
 
   const { isPending: isCreating, mutate: createProduct } = useMutation({
     mutationFn: async (newProduct) => {
-      const response = await axiosInstance.post("/products", newProduct);
       toast.loading("Guardando...", { id: "createProduct" });
+      const response = await axiosInstance.post("/products", newProduct);
       return response.data;
     },
     onSuccess: () => {

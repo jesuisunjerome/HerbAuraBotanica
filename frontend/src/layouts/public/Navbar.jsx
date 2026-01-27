@@ -24,7 +24,7 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-50">
+      <header className="sticky top-0 z-50 bg-[#fdfcfb]">
         <nav className="navbar lg:px-20 md:px-5 py-1">
           <div className="md:hidden">
             <button onClick={handleToggleNav} aria-label="Toggle Navigation">

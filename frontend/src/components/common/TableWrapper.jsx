@@ -82,7 +82,7 @@ export function TPagination({ table }) {
           <span>({table.getFilteredRowModel().rows.length} resultados)</span>
         </div>
         <div className="hidden md:block">
-          <span>| Mostrar</span>
+          <span>| Mostrar </span>
           <select
             value={table.getState().pagination.pageSize}
             onChange={(e) => {

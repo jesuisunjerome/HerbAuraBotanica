@@ -109,6 +109,19 @@ export const CART = {
   },
 };
 
+export const ORDER_STATUS = {
+  PROCESSING: "Processing",
+  SHIPPED: "Shipped",
+  DELIVERED: "Delivered",
+  CANCELLED: "Cancelled",
+};
+
+export const PAYMENT_STATUS = {
+  PENDING: "Pending",
+  PAID: "Paid",
+  FAILED: "Failed",
+};
+
 export const SORT_BY_OPTIONS = [
   { value: "", label: "Todos los productos" },
   { value: "priceAsc", label: "Precio: Bajo a Alto" },

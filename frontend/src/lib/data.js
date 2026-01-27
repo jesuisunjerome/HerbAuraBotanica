@@ -175,7 +175,7 @@ export const mocckCheckoutClientData = {
   country: "País Ejemplo",
   postalCode: "12345",
   state: "Estado Ejemplo",
-  paymentMethod: "MercadoPago",
+  paymentMethod: "PayPal",
 };
 
 export const newProduct = {

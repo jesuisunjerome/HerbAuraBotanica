@@ -57,7 +57,7 @@ export default function Sidebar({ showNavMobile, handleToggleNav }) {
             <span>Dashboard</span>
           </NavLink>
           <NavLink
-            to="/admin/order"
+            to="/admin/orders"
             className="flex items-center justify-between px-3 py-2 rounded-md hover:bg-slate-50"
           >
             <span className="flex items-center gap-3">

@@ -12,9 +12,12 @@ import {
   MessageCircleIcon,
   TruckIcon,
 } from "lucide-react";
-import { Link, useNavigate } from "react-router";
+import { useEffect } from "react";
+import { Link, useNavigate, useParams } from "react-router";
 import GradientBg from "../../components/common/GradientBg";
+import NoData from "../../components/common/NoData";
 import SEORender from "../../components/common/SEORender";
+import { useGetOrderById } from "../../hooks/orders/queries";
 import {
   calculateCartTotals,
   formatCurrency,
@@ -24,8 +27,29 @@ import { useCartStore } from "../../store/useCartStore";
 
 export default function OrderConfirmationPage() {
   const navigate = useNavigate();
-  const { cart } = useCartStore();
-  const { subtotal, tax, shipping, total } = calculateCartTotals(cart);
+  const { orderId } = useParams();
+  const { isPending, order } = useGetOrderById(orderId);
+  const { shippingDetails, orderItems, totalAmount } = order || {};
+  const { user } = shippingDetails || {};
+
+  const { cart, clearCart } = useCartStore();
+  const { subtotal, tax, shipping } = calculateCartTotals(cart);
+
+  useEffect(() => {
+    if (!isPending && order) clearCart();
+  }, [order, isPending, clearCart, navigate]);
+
+  if (isPending) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <LoaderIcon className="w-8 h-8 animate-spin text-amber-500" />
+      </div>
+    );
+  }
+
+  if (!order) {
+    return <NoData message="No se encontró el pedido." />;
+  }
 
   return (
     <>
@@ -33,7 +57,7 @@ export default function OrderConfirmationPage() {
         title="Confirmación de Pedido :: HerbAura Botanica"
         description="Gracias por tu compra en HerbAura Botanica. Tu pedido ha sido recibido y está siendo procesado. Revisa los detalles de tu pedido y la información de envío aquí."
       />
-      <section className="md:px-5 px-3 lg:px-20 pt-10 pb-20 relative bg-whsite">
+      <section className="md:px-5 px-3 lg:px-20 pt-10 pb-20 relative">
         <GradientBg />
         <div className="max-w-lg mb-6 mx-auto lg:p-8 rounded text-center">
           <CheckCircleIcon className="w-16 h-16 text-emerald-500 mx-auto mb-4" />
@@ -48,7 +72,7 @@ export default function OrderConfirmationPage() {
           <p className="text-gray-600 leading-tight">
             <MailCheckIcon className="w-5 h-5 inline-block mr-2" />
             Se ha enviado un correo de confirmación a{" "}
-            <span className="font-medium">ejemplo@correo.com</span>.
+            <span className="font-medium">{user?.email}</span>.
           </p>
         </div>
 
@@ -62,16 +86,16 @@ export default function OrderConfirmationPage() {
               <ChevronDownIcon className="w-5 h-5 text-gray-400 group-hover:text-gray-700 group-open:rotate-180" />
             </summary>
             <div className="px-6 py-4 space-y-3">
-              {cart.map((item) => (
+              {orderItems?.map((item) => (
                 <div
                   className="flex items-center justify-between py-2 border-b gap-2 border-gray-100"
-                  key={item._id}
+                  key={item.productId}
                 >
                   <div className="flex items-center gap-2">
                     <div className="bg-gray-100 overflow-hidden rounded-xl p-2 shrink-0">
                       <img
                         loading="lazy"
-                        src={item.images[0]}
+                        src={item.image}
                         className="w-12 h-12 object-contain bg-gray-100 rounded-xl"
                         alt={item.name}
                       />
@@ -106,7 +130,7 @@ export default function OrderConfirmationPage() {
                 </div>
                 <div className="flex justify-between font-semibold">
                   <span>Total:</span>
-                  <span>{formatCurrency(total)}</span>
+                  <span>{formatCurrency(totalAmount)}</span>
                 </div>
               </div>
             </div>
@@ -129,7 +153,7 @@ export default function OrderConfirmationPage() {
                     Fecha de compra
                   </span>
                   <span className="text-gray-500 leading-tight">
-                    {formatLongDateToString(new Date(), true)}
+                    {formatLongDateToString(new Date(order?.createdAt), true)}
                   </span>
                 </div>
               </div>
@@ -144,21 +168,23 @@ export default function OrderConfirmationPage() {
                     Enviar a
                   </span>
                   <span className="text-gray-500 leading-tight">
-                    Juan Pérez
+                    {user?.name}
                   </span>
                   <a
-                    href="tel:+5212345678901"
+                    href={`tel:${user?.phone}`}
                     className="text-gray-500 leading-tight"
                   >
-                    +52 1 234 567 8901
+                    {user?.phone}
                   </a>
                   <span className="text-gray-500 leading-tight">
-                    Calle Falsa 123
+                    {user?.address}, C.P: {user?.postalCode}
                   </span>
                   <span className="text-gray-500 leading-tight">
-                    Ciudad de México, CDMX, 01234
+                    {user?.city}, {user?.state}
                   </span>
-                  <span className="text-gray-500 leading-tight">México</span>
+                  <span className="text-gray-500 leading-tight">
+                    {user?.country}
+                  </span>
                 </div>
               </div>
               <div className="flex gap-3">
@@ -190,7 +216,8 @@ export default function OrderConfirmationPage() {
                     Método de pago
                   </span>
                   <span className="text-gray-500 leading-tight">
-                    Tarjeta de crédito/débito (Stripe)
+                    {order?.paymentMethod}
+                    {/* Tarjeta de crédito/débito (Stripe) */}
                   </span>
                 </div>
               </div>
@@ -230,7 +257,7 @@ export default function OrderConfirmationPage() {
                       Confirmado
                     </span>
                     <span className="text-gray-500 leading-tight">
-                      {formatLongDateToString(new Date(), true)}
+                      {formatLongDateToString(new Date(order?.paidAt), true)}
                     </span>
                   </div>
                 </li>
@@ -272,9 +299,20 @@ export default function OrderConfirmationPage() {
                   </div>
                   <div className="flex flex-col text-sm">
                     <span className="font-medium leading-tight">Entregado</span>
-                    <span className="text-gray-500 leading-tight">
-                      Tu pedido será entregado en la dirección proporcionada.
-                    </span>
+                    {order.isDelivered ? (
+                      <span className="text-gray-500 leading-tight">
+                        `Entregado el $
+                        {formatLongDateToString(
+                          new Date(order.deliveredAt),
+                          true,
+                        )}
+                        `
+                      </span>
+                    ) : (
+                      <span className="text-gray-500 leading-tight">
+                        Tu pedido será entregado en la dirección proporcionada.
+                      </span>
+                    )}
                   </div>
                 </li>
               </ul>

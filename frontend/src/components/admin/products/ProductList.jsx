@@ -68,19 +68,24 @@ export default function ProductList() {
       {
         header: "Stock",
         accessorKey: "stockQuantity",
+        cell: ({ row }) => (
+          <span className="font-medium">{row.original.stockQuantity}</span>
+        ),
       },
       {
         header: "Estado",
         accessorKey: "isActive",
         cell: ({ row }) => {
           const isActive = row.original.isActive;
-          return isActive ? (
-            <span className="px-2 py-1 text-xs rounded-full bg-emerald-100 text-emerald-800">
-              Activo
-            </span>
-          ) : (
-            <span className="px-2 py-1 text-xs rounded-full bg-red-100 text-red-800">
-              Inactivo
+          const statusStyles = isActive
+            ? "bg-emerald-100 text-emerald-800"
+            : "bg-rose-100 text-rose-800";
+
+          return (
+            <span
+              className={`px-2 py-1 text-xs font-medium rounded-full ${statusStyles}`}
+            >
+              {isActive ? "Activo" : "Inactivo"}
             </span>
           );
         },
@@ -88,8 +93,19 @@ export default function ProductList() {
       {
         header: "Fecha de Creación",
         accessorKey: "createdAt",
-        cell: ({ row }) =>
-          formatShortDateToString(new Date(row.original.createdAt), true),
+        cell: ({ row }) => (
+          <div>
+            <p className="leading-tight">
+              {formatShortDateToString(new Date(row.original.createdAt))}
+            </p>
+            <span className="text-gray-500 text-sm">
+              {new Date(row.original.createdAt).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </span>
+          </div>
+        ),
       },
       {
         header: "Acciones",

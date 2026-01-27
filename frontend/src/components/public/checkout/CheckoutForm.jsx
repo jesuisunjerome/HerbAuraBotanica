@@ -4,8 +4,18 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router";
+import {
+  useCreateCheckoutSession,
+  useFinalizeCheckoutSession,
+  useUpdateCheckoutPaymentStatus,
+} from "../../../hooks/checkout/mutations";
 import { mocckCheckoutClientData } from "../../../lib/data";
-import { calculateCartTotals, CART, formatCurrency } from "../../../lib/helper";
+import {
+  calculateCartTotals,
+  CART,
+  formatCurrency,
+  PAYMENT_STATUS,
+} from "../../../lib/helper";
 import { checkoutSchema } from "../../../lib/schemas";
 import { useCartStore } from "../../../store/useCartStore";
 import RHFInput from "../../common/form/RHFInput";
@@ -18,6 +28,11 @@ export default function CheckoutForm() {
     mocckCheckoutClientData.paymentMethod,
   );
 
+  const { isCreatingSession, checkoutId, createCheckoutSession } =
+    useCreateCheckoutSession();
+  const { isUpdatingPaymentStatus, updatePaymentStatus } =
+    useUpdateCheckoutPaymentStatus();
+  const { isFinalizing, finalizeOrder } = useFinalizeCheckoutSession();
   const { subtotal, tax, shipping, total } = calculateCartTotals(cart);
 
   const {
@@ -36,14 +51,56 @@ export default function CheckoutForm() {
     setValue("paymentMethod", name);
   };
 
-  const handlePaymentSuccess = (details) => {
+  const handlePaymentSuccess = async (details) => {
     console.log("Payment Successful:", details);
-    navigate("/order-confirmation");
+    const checkoutData = {
+      checkoutId,
+      paymentStatus: PAYMENT_STATUS.PAID,
+      paymentDetails: details,
+    };
+
+    updatePaymentStatus(checkoutData, {
+      onSuccess: () => {
+        finalizeOrder(checkoutId, {
+          onSuccess: (data) => {
+            navigate(`/order-confirmation/${data._id}`, { replace: true });
+          },
+        });
+      },
+    });
   };
 
   const onSubmit = (data) => {
-    console.log(data);
-    handlePaymentSuccess();
+    const shippingDetails = {
+      user: {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        phone: data.phone,
+        address: data.address,
+        city: data.city,
+        postalCode: data.postalCode,
+        state: data.state,
+        country: data.country,
+      },
+    };
+
+    const checkoutItems = cart.map((item) => ({
+      productId: item._id,
+      name: item.name,
+      image: item.images[0].url,
+      price: item.price,
+      quantity: item.quantity,
+    }));
+
+    const checkoutData = {
+      shippingDetails,
+      paymentMethod: data.paymentMethod,
+      checkoutItems,
+      totalAmount: total,
+    };
+
+    createCheckoutSession(checkoutData);
   };
 
   const handlePaymentError = (error) => {
@@ -81,6 +138,7 @@ export default function CheckoutForm() {
                 required={true}
                 register={register}
                 error={errors.firstName}
+                disabled={isCreatingSession || checkoutId}
               />
             </div>
             <div>
@@ -90,6 +148,7 @@ export default function CheckoutForm() {
                 required={true}
                 register={register}
                 error={errors.lastName}
+                disabled={isCreatingSession || checkoutId}
               />
             </div>
             <div>
@@ -100,6 +159,7 @@ export default function CheckoutForm() {
                 register={register}
                 error={errors.email}
                 type="email"
+                disabled={isCreatingSession || checkoutId}
               />
             </div>
             <div>
@@ -110,6 +170,7 @@ export default function CheckoutForm() {
                 register={register}
                 error={errors.phone}
                 type="tel"
+                disabled={isCreatingSession || checkoutId}
               />
             </div>
             <div className="sm:col-span-2 md:col-span-1 xl:col-span-2">
@@ -119,6 +180,7 @@ export default function CheckoutForm() {
                 required={true}
                 register={register}
                 error={errors.address}
+                disabled={isCreatingSession || checkoutId}
               />
             </div>
             <div>
@@ -128,6 +190,7 @@ export default function CheckoutForm() {
                 required={true}
                 register={register}
                 error={errors.city}
+                disabled={isCreatingSession || checkoutId}
               />
             </div>
             <div>
@@ -137,6 +200,7 @@ export default function CheckoutForm() {
                 required={true}
                 register={register}
                 error={errors.state}
+                disabled={isCreatingSession || checkoutId}
               />
             </div>
             <div>
@@ -146,6 +210,7 @@ export default function CheckoutForm() {
                 required={true}
                 register={register}
                 error={errors.postalCode}
+                disabled={isCreatingSession || checkoutId}
               />
             </div>
             <div>
@@ -155,6 +220,7 @@ export default function CheckoutForm() {
                 required={true}
                 register={register}
                 error={errors.country}
+                disabled={isCreatingSession || checkoutId}
               />
             </div>
           </div>
@@ -187,8 +253,9 @@ export default function CheckoutForm() {
                 {CART.PAYMENT_METHODS.map((method) => (
                   <button
                     type="button"
+                    disabled={isCreatingSession || checkoutId}
                     onClick={() => handlePaymentMethodSelect(method.name)}
-                    className={`w-1/${CART.PAYMENT_METHODS.length} p-2 rounded-lg border border-gray-200 flex items-center justify-center cursor-pointer ${
+                    className={`w-1/${CART.PAYMENT_METHODS.length} p-2 rounded-lg border border-gray-200 flex items-center justify-center ${isCreatingSession || checkoutId ? "cursor-not-allowed" : "cursor-pointer"} ${
                       selectedPaymentMethod === method.name
                         ? "ring-2 bg-amber-100 ring-amber-500"
                         : "bg-white"
@@ -196,6 +263,7 @@ export default function CheckoutForm() {
                     key={method.id}
                   >
                     <img
+                      loading="lazy"
                       src={method.img}
                       alt={method.name}
                       className="h-8 mx-auto object-contain"
@@ -208,15 +276,22 @@ export default function CheckoutForm() {
                   </button>
                 ))}
               </div>
-              {/* <button
-                type="submit"
-                disabled={!isValid}
-                className="w-full bg-amber-500 hover:bg-amber-600 text-white py-3 rounded-lg transition-colors disabled:hover:bg-amber-500"
-              >
-                Continuar al Pago
-              </button> */}
 
-              {isValid && (
+              {!checkoutId && (
+                <button
+                  type="submit"
+                  disabled={
+                    !isValid || !selectedPaymentMethod || isCreatingSession
+                  }
+                  className="w-full bg-amber-500 hover:bg-amber-600 text-white py-3 rounded-lg transition-colors disabled:hover:bg-amber-500 mb-4"
+                >
+                  {isCreatingSession
+                    ? "Creando sesión de pago..."
+                    : "Proceder al Pago"}
+                </button>
+              )}
+
+              {checkoutId && (
                 <RenderPaymentMethods
                   method={selectedPaymentMethod}
                   total={total}
