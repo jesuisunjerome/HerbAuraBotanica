@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ChevronLeftIcon } from "lucide-react";
+import { ChevronLeftIcon, LoaderIcon } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -52,7 +52,6 @@ export default function CheckoutForm() {
   };
 
   const handlePaymentSuccess = async (details) => {
-    console.log("Payment Successful:", details);
     const checkoutData = {
       checkoutId,
       paymentStatus: PAYMENT_STATUS.PAID,
@@ -114,6 +113,7 @@ export default function CheckoutForm() {
     <>
       <div className="mb-5">
         <button
+          type="button"
           onClick={() => navigate("/products")}
           className="text-amber-600 hover:underline inline-flex items-center gap-1 group"
         >
@@ -127,7 +127,7 @@ export default function CheckoutForm() {
       </h1>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col md:flex-row gap-10 xl:gap-20"
+        className="flex flex-col md:flex-row gap-10 xl:gap-20 relative"
       >
         <div className="w-full xl:w-7/12">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 xl:grid-cols-2 gap-6">
@@ -138,7 +138,6 @@ export default function CheckoutForm() {
                 required={true}
                 register={register}
                 error={errors.firstName}
-                disabled={isCreatingSession || checkoutId}
               />
             </div>
             <div>
@@ -148,7 +147,6 @@ export default function CheckoutForm() {
                 required={true}
                 register={register}
                 error={errors.lastName}
-                disabled={isCreatingSession || checkoutId}
               />
             </div>
             <div>
@@ -159,7 +157,6 @@ export default function CheckoutForm() {
                 register={register}
                 error={errors.email}
                 type="email"
-                disabled={isCreatingSession || checkoutId}
               />
             </div>
             <div>
@@ -170,7 +167,6 @@ export default function CheckoutForm() {
                 register={register}
                 error={errors.phone}
                 type="tel"
-                disabled={isCreatingSession || checkoutId}
               />
             </div>
             <div className="sm:col-span-2 md:col-span-1 xl:col-span-2">
@@ -180,7 +176,6 @@ export default function CheckoutForm() {
                 required={true}
                 register={register}
                 error={errors.address}
-                disabled={isCreatingSession || checkoutId}
               />
             </div>
             <div>
@@ -190,7 +185,6 @@ export default function CheckoutForm() {
                 required={true}
                 register={register}
                 error={errors.city}
-                disabled={isCreatingSession || checkoutId}
               />
             </div>
             <div>
@@ -200,7 +194,6 @@ export default function CheckoutForm() {
                 required={true}
                 register={register}
                 error={errors.state}
-                disabled={isCreatingSession || checkoutId}
               />
             </div>
             <div>
@@ -210,7 +203,6 @@ export default function CheckoutForm() {
                 required={true}
                 register={register}
                 error={errors.postalCode}
-                disabled={isCreatingSession || checkoutId}
               />
             </div>
             <div>
@@ -220,7 +212,6 @@ export default function CheckoutForm() {
                 required={true}
                 register={register}
                 error={errors.country}
-                disabled={isCreatingSession || checkoutId}
               />
             </div>
           </div>
@@ -253,9 +244,8 @@ export default function CheckoutForm() {
                 {CART.PAYMENT_METHODS.map((method) => (
                   <button
                     type="button"
-                    disabled={isCreatingSession || checkoutId}
                     onClick={() => handlePaymentMethodSelect(method.name)}
-                    className={`w-1/${CART.PAYMENT_METHODS.length} p-2 rounded-lg border border-gray-200 flex items-center justify-center ${isCreatingSession || checkoutId ? "cursor-not-allowed" : "cursor-pointer"} ${
+                    className={`w-1/${CART.PAYMENT_METHODS.length} p-2 rounded-lg border border-gray-200 flex items-center justify-center ${isCreatingSession ? "cursor-not-allowed" : "cursor-pointer"} ${
                       selectedPaymentMethod === method.name
                         ? "ring-2 bg-amber-100 ring-amber-500"
                         : "bg-white"
@@ -303,6 +293,21 @@ export default function CheckoutForm() {
           </div>
         </div>
       </form>
+
+      {(isCreatingSession || isUpdatingPaymentStatus || isFinalizing) && (
+        <div className="fixed top-0 left-0 w-full z-50 h-full bg-black/60 flex justify-center items-center">
+          <div className="flex items-center justify-center min-h-[60vh]">
+            <div className="bg-gray-800 text-center p-8 rounded-lg flex flex-col items-center">
+              <LoaderIcon className="w-8 h-8 animate-spin text-amber-500" />
+              <p className="text-white mt-4 text-center">
+                {isCreatingSession && "Creando sesión de pago..."}
+                {isUpdatingPaymentStatus && "Actualizando estado de pago..."}
+                {isFinalizing && "Finalizando pedido..."}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

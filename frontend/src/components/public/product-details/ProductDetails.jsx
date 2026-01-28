@@ -6,12 +6,18 @@ import {
   TruckElectricIcon,
 } from "lucide-react";
 import { useNavigate } from "react-router";
+import { formatCurrency, getDiscountedPrice } from "../../../lib/helper";
 import { useCartStore } from "../../../store/useCartStore";
 
 export default function ProductDetails({ product, isPending }) {
   const { addToCart } = useCartStore();
   const navigate = useNavigate();
-  const { name, price, description, tags } = product;
+  const { name, price, description, tags, discountPercentage } = product;
+  const {
+    hasDiscount,
+    price: originalPrice,
+    discountedPrice,
+  } = getDiscountedPrice(price, discountPercentage);
 
   if (isPending) return <LoadingSkeleton />;
 
@@ -21,7 +27,15 @@ export default function ProductDetails({ product, isPending }) {
         <div className="pb-5 mb-5 border-b border-gray-300/50">
           <h1 className="text-3xl">{name}</h1>
           <p>⭐ 4.9 (120 reseñas)</p>
-          <h3 className="text-3xl mb-5">${price}</h3>
+          <div className="mb-5 flex gap-1">
+            <h3 className="text-3xl">{formatCurrency(discountedPrice)}</h3>
+            {Boolean(hasDiscount) && (
+              <p className="text-gray-500 line-through">
+                {formatCurrency(originalPrice)}
+              </p>
+            )}
+          </div>
+
           {tags && (
             <div className="flex flex-wrap gap-0.5 text-sm font-semibold">
               {tags.split(",").map((tag, index) => (

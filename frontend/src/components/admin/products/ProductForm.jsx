@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
+  ChevronLeftIcon,
   EditIcon,
   HeartIcon,
   InfoIcon,
@@ -180,7 +181,26 @@ export default function ProductForm() {
     <section>
       <form className="space-y-3" onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-wrap justify-between items-start lg:items-center gap-4 bg-gray-50 pb-3 pt-4 sticky top-15 z-10">
-          <h1 className="text-2xl font-semibold">Nuevo Producto</h1>
+          <div>
+            <div className="mb-3">
+              <button
+                type="button"
+                onClick={() => navigate("/admin/products")}
+                className="text-amber-600 hover:underline inline-flex items-center gap-1 group"
+              >
+                <ChevronLeftIcon className="h-4 w-4 group-hover:-translate-x-1 transition-all" />
+                <span>Volver a Productos</span>
+              </button>
+            </div>
+            <h1 className="text-2xl font-semibold">
+              {product ? "Editar Producto" : "Nuevo Producto"}
+            </h1>
+            <div className="text-gray-600">
+              {product
+                ? "Edita la información del producto seleccionado."
+                : "Crea un nuevo producto para la tienda."}
+            </div>
+          </div>
           <div className="hidden md:flex flex-col sm:flex-row gap-2 md:w-auto">
             <button
               type="button"

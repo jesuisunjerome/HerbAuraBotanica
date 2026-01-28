@@ -85,6 +85,7 @@ export const finalizeCheckoutSession = async (req, res) => {
 
     if (checkout.isPaid && !checkout.isFinalized) {
       const finalOrder = await Order.create({
+        confirmationNumber: `HERB-${Date.now()}-${Math.floor(Math.random() * 1000)}-AURA`,
         shippingDetails: checkout.shippingDetails,
         orderItems: checkout.checkoutItems,
         totalAmount: checkout.totalAmount,

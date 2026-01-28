@@ -30,6 +30,11 @@ const orderItemSchema = new mongoose.Schema(
 
 const orderSchema = new mongoose.Schema(
   {
+    confirmationNumber: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     shippingDetails: {
       user: {
         firstName: {

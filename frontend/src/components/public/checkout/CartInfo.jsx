@@ -1,6 +1,6 @@
-import { MinusIcon, PlusIcon, TrashIcon, XIcon } from "lucide-react";
+import { MinusIcon, PlusIcon, TagIcon, TrashIcon, XIcon } from "lucide-react";
 import { useNavigate } from "react-router";
-import { formatCurrency } from "../../../lib/helper";
+import { formatCurrency, getDiscountedPrice } from "../../../lib/helper";
 import { useCartStore } from "../../../store/useCartStore";
 
 export default function CartInfo({ showCart, handleToggleCart }) {
@@ -34,58 +34,70 @@ export default function CartInfo({ showCart, handleToggleCart }) {
         {cart.length === 0 ? (
           <p>Tu carrito está vacío.</p>
         ) : (
-          cart.map((item) => (
-            <div
-              className="flex items-center justify-between py-3 border-b gap-2 border-gray-100"
-              key={item._id}
-            >
-              <div className="flex items-center gap-2">
-                <div className="bg-gray-100 overflow-hidden rounded-xl p-2 shrink-0">
-                  <img
-                    loading="lazy"
-                    src={item.images.find((img) => img.isMain)?.url}
-                    className="w-17 h-17 object-contain bg-gray-100 rounded-xl"
-                    alt={item.name}
-                  />
-                </div>
-                <div>
-                  <p className="font-medium leading-tight text-sm">
-                    {item.name}
-                  </p>
-                  <p className="text-gray-500 text-sm leading-tight">
-                    {item.quantity} x {formatCurrency(item.price)}
-                  </p>
+          cart.map((item) => {
+            const { hasDiscount, price, discountedPrice } = getDiscountedPrice(
+              item.price,
+              item.discountPercentage,
+            );
 
-                  <div className="flex items-center mt-2">
-                    <button
-                      title="Disminuir cantidad"
-                      onClick={() => decreaseQuantity(item._id)}
-                      className="bg-gray-200 rounded-md p-1 h-7 w-7 flex items-center justify-center"
-                    >
-                      <MinusIcon className="h-3 w-3 text-gray-600" />
-                    </button>
-                    <span className="px-3">{item.quantity}</span>
-                    <button
-                      title="Aumentar cantidad"
-                      onClick={() => addToCart(item)}
-                      className="bg-gray-200 rounded-md p-1 h-7 w-7 flex items-center justify-center"
-                    >
-                      <PlusIcon className="h-3 w-3 text-gray-600" />
-                    </button>
+            return (
+              <div
+                className="flex items-center justify-between py-3 border-b gap-2 border-gray-100"
+                key={item._id}
+              >
+                <div className="flex items-center gap-2">
+                  <div className="bg-gray-100 overflow-hidden rounded-xl p-2 shrink-0">
+                    <img
+                      loading="lazy"
+                      src={item.images.find((img) => img.isMain)?.url}
+                      className="w-17 h-17 object-contain bg-gray-100 rounded-xl"
+                      alt={item.name}
+                    />
+                  </div>
+                  <div>
+                    <p className="font-medium leading-tight text-sm">
+                      {item.name}
+                    </p>
+                    <p className="text-gray-500 text-sm leading-tight">
+                      {item.quantity} x {formatCurrency(discountedPrice)}
+                      {Boolean(hasDiscount) && (
+                        <span title="Descuento aplicado">
+                          <TagIcon className="inline w-4 h-4 ml-1 text-amber-600" />
+                        </span>
+                      )}
+                    </p>
+
+                    <div className="flex items-center mt-2">
+                      <button
+                        title="Disminuir cantidad"
+                        onClick={() => decreaseQuantity(item._id)}
+                        className="bg-gray-200 rounded-md p-1 h-7 w-7 flex items-center justify-center"
+                      >
+                        <MinusIcon className="h-3 w-3 text-gray-600" />
+                      </button>
+                      <span className="px-3">{item.quantity}</span>
+                      <button
+                        title="Aumentar cantidad"
+                        onClick={() => addToCart(item)}
+                        className="bg-gray-200 rounded-md p-1 h-7 w-7 flex items-center justify-center"
+                      >
+                        <PlusIcon className="h-3 w-3 text-gray-600" />
+                      </button>
+                    </div>
                   </div>
                 </div>
+                <div>
+                  <button
+                    title="Eliminar producto"
+                    onClick={() => removeFromCart(item._id)}
+                    className="bg-red-100 hover:bg-red-200 text-red-800 rounded-md p-1 h-8 w-8 flex items-center justify-center transition-colors"
+                  >
+                    <TrashIcon className="h-4 w-4" />
+                  </button>
+                </div>
               </div>
-              <div>
-                <button
-                  title="Eliminar producto"
-                  onClick={() => removeFromCart(item._id)}
-                  className="bg-red-100 hover:bg-red-200 text-red-800 rounded-md p-1 h-8 w-8 flex items-center justify-center transition-colors"
-                >
-                  <TrashIcon className="h-4 w-4" />
-                </button>
-              </div>
-            </div>
-          ))
+            );
+          })
         )}
       </div>
       {cart.length > 0 && (

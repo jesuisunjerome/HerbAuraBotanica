@@ -2,6 +2,7 @@ import { createBrowserRouter, Navigate } from "react-router";
 import AdminLayout from "../layouts/admin/AdminLayout";
 import MainLayout from "../layouts/public/MainLayout";
 import DashboardPage from "../pages/admin/DashboardPage";
+import OrderDetailsPage from "../pages/admin/OrderDetailsPage";
 import OrdersPage from "../pages/admin/OrdersPage";
 import ProductsPage from "../pages/admin/ProductsPage";
 import AboutPage from "../pages/public/AboutPage";
@@ -86,6 +87,10 @@ const router = createBrowserRouter([
         element: <ProductsPage />,
       },
       { path: "orders", element: <OrdersPage /> },
+      {
+        path: "orders/:orderId",
+        element: <OrderDetailsPage />,
+      },
       {
         path: "*",
         element: <div>Admin 404 Not Found</div>,

@@ -26,10 +26,14 @@ export function calculateCartTotals(
   ivaRate = 0.19,
   shippingCost = 19.0,
 ) {
-  const subtotal = cartItems.reduce(
-    (total, item) => total + item.price * item.quantity,
-    0,
-  );
+  const subtotal = cartItems.reduce((total, item) => {
+    const { discountedPrice } = getDiscountedPrice(
+      item.price,
+      item.discountPercentage,
+    );
+    return total + discountedPrice * item.quantity;
+  }, 0);
+
   const tax = subtotal * ivaRate;
   const shipping = cartItems.length > 0 ? shippingCost : 0;
   const total = subtotal + tax + shipping;
@@ -81,6 +85,24 @@ export function getMinAndMaxDates(dates) {
   return { minDate, maxDate };
 }
 
+export function getDiscountedPrice(price, discountPercentage) {
+  const hasDiscount = discountPercentage && discountPercentage > 0;
+
+  const discountedPrice = discountPercentage
+    ? price - price * (discountPercentage / 100)
+    : price;
+
+  return { hasDiscount, discountedPrice, price };
+}
+
+export const MODAL_SIZES = {
+  sm: "max-w-md",
+  md: "max-w-lg",
+  lg: "max-w-3xl",
+  xl: "max-w-5xl",
+  full: "max-w-full",
+};
+
 export const CART = {
   PAYMENT_METHODS: [
     {
@@ -128,3 +150,6 @@ export const SORT_BY_OPTIONS = [
   { value: "priceDesc", label: "Precio: Alto a Bajo" },
   { value: "newest", label: "Novedades" },
 ];
+
+export const IVA_RATE = 0.19;
+export const SHIPPING_COST = 19.0;

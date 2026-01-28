@@ -14,6 +14,7 @@ import {
   TruckElectricIcon,
 } from "lucide-react";
 import { useMemo, useState } from "react";
+import { Link } from "react-router";
 import TableWrapper, {
   SearchInput,
   TBody,
@@ -38,12 +39,15 @@ export default function OrdersPage() {
   const columns = useMemo(
     () => [
       {
-        header: "ID de Pedido",
-        accessorKey: "_id",
+        header: "Número de Pedido",
+        accessorKey: "confirmationNumber",
+        cell: ({ row }) => (
+          <span className="font-medium">{row.original.confirmationNumber}</span>
+        ),
       },
       {
         header: "Cliente",
-        accessorKey: "shippingDetails",
+        // accessorKey: "shippingDetails",
         cell: ({ row }) => {
           const { user } = row.original.shippingDetails;
 
@@ -176,13 +180,13 @@ export default function OrdersPage() {
 
           return (
             <div className="flex gap-2 items-center">
-              <button
-                type="button"
+              <Link
+                to={`/admin/orders/${orderId}`}
                 title="Ver detalles del pedido"
                 className="rounded-md p-1 h-8 w-8 flex items-center justify-center transition-colors bg-blue-100 hover:bg-blue-200"
               >
                 <EllipsisIcon className="h-4 w-4 text-blue-600" />
-              </button>
+              </Link>
             </div>
           );
         },
@@ -200,17 +204,22 @@ export default function OrdersPage() {
       columnFilters,
     },
     onPaginationChange: setPagination,
+    onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(), //client side filtering
     getSortedRowModel: getSortedRowModel(),
   });
 
   return (
     <section className="space-y-3">
-      <div className="flex flex-col md:flex-row flex-wrap justify-between items-start lg:items-center gap-4 bg-gray-50 pb-3 pt-4 sticky top-15 z-10">
-        <h1 className="text-2xl font-semibold">Pedidos</h1>
+      <div className="flex flex-col md:flex-row flex-wrap justify-between items-start lg:items-end gap-4 bg-gray-50 pb-3 pt-4 sticky top-15 z-10">
+        <div>
+          <h1 className="text-2xl font-semibold">Pedidos</h1>
+          <div className="text-gray-600">
+            Administra todos los pedidos realizados en la tienda.
+          </div>
+        </div>
         <div className="flex gap-2 w-full md:w-auto">
           <SearchInput table={table} placeholder="Buscar pedidos..." />
 

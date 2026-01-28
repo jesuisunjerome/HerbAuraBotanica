@@ -1,8 +1,13 @@
 import { ChevronRightIcon, HandbagIcon } from "lucide-react";
 import { Link } from "react-router";
-import { formatCurrency } from "../../../lib/helper";
+import { formatCurrency, getDiscountedPrice } from "../../../lib/helper";
 
 export default function NewProductCard({ item, addToCart }) {
+  const { hasDiscount, price, discountedPrice } = getDiscountedPrice(
+    item.price,
+    item.discountPercentage,
+  );
+
   return (
     <div className="rounded-2xl group overflow-hidden relative bg-gray-200 p-3  hover:scale-105 transition-transform duration-400">
       <img
@@ -27,9 +32,16 @@ export default function NewProductCard({ item, addToCart }) {
           <span className="hidden lg:block group-hover:hidden transition-all">
             {item.name}
           </span>
-          <span className="block lg:hidden group-hover:block text-xl font-bold">
-            {formatCurrency(item.price)}
-          </span>
+          <div>
+            <span className="inline-block lg:hidden group-hover:inline-block text-xl font-bold">
+              {formatCurrency(discountedPrice)}
+            </span>
+            {Boolean(hasDiscount) && (
+              <span className="line-through inline-block lg:hidden group-hover:inline-block ml-2 text-gray-500">
+                {formatCurrency(price)}
+              </span>
+            )}
+          </div>
           <small className="block lg:hidden group-hover:block">
             {item.name}
           </small>

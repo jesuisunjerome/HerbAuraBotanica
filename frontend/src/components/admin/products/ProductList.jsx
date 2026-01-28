@@ -40,12 +40,12 @@ export default function ProductList() {
         accessorKey: "name",
         cell: ({ row }) => (
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 max-w-sm">
-            <div className="p-2 rounded-2xl overflow-hidden bg-gray-100 shrink-0">
+            <div className="p-2 rounded-xl overflow-hidden bg-gray-100 shrink-0">
               <img
                 loading="lazy"
                 src={row.original.images.find((img) => img.isMain)?.url}
                 alt={row.original.name}
-                className="w-10 h-10 object-contain bg-gray-100 rounded-xl"
+                className="w-10 h-10 object-contain bg-gray-100 rounded-lg"
               />
             </div>
             <span className="font-medium text-wrap">{row.original.name}</span>
@@ -169,8 +169,13 @@ export default function ProductList() {
 
   return (
     <section className="space-y-3">
-      <div className="flex flex-col md:flex-row flex-wrap justify-between items-start lg:items-center gap-4 bg-gray-50 pb-3 pt-4 sticky top-15 z-10">
-        <h1 className="text-2xl font-semibold">Productos</h1>
+      <div className="flex flex-col md:flex-row flex-wrap justify-between items-start lg:items-end gap-4 bg-gray-50 pb-3 pt-4 sticky top-15 z-10">
+        <div>
+          <h1 className="text-2xl font-semibold">Productos</h1>
+          <div className="text-gray-600">
+            Administra todos los productos disponibles en la tienda.
+          </div>
+        </div>
         <div className="flex gap-2 w-full md:w-auto">
           <SearchInput table={table} placeholder="Buscar productos..." />
           <Link

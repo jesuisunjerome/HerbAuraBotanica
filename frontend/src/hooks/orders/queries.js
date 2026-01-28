@@ -25,3 +25,18 @@ export const useGetOrderById = (orderId) => {
 
   return { isPending, order };
 };
+
+export const useGetOrderByConfirmationNumber = (confirmationNumber) => {
+  const { isPending, data: order } = useQuery({
+    queryKey: ["order", confirmationNumber],
+    queryFn: async () => {
+      const response = await axiosInstance.get(
+        `/orders/confirmation/${confirmationNumber}`,
+      );
+      return response.data;
+    },
+    enabled: !!confirmationNumber,
+  });
+
+  return { isPending, order };
+};

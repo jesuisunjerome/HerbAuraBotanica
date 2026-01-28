@@ -20,13 +20,30 @@ export const getOrderById = async (req, res) => {
     console.log("getOrderById controller");
 
     const order = await Order.findById(id);
-    if (!order) {
-      return res.status(404).json({ message: "Orden no encontrada" });
-    }
+    if (!order) return res.status(404).json({ message: "Orden no encontrada" });
 
     res.json(order);
   } catch (error) {
     console.log("Server error in getOrderById controller", error.message);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const getOrderByConfirmationNumber = async (req, res) => {
+  const { confirmationNumber } = req.params;
+
+  try {
+    console.log("getOrderByConfirmationNumber controller");
+
+    const order = await Order.findOne({ confirmationNumber });
+    if (!order) return res.status(404).json({ message: "Orden no encontrada" });
+
+    res.json(order);
+  } catch (error) {
+    console.log(
+      "Server error in getOrderByConfirmationNumber controller",
+      error.message,
+    );
     res.status(500).json({ message: error.message });
   }
 };

@@ -2,11 +2,19 @@ import { flexRender } from "@tanstack/react-table";
 import { MoveDownIcon, MoveUpIcon, SearchIcon } from "lucide-react";
 import TableSkeleton from "./TableSkeleton";
 
-export default function TableWrapper({ isPending, children, pagination }) {
+export default function TableWrapper({
+  isPending,
+  className,
+  pagination,
+  children,
+  arrLength = 10,
+}) {
   return (
-    <div className="rounded-2xl shadow-lg shadow-gray-100 bg-white p-5 min-h-150">
+    <div
+      className={`rounded-2xl shadow-lg shadow-gray-100 bg-white p-5 min-h-150 ${className}`}
+    >
       {isPending ? (
-        <TableSkeleton />
+        <TableSkeleton className={className} arrLength={arrLength} />
       ) : (
         <>
           <div className="overflow-auto">

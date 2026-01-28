@@ -53,6 +53,34 @@
     @apply leading-7;
   }
 
+  .modal-wrapper {
+    @apply fixed inset-0 z-50 flex h-full justify-center bg-black/30 py-6;
+  }
+
+  .modal-dialog {
+    @apply relative mx-4 w-full transform text-start transition-all duration-300;
+  }
+
+  .modal-content {
+    @apply flex max-h-full flex-col rounded-lg bg-white shadow-lg;
+  }
+
+  .modal-header {
+    @apply shrink-0 border-b border-slate-200 px-7 py-5;
+  }
+
+  .btn-close-modal {
+    @apply absolute top-5 right-4 rounded p-1 text-slate-600 transition-colors hover:text-slate-950;
+  }
+
+  .modal-body {
+    @apply flex-1 overflow-y-auto px-7 py-5;
+  }
+
+  .modal-footer {
+    @apply flex shrink-0 justify-end gap-2 border-t border-slate-200 px-7 py-5;
+  }
+
   @media (max-width: 576px) {
     button:hover {
       @apply translate-0;
