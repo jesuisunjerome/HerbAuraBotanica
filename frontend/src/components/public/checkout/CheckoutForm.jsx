@@ -291,14 +291,14 @@ export default function CheckoutForm() {
                 </button>
               )}
 
-              {/* {checkoutId && ( */}
-              <RenderPaymentMethods
-                method={selectedPaymentMethod}
-                total={total}
-                handlePaymentSuccess={handlePaymentSuccess}
-                handlePaymentError={handlePaymentError}
-              />
-              {/* )} */}
+              {checkoutId && (
+                <RenderPaymentMethods
+                  method={selectedPaymentMethod}
+                  total={total}
+                  handlePaymentSuccess={handlePaymentSuccess}
+                  handlePaymentError={handlePaymentError}
+                />
+              )}
             </div>
           </div>
         </div>
