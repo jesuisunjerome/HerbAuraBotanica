@@ -24,7 +24,7 @@ export default function Sidebar({ showNavMobile, handleToggleNav }) {
     <aside
       className={`fixed top-0 left-0 h-full w-64 bg-white border-r border-slate-200 flex flex-col transform ${
         showNavMobile ? "translate-x-0" : "-translate-x-full md:translate-x-0"
-      } transition-transform duration-200 ease-in-out z-50`}
+      } transition-transform duration-200 ease-in-out z-51`}
     >
       <div className="flex justify-between md:justify-center border-b border-b-slate-100 px-4 py-3">
         <Link to="/admin/dashboard">

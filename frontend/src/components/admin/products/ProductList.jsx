@@ -16,7 +16,11 @@ import { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useUpdateProductStatus } from "../../../hooks/products/mutations";
 import { useFetchProducts } from "../../../hooks/products/queries";
-import { formatCurrency, formatShortDateToString } from "../../../lib/helper";
+import {
+  formatCurrency,
+  formatShortDateToString,
+  getDiscountedPrice,
+} from "../../../lib/helper";
 import TableWrapper, {
   SearchInput,
   TBody,
@@ -59,11 +63,29 @@ export default function ProductList() {
       {
         header: "Precio",
         accessorKey: "price",
-        cell: ({ row }) => (
-          <span className="text-emerald-600 font-medium text-nowrap">
-            {formatCurrency(row.original.price)}
-          </span>
-        ),
+        cell: ({ row }) => {
+          const { hasDiscount, price, discountedPrice } = getDiscountedPrice(
+            row.original.price,
+            row.original.discountPercentage,
+          );
+
+          return (
+            <div className="flex flex-col">
+              {hasDiscount ? (
+                <div className="flex flex-col">
+                  <span className="font-medium text-emerald-600">
+                    {formatCurrency(discountedPrice)}
+                  </span>
+                  <span className="text-sm text-gray-500 line-through">
+                    {formatCurrency(price)}
+                  </span>
+                </div>
+              ) : (
+                <span className="font-medium">{formatCurrency(price)}</span>
+              )}
+            </div>
+          );
+        },
       },
       {
         header: "Stock",

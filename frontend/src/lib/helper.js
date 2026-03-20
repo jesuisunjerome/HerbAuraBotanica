@@ -21,11 +21,7 @@ export function base64ToFile(base64String, filename) {
   return new File([u8arr], filename, { type: mime });
 }
 
-export function calculateCartTotals(
-  cartItems,
-  ivaRate = 0.19,
-  shippingCost = 19.0,
-) {
+export function calculateCartTotals(cartItems) {
   const subtotal = cartItems.reduce((total, item) => {
     const { discountedPrice } = getDiscountedPrice(
       item.price,
@@ -34,8 +30,8 @@ export function calculateCartTotals(
     return total + discountedPrice * item.quantity;
   }, 0);
 
-  const tax = subtotal * ivaRate;
-  const shipping = cartItems.length > 0 ? shippingCost : 0;
+  const tax = subtotal * IVA_RATE;
+  const shipping = cartItems.length > 0 ? SHIPPING_COST : 0;
   const total = subtotal + tax + shipping;
   return { subtotal, tax, shipping, total };
 }

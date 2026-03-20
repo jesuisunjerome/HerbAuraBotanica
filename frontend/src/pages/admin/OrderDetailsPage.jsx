@@ -6,7 +6,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
-import { useNavigate, useParams } from "react-router";
+import { useParams } from "react-router";
 import BasicDetails from "../../components/admin/orders/BasicDetails";
 import CustomerInfo from "../../components/admin/orders/CustomerInfo";
 import Header from "../../components/admin/orders/Header";
@@ -15,13 +15,12 @@ import PaymentStatus from "../../components/admin/orders/PaymentStatus";
 import ProductList from "../../components/admin/orders/ProductList";
 import Timeline from "../../components/admin/orders/Timeline";
 import { useGetOrderById } from "../../hooks/orders/queries";
-import { formatCurrency, IVA_RATE, SHIPPING_COST } from "../../lib/helper";
+import { formatCurrency } from "../../lib/helper";
 
 const fallbackData = [];
 
 export default function OrderDetailsPage() {
   const { orderId } = useParams();
-  const navigate = useNavigate();
   const { isPending, order } = useGetOrderById(orderId);
   const [columnFilters, setColumnFilters] = useState([]);
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 5 });
@@ -88,17 +87,6 @@ export default function OrderDetailsPage() {
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
   });
-
-  const subtotal = order?.orderItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0,
-  );
-
-  const tax = subtotal * IVA_RATE;
-  const shipping = order?.orderItems.length > 0 ? SHIPPING_COST : 0;
-  const total = subtotal + tax + shipping;
-
-  console.log(tax, shipping, total);
 
   return (
     <section className="space-y-3">

@@ -29,11 +29,12 @@ export default function OrderConfirmationPage() {
   const navigate = useNavigate();
   const { orderId } = useParams();
   const { isPending, order } = useGetOrderById(orderId);
-  const { shippingDetails, orderItems, totalAmount } = order || {};
+  const { shippingDetails, orderItems, totalAmount, confirmationNumber } =
+    order || {};
   const { user } = shippingDetails || {};
 
-  const { cart, clearCart } = useCartStore();
-  const { subtotal, tax, shipping } = calculateCartTotals(cart);
+  const { clearCart } = useCartStore();
+  const { subtotal, tax, shipping } = calculateCartTotals(orderItems || []);
 
   useEffect(() => {
     if (!isPending && order) clearCart();
@@ -67,7 +68,7 @@ export default function OrderConfirmationPage() {
           </p>
           <div className="lg:inline-block mb-4 lg:min-w-sm px-3 py-2 rounded-lg bg-[#dbf3e1] border border-[#3f6b4c]">
             <span className="text-sm text-[#3f6b4c]">Número de Pedido</span>
-            <h2 className="text-xl font-medium">ORD-123456-HERB</h2>
+            <h2 className="text-xl font-medium">{confirmationNumber}</h2>
           </div>
           <p className="text-gray-600 leading-tight">
             <MailCheckIcon className="w-5 h-5 inline-block mr-2" />

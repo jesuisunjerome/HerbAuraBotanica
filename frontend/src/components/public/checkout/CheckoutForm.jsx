@@ -14,6 +14,7 @@ import {
   calculateCartTotals,
   CART,
   formatCurrency,
+  getDiscountedPrice,
   PAYMENT_STATUS,
 } from "../../../lib/helper";
 import { checkoutSchema } from "../../../lib/schemas";
@@ -88,7 +89,8 @@ export default function CheckoutForm() {
       productId: item._id,
       name: item.name,
       image: item.images[0].url,
-      price: item.price,
+      price: getDiscountedPrice(item.price, item.discountPercentage)
+        .discountedPrice,
       quantity: item.quantity,
     }));
 

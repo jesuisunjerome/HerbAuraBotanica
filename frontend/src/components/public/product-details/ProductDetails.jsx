@@ -91,7 +91,7 @@ export default function ProductDetails({ product, isPending }) {
           </div>
         </div>
 
-        <div className="mt-5 pt-5 border-t border-gray-300/50">
+        {/* <div className="mt-5 pt-5 border-t border-gray-300/50">
           <h4 className="text-lg">Ingredientes Clave y Sus Beneficios</h4>
           <ul className="mt-2 space-y-2 text-gray-600 text-sm">
             <li>
@@ -123,7 +123,7 @@ export default function ProductDetails({ product, isPending }) {
               </p>
             </li>
           </ul>
-        </div>
+        </div> */}
       </div>
     </div>
   );

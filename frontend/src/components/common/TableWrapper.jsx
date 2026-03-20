@@ -80,63 +80,73 @@ export function TBody({ row }) {
 export function TPagination({ table }) {
   return (
     <div className="py-3 flex flex-col md:flex-row justify-between items-center gap-2 border-t border-gray-100 text-gray-700">
-      <div className="flex flex-col md:flex-row flex-wrap gap-2 items-center">
-        <div className="flex items-center gap-1">
-          <span>Página</span>
-          <span className="font-medium">
-            {table.getState().pagination.pageIndex + 1} de{" "}
-            {table.getPageCount()}
-          </span>
-          <span>({table.getFilteredRowModel().rows.length} resultados)</span>
-        </div>
-        <div className="hidden md:block">
-          <span>| Mostrar </span>
-          <select
-            value={table.getState().pagination.pageSize}
-            onChange={(e) => {
-              table.setPageSize(Number(e.target.value));
-            }}
-          >
-            {[10, 20, 30, 40, 50].map((pageSize) => (
-              <option key={pageSize} value={pageSize}>
-                {pageSize}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-      <div className="flex flex-col-reverse md:flex-row flex-wrap gap-2 items-center">
-        <span className="flex items-center gap-1">
-          Ir a la página:
-          <input
-            type="number"
-            min="1"
-            max={table.getPageCount()}
-            defaultValue={table.getState().pagination.pageIndex + 1}
-            onChange={(e) => {
-              const page = e.target.value ? Number(e.target.value) - 1 : 0;
-              table.setPageIndex(page);
-            }}
-            className="border border-gray-200 focus:outline-none p-1 rounded w-16"
-          />
+      {table.getPageCount() > 1 ? (
+        <>
+          <div className="flex flex-col md:flex-row flex-wrap gap-2 items-center">
+            <div className="flex items-center gap-1">
+              <span>Página</span>
+              <span className="font-medium">
+                {table.getState().pagination.pageIndex + 1} de{" "}
+                {table.getPageCount()}
+              </span>
+              <span>
+                ({table.getFilteredRowModel().rows.length} resultados)
+              </span>
+            </div>
+            <div className="hidden md:block">
+              <span>| Mostrar </span>
+              <select
+                value={table.getState().pagination.pageSize}
+                onChange={(e) => {
+                  table.setPageSize(Number(e.target.value));
+                }}
+              >
+                {[10, 20, 30, 40, 50].map((pageSize) => (
+                  <option key={pageSize} value={pageSize}>
+                    {pageSize}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className="flex flex-col-reverse md:flex-row flex-wrap gap-2 items-center">
+            <span className="flex items-center gap-1">
+              Ir a la página:
+              <input
+                type="number"
+                min="1"
+                max={table.getPageCount()}
+                defaultValue={table.getState().pagination.pageIndex + 1}
+                onChange={(e) => {
+                  const page = e.target.value ? Number(e.target.value) - 1 : 0;
+                  table.setPageIndex(page);
+                }}
+                className="border border-gray-200 focus:outline-none p-1 rounded w-16"
+              />
+            </span>
+            <div className="flex items-center gap-2">
+              <button
+                className="border border-gray-200 focus:outline-none rounded p-1"
+                onClick={() => table.previousPage()}
+                disabled={!table.getCanPreviousPage()}
+              >
+                Anterior
+              </button>
+              <button
+                className="border border-gray-200 focus:outline-none rounded p-1"
+                onClick={() => table.nextPage()}
+                disabled={!table.getCanNextPage()}
+              >
+                Siguiente
+              </button>
+            </div>
+          </div>
+        </>
+      ) : (
+        <span className="text-gray-400 text-sm">
+          ({table.getFilteredRowModel().rows.length} resultados encontrados)
         </span>
-        <div className="flex items-center gap-2">
-          <button
-            className="border border-gray-200 focus:outline-none rounded p-1"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Anterior
-          </button>
-          <button
-            className="border border-gray-200 focus:outline-none rounded p-1"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Siguiente
-          </button>
-        </div>
-      </div>
+      )}
     </div>
   );
 }
@@ -160,11 +170,11 @@ export function SearchInput({ table, placeholder = "Buscar..." }) {
   const value = table.getState().globalFilter ?? "";
 
   return (
-    <div className="relative">
+    <div className="relative w-full md:w-64 md:max-w-[50vw]">
       <input
         value={value}
         onChange={handleChange}
-        className="w-64 max-w-[50vw] rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-sm focus:outline-none focus:ring-2"
+        className="w-full rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-sm focus:outline-none focus:ring-2"
         placeholder={placeholder}
         aria-label={placeholder}
       />
