@@ -49,6 +49,8 @@ export const useCartStore = create(
           cart: state.cart.filter((p) => p._id !== _id),
         })),
 
+      isInCart: (_id) => get().cart.some((p) => p._id === _id),
+
       clearCart: () => set({ cart: [] }),
     }),
     {

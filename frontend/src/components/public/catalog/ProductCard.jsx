@@ -1,8 +1,10 @@
 import { ChevronRightIcon, HandbagIcon } from "lucide-react";
 import { Link } from "react-router";
 import { formatCurrency, getDiscountedPrice } from "../../../lib/helper";
+import { useCartStore } from "../../../store/useCartStore";
 
 export default function ProductCard({ item, handleAddToCart, searchTerm }) {
+  const { isInCart } = useCartStore();
   const { hasDiscount, price, discountedPrice } = getDiscountedPrice(
     item.price,
     item.discountPercentage,
@@ -17,8 +19,11 @@ export default function ProductCard({ item, handleAddToCart, searchTerm }) {
         alt={item.name}
       />
       <button
-        title="Agregar al carrito"
+        title={
+          isInCart(item._id) ? "Producto en el carrito" : "Agregar al carrito"
+        }
         onClick={() => handleAddToCart(item)}
+        disabled={isInCart(item._id)}
         className="absolute top-2 right-2 p-2 size-10 flex items-center justify-center rounded-xl bg-white/60 hover:shadow-lg backdrop-blur-sm"
       >
         <HandbagIcon className="w-5 h-5" />
