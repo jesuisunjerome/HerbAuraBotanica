@@ -89,7 +89,7 @@ export default function AboutPage() {
 
       <section className="py-25 bg-white px-3 lg:px-20 md:px-5 relative">
         <div className="flex flex-col md:flex-row gap-10">
-          <div className="w-full md:w-1/2 bg-gray-50 px-7 py-10 rounded-2xl relative">
+          <div className="w-full md:w-1/2 bg-linear-to-b from-gray-50 to-transparent px-7 py-10 rounded-2xl relative">
             <div className="max-w-lg mb-5">
               <h1 className="text-3xl mb-3">
                 ✨ Ingredientes Puros y Naturales
@@ -107,7 +107,7 @@ export default function AboutPage() {
                   loading="lazy"
                   src="/images/4.png"
                   alt="HerbAura Botanica - Cuidado Natural del Cabello"
-                  className="w-full h-50 object-cover rounded-lg"
+                  className="w-full h-60 object-cover rounded-lg"
                 />
               </div>
               <div>
@@ -115,7 +115,7 @@ export default function AboutPage() {
                   loading="lazy"
                   src="/images/modelo-1.jpeg"
                   alt="HerbAura Botanica - Cuidado Natural del Cabello"
-                  className="w-full h-50 object-cover rounded-lg"
+                  className="w-full h-60 object-cover rounded-lg"
                 />
               </div>
               <div className="col-span-2">
@@ -123,12 +123,12 @@ export default function AboutPage() {
                   loading="lazy"
                   src="/images/modelo-3.jpeg"
                   alt="HerbAura Botanica - Cuidado Natural del Cabello"
-                  className="w-full h-60 object-cover rounded-lg"
+                  className="w-full h-80 object-cover rounded-lg"
                 />
               </div>
               <div className="absolute inset-0 bg-linear-to-t from-gray-50 to-transparent" />
             </div>
-            <div className="absolute bottom-0 left-0 w-full h-[20%] bg-linear-to-t from-white to-transparent" />
+            <div className="absolute -bottom-20 left-0 w-full h-[30%] bg-linear-to-t from-white to-transparent" />
           </div>
           <div className="w-full md:w-1/2 space-y-5 sticky top-20 self-start">
             <div className="bg-amber-50 px-7 py-10 rounded-2xl">
