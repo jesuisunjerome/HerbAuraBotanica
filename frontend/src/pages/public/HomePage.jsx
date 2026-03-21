@@ -29,7 +29,7 @@ export default function HomePage() {
           loading="lazy"
           src="/images/vector.png"
           className="absolute -top-4 left-0 h-8 w-full rotate-180 pointer-events-none"
-          alt=""
+          alt="Decorative vector graphic"
         />
         <div
           className="absolute -top-8 left-0 z-10 w-full h-8 pointer-events-none"
@@ -194,7 +194,7 @@ export default function HomePage() {
           loading="lazy"
           src="/images/vector.png"
           className="absolute -top-4 left-0 h-8 w-full rotate-180 pointer-events-none"
-          alt=""
+          alt="Decorative vector graphic"
         />
       </section>
 

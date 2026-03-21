@@ -92,14 +92,14 @@ export default function PolicyPage() {
           loading="lazy"
           src="/images/vector.png"
           className="absolute -top-4 left-0 h-8 w-full pointer-events-none"
-          alt=""
+          alt="Decorative vector graphic"
         />
         <NewsLetter />
         <img
           loading="lazy"
           src="/images/vector.png"
           className="absolute -bottom-4 left-0 h-8 w-full z-10 pointer-events-none"
-          alt=""
+          alt="Decorative vector graphic"
         />
         <div className="absolute top-0 right-0 w-40 h-40 -z-10 opacity-10 blur-3xl bg-amber-100 rounded-lg animate-pulse" />
       </section>

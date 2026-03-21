@@ -36,19 +36,19 @@ export default function Banner() {
                 <img
                   loading="lazy"
                   src="https://i.pravatar.cc/100?img=16"
-                  alt=""
+                  alt="Usuario 1"
                   className="size-9 object-cover rounded-full border-2 border-white bg-gray-200"
                 />
                 <img
                   loading="lazy"
                   src="https://i.pravatar.cc/100?img=28"
-                  alt=""
+                  alt="Usuario 2"
                   className="size-9 object-cover rounded-full border-2 border-white bg-gray-200"
                 />
                 <img
                   loading="lazy"
                   src="https://i.pravatar.cc/100?img=27"
-                  alt=""
+                  alt="Usuario 3"
                   className="size-9 object-cover rounded-full border-2 border-white bg-gray-200"
                 />
               </div>
@@ -71,7 +71,7 @@ export default function Banner() {
             loading="lazy"
             src="/images/vector-1.png"
             className="absolute bottom-0 left-0 h-8 w-full pointer-events-none"
-            alt=""
+            alt="Decorative vector graphic"
           />
         </div>
       </div>

@@ -340,7 +340,7 @@ export default function ProductForm() {
                         <img
                           src={listOfImages.find((img) => img.isMain).url}
                           className="size-full object-contain"
-                          alt=""
+                          alt="Imagen principal del producto"
                         />
                       </div>
                     </div>
@@ -354,7 +354,7 @@ export default function ProductForm() {
                       <img
                         src={image.url}
                         className="w-full h-full object-contain"
-                        alt=""
+                        alt={`Imagen del producto ${index + 1}`}
                       />
 
                       <div className="absolute top-2 left-2">

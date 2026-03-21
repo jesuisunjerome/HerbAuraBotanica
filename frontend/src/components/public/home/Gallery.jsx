@@ -16,7 +16,7 @@ export default function Gallery() {
         loading="lazy"
         src="/images/vector.png"
         className="absolute -top-4 left-0 h-8 w-full rotate-180 pointer-events-none"
-        alt=""
+        alt="Decorative vector graphic"
       />
 
       <div className="max-w-3xl mb-10">
@@ -49,7 +49,7 @@ export default function Gallery() {
                   loading="lazy"
                   src={src}
                   className="h-60 md:h-70 lg:90 w-full object-cover rounded-xl bg-gray-200"
-                  alt=""
+                  alt={`Imagen de la galería de HerbAura Botanica ${index + 1}`}
                 />
               </div>
             ))}
@@ -60,7 +60,7 @@ export default function Gallery() {
         loading="lazy"
         src="/images/vector.png"
         className="absolute -bottom-4 left-0 h-8 w-full rotate-180 z-10 pointer-events-none"
-        alt=""
+        alt="Decorative vector graphic"
       />
     </section>
   );

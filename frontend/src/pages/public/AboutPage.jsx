@@ -60,13 +60,13 @@ export default function AboutPage() {
               loading="lazy"
               src="/images/2.png"
               className="absolute bottom-0 left-6 h-60 object-cover w-[60%] pointer-events-none rounded-t-2xl ring-4 ring-white ring-offset-1"
-              alt=""
+              alt="HerbAura Botanica - Cuidado Natural del Cabello"
             />
             <img
               loading="lazy"
               src="/images/vector-1.png"
               className="absolute -bottom-4 left-0 h-8 w-[90%] pointer-events-none"
-              alt=""
+              alt="Decorative vector graphic"
             />
           </div>
         </div>
@@ -141,7 +141,7 @@ export default function AboutPage() {
           <img
             loading="lazy"
             src="/images/9.png"
-            alt=""
+            alt="HerbAura Botanica - Cuidado Natural del Cabello"
             className="w-full h-full object-cover rounded-lg"
           />
         </div>
@@ -166,7 +166,7 @@ export default function AboutPage() {
                 <img
                   loading="lazy"
                   src="/images/3.png"
-                  alt=""
+                  alt="HerbAura Botanica - Cuidado Natural del Cabello"
                   className="w-full h-50 object-cover rounded-lg"
                 />
               </div>
@@ -174,7 +174,7 @@ export default function AboutPage() {
                 <img
                   loading="lazy"
                   src="/images/3.png"
-                  alt=""
+                  alt="HerbAura Botanica - Cuidado Natural del Cabello"
                   className="w-full h-50 object-cover rounded-lg"
                 />
               </div>
@@ -182,7 +182,7 @@ export default function AboutPage() {
                 <img
                   loading="lazy"
                   src="/images/3.png"
-                  alt=""
+                  alt="HerbAura Botanica - Cuidado Natural del Cabello"
                   className="w-full h-60 object-cover rounded-lg"
                 />
               </div>
@@ -196,25 +196,25 @@ export default function AboutPage() {
                 <img
                   loading="lazy"
                   src="https://i.pravatar.cc/100?img=16"
-                  alt=""
+                  alt="Usuario 1"
                   className="size-15 object-cover rounded-full border-2 border-white bg-gray-200"
                 />
                 <img
                   loading="lazy"
                   src="https://i.pravatar.cc/100?img=28"
-                  alt=""
+                  alt="Usuario 2"
                   className="size-15 object-cover rounded-full border-2 border-white bg-gray-200"
                 />
                 <img
                   loading="lazy"
                   src="https://i.pravatar.cc/100?img=29"
-                  alt=""
+                  alt="Usuario 3"
                   className="size-15 object-cover rounded-full border-2 border-white bg-gray-200"
                 />
                 <img
                   loading="lazy"
                   src="https://i.pravatar.cc/100?img=27"
-                  alt=""
+                  alt="Usuario 4"
                   className="size-15 object-cover rounded-full border-2 border-white bg-gray-200"
                 />
                 <div className="size-15 object-cover rounded-full border-2 border-white bg-amber-600 flex items-center justify-center text-white text-2xl font-semibold">
@@ -251,7 +251,7 @@ export default function AboutPage() {
           loading="lazy"
           src="/images/vector.png"
           className="absolute -bottom-4 left-0 h-8 w-full z-10 pointer-events-none"
-          alt=""
+          alt="Decorative vector graphic"
         />
         <div className="absolute top-0 right-0 w-40 h-40 -z-10 opacity-10 blur-3xl bg-amber-100 rounded-lg animate-pulse" />
       </section>
