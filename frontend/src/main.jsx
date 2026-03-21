@@ -12,8 +12,8 @@ createRoot(document.getElementById("root")).render(
     <App />
     <Toaster
       position="top-center"
-      gutter={12}
-      containerStyle={{ margin: "8px" }}
+      // gutter={12}
+      // containerStyle={{ margin: "8px" }}
       toastOptions={{
         success: { duration: 6000 },
         error: { duration: 7000 },

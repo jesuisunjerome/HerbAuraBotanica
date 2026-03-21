@@ -168,7 +168,7 @@ export const bestSellerProducts = [
 export const mocckCheckoutClientData = {
   firstName: "Juan",
   lastName: "Pérez",
-  email: "juan.perez@example.com",
+  email: "ralphpierrerhodeexy@yahoo.com",
   phone: "1234567890",
   address: "Calle Falsa 123",
   city: "Ciudad Ejemplo",

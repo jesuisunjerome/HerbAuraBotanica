@@ -1,6 +1,7 @@
 import { PAYMENT_STATUS } from "../lib/constants.js";
 import Checkout from "../models/Checkout.js";
 import Order from "../models/Order.js";
+import { sendOrderConfirmationEmail } from "../services/email.service.js";
 
 // Create a new checkout session
 export const createNewCheckoutSession = async (req, res) => {
@@ -100,6 +101,11 @@ export const finalizeCheckoutSession = async (req, res) => {
       checkout.isFinalized = true;
       checkout.finalizedAt = new Date();
       await checkout.save();
+
+      // Send order confirmation email to the client
+      await sendOrderConfirmationEmail(finalOrder, "client");
+      // Send order confirmation email to the admin
+      await sendOrderConfirmationEmail(finalOrder, "admin");
 
       return res.status(201).json(finalOrder);
     }
