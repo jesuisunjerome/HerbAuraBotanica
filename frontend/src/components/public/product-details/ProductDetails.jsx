@@ -64,9 +64,9 @@ export default function ProductDetails({ product, isPending }) {
               addToCart(product);
               navigate("/checkout");
             }}
-            className="bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700 transition hover:shadow-lg flex w-full sm:w-auto justify-center items-center gap-2"
+            className="bg-blue-600 text-white px-6 py-3 rounded group hover:bg-blue-700 transition hover:shadow-lg flex w-full sm:w-auto justify-center items-center gap-2"
           >
-            <CreditCardIcon className="group-hover:translate-x-2 transition-all" />
+            <CreditCardIcon className="group-hover:-translate-x-2 transition-all" />
             <span>Pagar Ahora</span>
           </button>
         </div>
@@ -91,7 +91,7 @@ export default function ProductDetails({ product, isPending }) {
           </div>
         </div>
 
-        {/* <div className="mt-5 pt-5 border-t border-gray-300/50">
+        <div className="mt-5 pt-5 border-t border-gray-300/50">
           <h4 className="text-lg">Ingredientes Clave y Sus Beneficios</h4>
           <ul className="mt-2 space-y-2 text-gray-600 text-sm">
             <li>
@@ -123,7 +123,7 @@ export default function ProductDetails({ product, isPending }) {
               </p>
             </li>
           </ul>
-        </div> */}
+        </div>
       </div>
     </div>
   );

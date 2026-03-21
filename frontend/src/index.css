@@ -2,6 +2,7 @@
 
 :root {
   --detail-high-contrast: rgb(101, 101, 101);
+  scroll-behavior: smooth;
 }
 
 body {

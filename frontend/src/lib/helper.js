@@ -54,6 +54,25 @@ export function formatShortDateToString(date, time = false) {
   }).format(date);
 }
 
+export function highlightStyleWhenIdMatchesOnScroll(id) {
+  const element = document.getElementById(id);
+
+  if (!element) return;
+  const rect = element.getBoundingClientRect();
+  const isInView =
+    rect.top >= 0 &&
+    rect.bottom <=
+      (window.innerHeight || document.documentElement.clientHeight);
+
+  if (isInView)
+    document.querySelectorAll(".menu-item").forEach((el) => {
+      el.classList.remove("text-amber-600", "font-semibold", "text-gray-700");
+      if (el.getAttribute("href") === `#${id}`) {
+        el.classList.add("text-amber-600", "font-semibold");
+      }
+    });
+}
+
 export function updateSearchParams(key, value, searchParams, setSearchParams) {
   const params = new URLSearchParams(searchParams);
   if (value) params.set(key, value);

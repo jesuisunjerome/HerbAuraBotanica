@@ -1,0 +1,466 @@
+{
+  "menuItems": [
+    { "label": "Información del Producto", "href": "#product-info" },
+    { "label": "Compras y Pagos", "href": "#purchases-payments" },
+    { "label": "Envíos y Entregas", "href": "#shipping-delivery" },
+    { "label": "Devoluciones y Reembolsos", "href": "#returns-refunds" },
+    { "label": "Uso del Sitio Web", "href": "#website-usage" },
+    { "label": "Propiedad Intelectual", "href": "#intellectual-property" },
+    { "label": "Política de Privacidad", "href": "#privacy" },
+    { "label": "Seguridad de Datos", "href": "#data-security" },
+    { "label": "Cookies", "href": "#cookies" },
+    { "label": "Modificaciones de los Términos", "href": "#terms-updates" },
+    { "label": "Limitación de Responsabilidad", "href": "#liability" },
+    { "label": "Contacto", "href": "#contact" }
+  ],
+  "contentSections": [
+    {
+      "id": "product-info",
+      "title": "Información del Producto",
+      "paragraphs": [
+        {
+          "text": "En {keyword:HerbAura Botanica} nos esforzamos por proporcionar descripciones precisas, completas y detalladas de todos nuestros productos de {keyword:cuidado capilar botánico}. Cada producto está cuidadosamente documentado con su lista completa de {keyword:ingredientes naturales}, beneficios, modo de uso y precauciones.",
+          "highlights": [
+            { "type": "keyword", "text": "HerbAura Botanica" },
+            { "type": "keyword", "text": "cuidado capilar botánico" },
+            { "type": "keyword", "text": "ingredientes naturales" }
+          ]
+        },
+        {
+          "text": "Los colores, texturas y aromas pueden variar ligeramente entre lotes debido a la naturaleza {keyword:orgánica} de nuestros ingredientes botánicos. Esto es normal y no afecta la calidad ni eficacia del producto. Todas las fotografías son {keyword:referenciales} y pueden no reflejar el color exacto del producto final.",
+          "highlights": [
+            { "type": "keyword", "text": "orgánica" },
+            { "type": "keyword", "text": "referenciales" }
+          ]
+        },
+        {
+          "text": "Nos reservamos el derecho de modificar las fórmulas de nuestros productos para mejorar su calidad, siempre manteniendo nuestro compromiso con {keyword:ingredientes naturales y sostenibles}. Cualquier cambio significativo será comunicado en la descripción del producto.",
+          "highlights": [
+            {
+              "type": "keyword",
+              "text": "ingredientes naturales y sostenibles"
+            }
+          ]
+        },
+        {
+          "text": "Si tienes {keyword:alergias conocidas} o sensibilidad a algún ingrediente botánico, te recomendamos revisar cuidadosamente la lista de ingredientes antes de realizar tu compra. No nos hacemos responsables de reacciones alérgicas a ingredientes claramente listados en la descripción del producto.",
+          "highlights": [{ "type": "keyword", "text": "alergias conocidas" }]
+        }
+      ]
+    },
+    {
+      "id": "purchases-payments",
+      "title": "Compras y Pagos",
+      "paragraphs": [
+        {
+          "text": "Al realizar una compra en HerbAura Botanica, te comprometes a pagar el {keyword:precio total} indicado en el carrito de compras, incluyendo el costo de los productos, impuestos aplicables y gastos de envío. Todos los precios están expresados en la moneda local y pueden estar sujetos a cambios sin previo aviso.",
+          "highlights": [{ "type": "keyword", "text": "precio total" }]
+        },
+        {
+          "text": "Aceptamos los siguientes métodos de pago: {keyword:tarjetas de crédito y débito} (Visa, Mastercard, American Express), {keyword:PayPal}, y {keyword:transferencias bancarias}. Todas las transacciones son procesadas a través de {keyword:pasarelas de pago seguras} que cumplen con los estándares {keyword:PCI DSS} para proteger tu información financiera.",
+          "highlights": [
+            { "type": "keyword", "text": "tarjetas de crédito y débito" },
+            { "type": "keyword", "text": "PayPal" },
+            { "type": "keyword", "text": "transferencias bancarias" },
+            { "type": "keyword", "text": "pasarelas de pago seguras" },
+            { "type": "keyword", "text": "PCI DSS" }
+          ]
+        },
+        {
+          "text": "Nos reservamos el derecho de rechazar o cancelar cualquier pedido por razones que incluyan pero no se limiten a: disponibilidad de productos, errores en la información del producto o precio, problemas identificados por nuestro departamento de {keyword:prevención de fraude}, o cualquier otra razón legítima. Si tu pedido es cancelado después del pago, se te reembolsará el {keyword:monto completo}.",
+          "highlights": [
+            { "type": "keyword", "text": "prevención de fraude" },
+            { "type": "keyword", "text": "monto completo" }
+          ]
+        },
+        {
+          "text": "Una vez confirmado tu pedido, recibirás un {keyword:correo electrónico} con el número de confirmación y los detalles de tu compra. Este correo sirve como {keyword:comprobante} de tu transacción. Por favor, revisa cuidadosamente la información y contáctanos de inmediato si encuentras algún error.",
+          "highlights": [
+            { "type": "keyword", "text": "correo electrónico" },
+            { "type": "keyword", "text": "comprobante" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shipping-delivery",
+      "title": "Envíos y Entregas",
+      "paragraphs": [
+        {
+          "text": "Realizamos envíos a nivel {keyword:nacional e internacional}. Los tiempos de entrega estimados son de {keyword:3-5 días hábiles} para envíos nacionales y de {keyword:7-15 días hábiles} para envíos internacionales, dependiendo del destino y el servicio de mensajería. Estos tiempos son aproximados y pueden variar según la ubicación y temporada.",
+          "highlights": [
+            { "type": "keyword", "text": "nacional e internacional" },
+            { "type": "keyword", "text": "3-5 días hábiles" },
+            { "type": "keyword", "text": "7-15 días hábiles" }
+          ]
+        },
+        {
+          "text": "Los costos de envío se calculan automáticamente según el peso del paquete, la dirección de entrega y el método de envío seleccionado. Ofrecemos {keyword:envío gratuito} en compras superiores a cierto monto, según promociones vigentes. Los pedidos se procesan de {keyword:lunes a viernes} en días hábiles.",
+          "highlights": [
+            { "type": "keyword", "text": "envío gratuito" },
+            { "type": "keyword", "text": "lunes a viernes" }
+          ]
+        },
+        {
+          "text": "Una vez que tu pedido sea despachado, recibirás un correo electrónico con el {keyword:número de seguimiento} para que puedas rastrear tu paquete en tiempo real. No nos hacemos responsables por retrasos causados por servicios de mensajería externos, condiciones climáticas adversas, aduanas, o circunstancias fuera de nuestro control.",
+          "highlights": [{ "type": "keyword", "text": "número de seguimiento" }]
+        },
+        {
+          "text": "Es responsabilidad del cliente proporcionar una {keyword:dirección de entrega correcta y completa}. Si el paquete es devuelto por dirección incorrecta o ausencia del destinatario, se podrán aplicar cargos adicionales por reenvío. En caso de pérdida o daño durante el transporte, trabajaremos con la empresa de mensajería para resolver la situación lo antes posible.",
+          "highlights": [
+            {
+              "type": "keyword",
+              "text": "dirección de entrega correcta y completa"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "returns-refunds",
+      "title": "Devoluciones y Reembolsos",
+      "paragraphs": [
+        {
+          "text": "Aceptamos devoluciones dentro de los {keyword:30 días} posteriores a la fecha de compra, siempre que el producto esté {keyword:sin abrir}, en su empaque original y en perfectas condiciones de reventa. Los productos de cuidado personal no pueden ser devueltos una vez abiertos por razones de {keyword:higiene y seguridad}, salvo que presenten defectos de fabricación.",
+          "highlights": [
+            { "type": "keyword", "text": "30 días" },
+            { "type": "keyword", "text": "sin abrir" },
+            { "type": "keyword", "text": "higiene y seguridad" }
+          ]
+        },
+        {
+          "text": "Para iniciar una devolución, debes contactarnos a través de nuestro correo electrónico con tu {keyword:número de orden} y el motivo de la devolución. Te proporcionaremos instrucciones detalladas y, si aplica, una {keyword:etiqueta de devolución prepagada}. Los costos de envío de devolución corren por cuenta del cliente, excepto en casos de productos defectuosos o error en el envío.",
+          "highlights": [
+            { "type": "keyword", "text": "número de orden" },
+            { "type": "keyword", "text": "etiqueta de devolución prepagada" }
+          ]
+        },
+        {
+          "text": "Los reembolsos se procesarán dentro de {keyword:5-10 días hábiles} una vez que recibamos y verifiquemos el producto devuelto. El reembolso se realizará al {keyword:método de pago original} utilizado en la compra. Ten en cuenta que los gastos de envío originales no son reembolsables, excepto en casos de error por nuestra parte.",
+          "highlights": [
+            { "type": "keyword", "text": "5-10 días hábiles" },
+            { "type": "keyword", "text": "método de pago original" }
+          ]
+        },
+        {
+          "text": "Si recibes un producto dañado, defectuoso o equivocado, por favor contáctanos dentro de las primeras {keyword:48 horas} de recibido el pedido, adjuntando fotografías del producto y empaque. Reemplazaremos el producto sin costo adicional o te reembolsaremos el monto completo, incluyendo gastos de envío.",
+          "highlights": [{ "type": "keyword", "text": "48 horas" }]
+        }
+      ]
+    },
+    {
+      "id": "website-usage",
+      "title": "Uso del Sitio Web",
+      "paragraphs": [
+        {
+          "text": "Al acceder y utilizar el sitio web de HerbAura Botanica, aceptas hacer un uso {keyword:responsable y legal} del mismo. Está {keyword:prohibido} usar nuestro sitio para cualquier propósito ilegal, fraudulento o que viole los derechos de terceros.",
+          "highlights": [
+            { "type": "keyword", "text": "responsable y legal" },
+            { "type": "keyword", "text": "prohibido" }
+          ]
+        },
+        {
+          "text": "No está permitido intentar acceder a áreas restringidas del sitio web, interferir con su funcionamiento, introducir {keyword:virus o malware}, realizar ingeniería inversa, o extraer contenido de manera automatizada sin autorización expresa. Cualquier violación puede resultar en la {keyword:suspensión inmediata} de tu acceso y acciones legales correspondientes.",
+          "highlights": [
+            { "type": "keyword", "text": "virus o malware" },
+            { "type": "keyword", "text": "suspensión inmediata" }
+          ]
+        },
+        {
+          "text": "Debes ser {keyword:mayor de 18 años} para realizar compras en nuestro sitio. Si eres menor de edad, requieres la supervisión y autorización de un padre o tutor legal para usar nuestros servicios.",
+          "highlights": [{ "type": "keyword", "text": "mayor de 18 años" }]
+        },
+        {
+          "text": "Nos reservamos el derecho de modificar, suspender o discontinuar cualquier aspecto del sitio web en cualquier momento sin previo aviso. No garantizamos que el sitio estará disponible de manera {keyword:ininterrumpida o libre de errores}, aunque hacemos nuestro mejor esfuerzo para mantener un servicio de calidad.",
+          "highlights": [
+            { "type": "keyword", "text": "ininterrumpida o libre de errores" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "intellectual-property",
+      "title": "Propiedad Intelectual",
+      "paragraphs": [
+        {
+          "text": "Todo el contenido presente en el sitio web de HerbAura Botanica, incluyendo pero no limitado a textos, imágenes, logotipos, gráficos, videos, diseños, código fuente, y material audiovisual, está protegido por {keyword:derechos de autor}, {keyword:marcas registradas} y otras leyes de propiedad intelectual.",
+          "highlights": [
+            { "type": "keyword", "text": "derechos de autor" },
+            { "type": "keyword", "text": "marcas registradas" }
+          ]
+        },
+        {
+          "text": "{keyword:HerbAura Botanica} y sus logotipos son {keyword:marcas registradas} de nuestra empresa. No está permitido usar, copiar, reproducir, distribuir, modificar o crear obras derivadas de nuestro contenido sin {keyword:autorización previa por escrito}.",
+          "highlights": [
+            { "type": "keyword", "text": "HerbAura Botanica" },
+            { "type": "keyword", "text": "marcas registradas" },
+            { "type": "keyword", "text": "autorización previa por escrito" }
+          ]
+        },
+        {
+          "text": "Se te concede una {keyword:licencia limitada}, no exclusiva y no transferible para acceder y utilizar el sitio web únicamente para {keyword:fines personales y no comerciales}. Cualquier uso comercial o redistribución del contenido requiere permiso explícito.",
+          "highlights": [
+            { "type": "keyword", "text": "licencia limitada" },
+            { "type": "keyword", "text": "fines personales y no comerciales" }
+          ]
+        },
+        {
+          "text": "Si crees que tu propiedad intelectual ha sido utilizada en nuestro sitio de manera que constituye una {keyword:infracción de derechos de autor}, por favor contáctanos con la información detallada para que podamos investigar y tomar las medidas apropiadas.",
+          "highlights": [
+            { "type": "keyword", "text": "infracción de derechos de autor" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "privacy",
+      "title": "Política de Privacidad",
+      "paragraphs": [
+        {
+          "text": "En HerbAura Botanica nos tomamos muy en serio la {keyword:privacidad y protección} de tus datos personales. Esta Política de Privacidad explica qué información recopilamos, cómo la utilizamos, con quién la compartimos y qué {keyword:derechos tienes} sobre tus datos.",
+          "highlights": [
+            { "type": "keyword", "text": "privacidad y protección" },
+            { "type": "keyword", "text": "derechos tienes" }
+          ]
+        },
+        {
+          "text": "Recopilamos información que nos proporcionas directamente cuando creas una cuenta, realizas una compra, te suscribes a nuestro boletín, o te comunicas con nosotros. Esto incluye: {keyword:nombre completo}, {keyword:dirección de correo electrónico}, {keyword:dirección postal}, {keyword:número de teléfono}, información de pago, y preferencias de productos.",
+          "highlights": [
+            { "type": "keyword", "text": "nombre completo" },
+            { "type": "keyword", "text": "dirección de correo electrónico" },
+            { "type": "keyword", "text": "dirección postal" },
+            { "type": "keyword", "text": "número de teléfono" }
+          ]
+        },
+        {
+          "text": "También recopilamos información automáticamente cuando visitas nuestro sitio web, como tu {keyword:dirección IP}, tipo de navegador, páginas visitadas, tiempo de permanencia, fuente de referencia, y otros datos de uso a través de {keyword:cookies} y tecnologías similares. Esta información nos ayuda a mejorar la experiencia del usuario y optimizar nuestros servicios.",
+          "highlights": [
+            { "type": "keyword", "text": "dirección IP" },
+            { "type": "keyword", "text": "cookies" }
+          ]
+        },
+        {
+          "text": "Utilizamos tu información personal para: {keyword:procesar y completar tus pedidos}, enviarte {keyword:confirmaciones y actualizaciones de envío}, responder a tus consultas y solicitudes de soporte, enviarte información sobre productos y promociones (si has aceptado recibirlas), mejorar nuestros productos y servicios, {keyword:prevenir fraudes} y garantizar la seguridad del sitio, y cumplir con obligaciones legales.",
+          "highlights": [
+            { "type": "keyword", "text": "procesar y completar tus pedidos" },
+            {
+              "type": "keyword",
+              "text": "confirmaciones y actualizaciones de envío"
+            },
+            { "type": "keyword", "text": "prevenir fraudes" }
+          ]
+        },
+        {
+          "text": "{keyword:No vendemos}, alquilamos ni compartimos tu información personal con terceros para sus propios fines de marketing. Solo compartimos información con: proveedores de servicios de confianza que nos ayudan a operar nuestro negocio (procesadores de pago, empresas de envío, plataformas de email marketing), cuando sea requerido por ley o para proteger nuestros derechos legales, o con tu {keyword:consentimiento explícito}.",
+          "highlights": [
+            { "type": "keyword", "text": "No vendemos" },
+            { "type": "keyword", "text": "consentimiento explícito" }
+          ]
+        },
+        {
+          "text": "Tienes derecho a: {keyword:acceder} a la información personal que tenemos sobre ti, solicitar la {keyword:corrección} de datos incorrectos o incompletos, solicitar la {keyword:eliminación} de tus datos personales (sujeto a ciertas excepciones legales), {keyword:oponerte} al procesamiento de tus datos para ciertos fines, {keyword:retirar tu consentimiento} en cualquier momento, y presentar una queja ante la autoridad de protección de datos competente.",
+          "highlights": [
+            { "type": "keyword", "text": "acceder" },
+            { "type": "keyword", "text": "corrección" },
+            { "type": "keyword", "text": "eliminación" },
+            { "type": "keyword", "text": "oponerte" },
+            { "type": "keyword", "text": "retirar tu consentimiento" }
+          ]
+        },
+        {
+          "text": "Para ejercer cualquiera de estos derechos, por favor contáctanos a través del correo electrónico proporcionado en la sección de {link:/contact:contacto}. Responderemos a tu solicitud dentro de los plazos establecidos por la legislación aplicable.",
+          "highlights": [
+            { "type": "link", "text": "contacto", "href": "/contact" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "data-security",
+      "title": "Seguridad de Datos",
+      "paragraphs": [
+        {
+          "text": "Implementamos medidas de seguridad técnicas, administrativas y físicas apropiadas para proteger tu información personal contra acceso no autorizado, alteración, divulgación o destrucción. Esto incluye {keyword:encriptación SSL/TLS} para todas las transmisiones de datos sensibles, {keyword:firewalls}, controles de acceso estrictos, y {keyword:monitoreo continuo} de sistemas.",
+          "highlights": [
+            { "type": "keyword", "text": "encriptación SSL/TLS" },
+            { "type": "keyword", "text": "firewalls" },
+            { "type": "keyword", "text": "monitoreo continuo" }
+          ]
+        },
+        {
+          "text": "Toda la información de pago es procesada a través de {keyword:pasarelas de pago certificadas PCI DSS} que utilizan {keyword:encriptación de nivel bancario}. Nosotros {keyword:no almacenamos} información completa de tarjetas de crédito en nuestros servidores.",
+          "highlights": [
+            {
+              "type": "keyword",
+              "text": "pasarelas de pago certificadas PCI DSS"
+            },
+            { "type": "keyword", "text": "encriptación de nivel bancario" },
+            { "type": "keyword", "text": "no almacenamos" }
+          ]
+        },
+        {
+          "text": "Aunque implementamos medidas de seguridad robustas, ningún sistema es completamente infalible. No podemos garantizar la {keyword:seguridad absoluta} de la información transmitida a través de internet. Al usar nuestro sitio web, aceptas que comprendes y asumes este riesgo inherente.",
+          "highlights": [{ "type": "keyword", "text": "seguridad absoluta" }]
+        },
+        {
+          "text": "Te recomendamos mantener tu {keyword:contraseña segura}, no compartirla con terceros, y {keyword:cerrar sesión} después de usar nuestro sitio en dispositivos compartidos. Si sospechas que tu cuenta ha sido comprometida, {email:contacto@herbaurabotanica.com:contáctanos inmediatamente} para tomar las medidas de seguridad necesarias.",
+          "highlights": [
+            { "type": "keyword", "text": "contraseña segura" },
+            { "type": "keyword", "text": "cerrar sesión" },
+            {
+              "type": "email",
+              "text": "contáctanos inmediatamente",
+              "email": "contacto@herbaurabotanica.com"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cookies",
+      "title": "Política de Cookies",
+      "paragraphs": [
+        {
+          "text": "Nuestro sitio web utiliza {keyword:cookies} y tecnologías similares para mejorar tu experiencia de navegación, recordar tus preferencias, analizar el tráfico del sitio, y personalizar el contenido y anuncios. Las cookies son {keyword:pequeños archivos de texto} que se almacenan en tu dispositivo cuando visitas un sitio web.",
+          "highlights": [
+            { "type": "keyword", "text": "cookies" },
+            { "type": "keyword", "text": "pequeños archivos de texto" }
+          ]
+        },
+        {
+          "text": "Utilizamos los siguientes tipos de cookies: {keyword:Cookies esenciales} (necesarias para el funcionamiento básico del sitio y el carrito de compras), {keyword:Cookies de rendimiento} (recopilan información anónima sobre cómo los visitantes usan el sitio), {keyword:Cookies de funcionalidad} (recuerdan tus preferencias y elecciones), y {keyword:Cookies de marketing} (rastrean tu actividad para mostrarte anuncios relevantes).",
+          "highlights": [
+            { "type": "keyword", "text": "Cookies esenciales" },
+            { "type": "keyword", "text": "Cookies de rendimiento" },
+            { "type": "keyword", "text": "Cookies de funcionalidad" },
+            { "type": "keyword", "text": "Cookies de marketing" }
+          ]
+        },
+        {
+          "text": "Puedes controlar y gestionar las cookies a través de la {keyword:configuración de tu navegador}. Puedes bloquear, eliminar o restringir el uso de cookies, aunque esto puede afectar la funcionalidad del sitio y tu experiencia de usuario. La mayoría de los navegadores aceptan cookies automáticamente, pero puedes modificar esta configuración.",
+          "highlights": [
+            { "type": "keyword", "text": "configuración de tu navegador" }
+          ]
+        },
+        {
+          "text": "Al continuar usando nuestro sitio web sin cambiar la configuración de cookies de tu navegador, consientes el uso de cookies según descrito en esta política. Para más información sobre cómo usamos cookies específicas y cómo desactivarlas, consulta nuestra Política de Cookies detallada o {email:contacto@herbaurabotanica.com:contáctanos directamente}.",
+          "highlights": [
+            {
+              "type": "email",
+              "text": "contáctanos directamente",
+              "email": "contacto@herbaurabotanica.com"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "terms-updates",
+      "title": "Modificaciones de los Términos",
+      "paragraphs": [
+        {
+          "text": "Nos reservamos el derecho de modificar, actualizar o revisar estos términos y condiciones en cualquier momento sin previo aviso. Las modificaciones entrarán en vigor {keyword:inmediatamente} después de su publicación en nuestro sitio web. La {keyword:fecha de la última actualización} se indicará al comienzo de este documento.",
+          "highlights": [
+            { "type": "keyword", "text": "inmediatamente" },
+            { "type": "keyword", "text": "fecha de la última actualización" }
+          ]
+        },
+        {
+          "text": "Es tu {keyword:responsabilidad} revisar periódicamente estos términos y condiciones para estar al tanto de cualquier cambio. El uso continuado del sitio web después de la publicación de modificaciones constituye tu {keyword:aceptación} de los términos actualizados.",
+          "highlights": [
+            { "type": "keyword", "text": "responsabilidad" },
+            { "type": "keyword", "text": "aceptación" }
+          ]
+        },
+        {
+          "text": "Si realizamos {keyword:cambios sustanciales} que afecten significativamente tus derechos u obligaciones, haremos esfuerzos razonables para notificarte por correo electrónico o mediante un aviso destacado en nuestro sitio web. Sin embargo, es tu responsabilidad mantenerte informado.",
+          "highlights": [{ "type": "keyword", "text": "cambios sustanciales" }]
+        },
+        {
+          "text": "Si no estás de acuerdo con los términos modificados, debes dejar de usar nuestro sitio web y servicios. Si tienes preguntas o inquietudes sobre los cambios, no dudes en {email:contacto@herbaurabotanica.com:contactarnos}.",
+          "highlights": [
+            {
+              "type": "email",
+              "text": "contactarnos",
+              "email": "contacto@herbaurabotanica.com"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "liability",
+      "title": "Limitación de Responsabilidad",
+      "paragraphs": [
+        {
+          "text": "En la medida máxima permitida por la ley aplicable, HerbAura Botanica {keyword:no será responsable} de daños indirectos, incidentales, especiales, consecuentes o punitivos, incluyendo pero no limitado a pérdida de beneficios, ingresos, datos o uso, resultantes de o relacionados con el uso o imposibilidad de uso de nuestros productos o sitio web.",
+          "highlights": [{ "type": "keyword", "text": "no será responsable" }]
+        },
+        {
+          "text": "No garantizamos que nuestros productos sean adecuados para tus necesidades específicas, produzcan resultados particulares, o sean compatibles con tu tipo de cabello. Los {keyword:resultados pueden variar} según factores individuales. Las imágenes de antes y después son {keyword:testimonios reales} pero no representan resultados garantizados.",
+          "highlights": [
+            { "type": "keyword", "text": "resultados pueden variar" },
+            { "type": "keyword", "text": "testimonios reales" }
+          ]
+        },
+        {
+          "text": "No nos hacemos responsables de {keyword:reacciones adversas o alergias} a nuestros productos si los ingredientes están claramente listados en la descripción del producto. Es tu responsabilidad leer las etiquetas y realizar una {keyword:prueba de parche} antes del primer uso si tienes piel sensible o alergias conocidas.",
+          "highlights": [
+            { "type": "keyword", "text": "reacciones adversas o alergias" },
+            { "type": "keyword", "text": "prueba de parche" }
+          ]
+        },
+        {
+          "text": "Nuestra {keyword:responsabilidad total} por cualquier reclamo relacionado con nuestros productos o servicios estará limitada al monto que pagaste por el producto específico en cuestión. Estas limitaciones aplican independientemente de la forma legal de la acción, ya sea contractual, extracontractual o de otro tipo.",
+          "highlights": [{ "type": "keyword", "text": "responsabilidad total" }]
+        }
+      ]
+    },
+    {
+      "id": "contact",
+      "title": "Contacto",
+      "paragraphs": [
+        {
+          "text": "Si tienes alguna pregunta, inquietud o comentario sobre estos términos y condiciones, nuestra política de privacidad, o cualquier aspecto de nuestros productos y servicios, estamos aquí para ayudarte. Tu {keyword:satisfacción y confianza} son nuestra prioridad.",
+          "highlights": [
+            { "type": "keyword", "text": "satisfacción y confianza" }
+          ]
+        },
+        {
+          "text": "Puedes contactarnos a través de los siguientes medios: Correo electrónico: {email:contacto@herbaurabotanica.com:contacto@herbaurabotanica.com} (respondemos dentro de 24-48 horas hábiles), Teléfono: {phone:+1 (555) 123-4567:+1 (555) 123-4567} ({keyword:Lunes a Viernes, 9:00 AM - 6:00 PM}), o mediante nuestro {link:/contact:formulario de contacto} en la sección 'Contacto' de nuestro sitio web.",
+          "highlights": [
+            {
+              "type": "email",
+              "text": "contacto@herbaurabotanica.com",
+              "email": "contacto@herbaurabotanica.com"
+            },
+            {
+              "type": "phone",
+              "text": "+1 (555) 123-4567",
+              "phone": "+1 (555) 123-4567"
+            },
+            { "type": "keyword", "text": "Lunes a Viernes, 9:00 AM - 6:00 PM" },
+            {
+              "type": "link",
+              "text": "formulario de contacto",
+              "href": "/contact"
+            }
+          ]
+        },
+        {
+          "text": "También puedes seguirnos en nuestras {keyword:redes sociales} para mantenerte al día con nuestros últimos productos, consejos de cuidado capilar, promociones especiales y contenido inspirador sobre belleza botánica consciente.",
+          "highlights": [{ "type": "keyword", "text": "redes sociales" }]
+        },
+        {
+          "text": "{keyword:Última actualización: 20 de marzo de 2026}. Gracias por confiar en HerbAura Botanica para el cuidado natural de tu cabello. 🌿✨",
+          "highlights": [
+            {
+              "type": "keyword",
+              "text": "Última actualización: 20 de marzo de 2026"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
