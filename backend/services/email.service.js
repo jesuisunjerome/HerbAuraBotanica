@@ -6,7 +6,9 @@ dotenv.config();
 
 // Configuración del transporte de correo utilizando Gmail
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: process.env.EMAIL_HOST,
+  port: process.env.EMAIL_PORT,
+  secure: process.env.EMAIL_PORT === "465", // true for 465, false for other ports
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.GOOGLE_APP_PASSWORD, // Utiliza una contraseña de aplicación generada en tu cuenta de Google
