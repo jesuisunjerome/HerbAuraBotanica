@@ -68,6 +68,7 @@ export const handleStripeWebhook = async (req, res) => {
 // @access  Mercado Pago only
 export const handleMercadoPagoWebhook = async (req, res) => {
   let body = req.body;
+  console.log("handleMercadoPagoWebhook body:", body);
 
   try {
     if (Buffer.isBuffer(body)) {
