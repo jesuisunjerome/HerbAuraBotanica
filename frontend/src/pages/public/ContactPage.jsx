@@ -13,7 +13,7 @@ export default function ContactPage() {
 
       <section className="px-3 lg:px-20 md:px-5 relative">
         <div
-          className="flex flex-col lg:flex-row gap-10 items-center min-h-95 px-10 py-20 lg:py-10 rounded-3xl mb-10 relative overflow-hidden"
+          className="flex flex-col lg:flex-row gap-10 items-center min-h-95 px-5 py-20 md:px-10 lg:p-10 rounded-3xl mb-10 relative overflow-hidden"
           style={{
             background: "url('/images/7.png') no-repeat center center",
             backgroundSize: "cover",
@@ -52,7 +52,7 @@ export default function ContactPage() {
                   descubre el poder de la naturaleza para tu cabello.
                 </p>
               </div>
-              <div className="mt-auto grid grid-cols-2 gap-7 text-gray-300">
+              <div className="mt-auto grid md:grid-cols-2 gap-7 text-gray-300">
                 <div>
                   <p className="text-xl text-white">Correo</p>
                   <a
