@@ -57,7 +57,7 @@ export default function ContactPage() {
                   <p className="text-xl text-white">Correo</p>
                   <a
                     className="hover:underline"
-                    href="mailto:info@herbaurabotanica.com"
+                    href="mailto:info@herbaurabotanica.com?subject=Consulta%20desde%20el%20sitio%20web&body=Hola%20HerbAura%20Botanica%2C%0A%0AQuisiera%20saber%20más%20sobre%20sus%20productos.%0A%0AGracias!"
                   >
                     info@herbaurabotanica.com
                   </a>
