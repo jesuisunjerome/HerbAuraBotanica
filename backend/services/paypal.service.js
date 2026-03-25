@@ -1,17 +1,15 @@
 const PAYPAL_CLIENT_ID = process.env.PAYPAL_CLIENT_ID;
 const PAYPAL_CLIENT_SECRET = process.env.PAYPAL_CLIENT_SECRET;
 const PAYPAL_BASE_URL =
-  process.env.NODE_ENV === "production"
-    ? "https://api-m.paypal.com"
-    : "https://api-m.sandbox.paypal.com";
+  // process.env.NODE_ENV === "production"
+  //   ? "https://api-m.paypal.com" :
+  "https://api-m.sandbox.paypal.com";
 
 /**
  * Generate an OAuth 2.0 access token for PayPal API authentication.
  *  * @see https://developer.paypal.com/api/rest/authentication/
  */
 async function generateAccessToken() {
-  console.log(process.env.NODE_ENV);
-
   if (!PAYPAL_CLIENT_ID || !PAYPAL_CLIENT_SECRET) {
     throw new Error(
       "PayPal client ID and secret must be set in environment variables.",
