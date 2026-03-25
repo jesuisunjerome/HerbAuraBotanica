@@ -17,6 +17,6 @@ export const subscribe = async (req, res) => {
     res.status(201).json({ message: "Suscripción exitosa." });
   } catch (error) {
     console.log("Server error in subscribe controller", error.message);
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "Error del servidor: " + error.message });
   }
 };

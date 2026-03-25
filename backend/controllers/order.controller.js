@@ -20,7 +20,7 @@ export const getAllOrders = async (_, res) => {
     res.json(orders);
   } catch (error) {
     console.log("Server error in getAllOrders controller", error.message);
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "Error del servidor: " + error.message });
   }
 };
 
@@ -118,7 +118,9 @@ export const createOrder = async (req, res) => {
     res.status(201).json(responseData);
   } catch (error) {
     console.log("Server error in createOrder controller", error.message);
-    return res.status(500).json({ message: error.message });
+    return res
+      .status(500)
+      .json({ message: "Error del servidor: " + error.message });
   }
 };
 
@@ -159,7 +161,9 @@ export const captureOrder = async (req, res) => {
       "Server error in capturePaypalPayment controller",
       error.message,
     );
-    return res.status(500).json({ message: error.message });
+    return res
+      .status(500)
+      .json({ message: "Error del servidor: " + error.message });
   }
 };
 
@@ -179,7 +183,9 @@ export const getOrderById = async (req, res) => {
     res.json(order);
   } catch (error) {
     console.log("Server error in getOrderById controller", error.message);
-    return res.status(500).json({ message: error.message });
+    return res
+      .status(500)
+      .json({ message: "Error del servidor: " + error.message });
   }
 };
 
@@ -201,6 +207,8 @@ export const getOrderByConfirmationNumber = async (req, res) => {
       "Server error in getOrderByConfirmationNumber controller",
       error.message,
     );
-    return res.status(500).json({ message: error.message });
+    return res
+      .status(500)
+      .json({ message: "Error del servidor: " + error.message });
   }
 };

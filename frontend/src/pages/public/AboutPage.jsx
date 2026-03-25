@@ -80,7 +80,7 @@ export default function AboutPage() {
         <div className="h-120">
           <img
             loading="lazy"
-            src="/images/9.png"
+            src="/images/10.png"
             alt="HerbAura Botanica - Cuidado Natural del Cabello"
             className="w-full h-full object-cover rounded-lg"
           />
@@ -113,7 +113,7 @@ export default function AboutPage() {
               <div>
                 <img
                   loading="lazy"
-                  src="/images/modelo-1.jpeg"
+                  src="/images/modelos/modelo-1.jpeg"
                   alt="HerbAura Botanica - Cuidado Natural del Cabello"
                   className="w-full h-60 object-cover rounded-lg"
                 />
@@ -121,7 +121,7 @@ export default function AboutPage() {
               <div className="col-span-2">
                 <img
                   loading="lazy"
-                  src="/images/modelo-3.jpeg"
+                  src="/images/modelos/modelo-3.jpeg"
                   alt="HerbAura Botanica - Cuidado Natural del Cabello"
                   className="w-full h-80 object-cover rounded-lg"
                 />

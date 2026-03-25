@@ -128,41 +128,14 @@ export const productos = [
 ];
 
 export const galleryImages = [
-  "/images/modelo-3.jpeg",
-  "/images/modelo-7.jpeg",
-  "/images/modelo-1.jpeg",
-  "/images/modelo-8.jpeg",
-  "/images/modelo-9.jpeg",
-  "/images/modelo-12.jpeg",
-  "/images/modelo-10.jpeg",
-  "/images/modelo-11.jpeg",
-];
-
-export const bestSellerProducts = [
-  {
-    productId: 100,
-    img: "/images/7.png",
-    name: "Tónico Capilar de Romero y Menta",
-    description:
-      "Revitaliza tu cuero cabelludo con nuestro tónico capilar de romero y menta, que estimula el crecimiento del cabello.",
-    price: 15.99,
-  },
-  {
-    productId: 200,
-    img: "/images/5.png",
-    name: "Shampoo Natural de Aloe Vera y Jengibre",
-    description:
-      "Limpia y nutre tu cabello con nuestro shampoo natural formulado con aloe vera y jengibre, ideal para todo tipo de cabello.",
-    price: 12.99,
-  },
-  {
-    productId: 300,
-    img: "/images/3.png",
-    name: "Aceite de Argán Puro para el Cabello",
-    description:
-      "Hidrata y fortalece tu melena con nuestro aceite de argán puro, rico en antioxidantes y ácidos grasos esenciales.",
-    price: 18.99,
-  },
+  "/images/modelos/modelo-3.jpeg",
+  "/images/modelos/modelo-7.jpeg",
+  "/images/modelos/modelo-1.jpeg",
+  "/images/modelos/modelo-8.jpeg",
+  "/images/modelos/modelo-9.jpeg",
+  "/images/modelos/modelo-12.jpeg",
+  "/images/modelos/modelo-10.jpeg",
+  "/images/modelos/modelo-11.jpeg",
 ];
 
 export const mocckCheckoutClientData = {

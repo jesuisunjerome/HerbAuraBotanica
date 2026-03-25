@@ -53,7 +53,7 @@ export const sendOrderConfirmationEmail = async (order, type = "client") => {
     <div style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #364153; background-color: #f9f9f9; padding:15px">
       <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 20px 10px; border-radius: 8px;">
         <header style="text-align: center; margin-bottom: 20px; padding-top:20px">
-          <img alt="HerbAura Botanica Logo" height="80" src="https://herbaurabotanica-front.onrender.com/logos/logo.png" style="height: 80px; object-fit: contain; display: block; margin: 0 auto;" />
+          <img alt="Logo de HerbAura Botanica" height="80" src="https://herbaurabotanica-front.onrender.com/logos/logo.png" style="height: 80px; object-fit: contain; display: block; margin: 0 auto;" />
         </header>
         <main>
           <div style="margin-bottom: 20px;">
@@ -135,7 +135,7 @@ export const sendOrderConfirmationEmail = async (order, type = "client") => {
                   </div>
                 </td>
                 <td style="width: 50%;">
-                  <img src="https://herbaurabotanica-front.onrender.com/images/7.png" alt="Unboxing experience with botanical products in a rustic setting" style="width: 100%; height: 290px; background-color: #e5e7eb2e; border-radius: 8px; object-fit: cover;" />
+                  <img src="https://herbaurabotanica-front.onrender.com/images/7.png" alt="Experiencia de unboxing con productos botánicos en un entorno rústico" style="width: 100%; height: 290px; background-color: #e5e7eb2e; border-radius: 8px; object-fit: cover;" />
                 </td>
               </tr>
             </table>

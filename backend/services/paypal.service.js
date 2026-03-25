@@ -12,7 +12,7 @@ const PAYPAL_BASE_URL =
 async function generateAccessToken() {
   if (!PAYPAL_CLIENT_ID || !PAYPAL_CLIENT_SECRET) {
     throw new Error(
-      "PayPal client ID and secret must be set in environment variables.",
+      "El ID de cliente y el secreto de PayPal deben configurarse en las variables de entorno.",
     );
   }
 
@@ -31,7 +31,7 @@ async function generateAccessToken() {
   if (!response.ok) {
     const errorData = await response.json();
     throw new Error(
-      `Failed to generate PayPal access token: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`,
+      `Error al generar el token de acceso de PayPal: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`,
     );
   }
 
@@ -67,7 +67,7 @@ export async function createPaypalOrder(totalAmount, orderId) {
   if (!response.ok) {
     const errorData = await response.json();
     throw new Error(
-      `Failed to create PayPal order: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`,
+      `Error al crear la orden de PayPal: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`,
     );
   }
 
@@ -94,7 +94,7 @@ export async function capturePaypalOrder(paypalOrderId) {
   if (!response.ok) {
     const errorData = await response.json();
     throw new Error(
-      `Failed to capture PayPal order: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`,
+      `Error al capturar la orden de PayPal: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`,
     );
   }
 
