@@ -13,7 +13,7 @@ export default function ContactPage() {
 
       <section className="px-3 lg:px-20 md:px-5 relative">
         <div
-          className="flex flex-col lg:flex-row gap-10 items-center min-h-95 px-5 py-20 md:px-10 lg:p-10 rounded-3xl mb-10 relative overflow-hidden"
+          className="flex flex-col lg:flex-row gap-10 items-center min-h-95 px-5 py-10 md:px-10 lg:p-10 rounded-3xl mb-10 relative overflow-hidden"
           style={{
             background: "url('/images/7.png') no-repeat center center",
             backgroundSize: "cover",
