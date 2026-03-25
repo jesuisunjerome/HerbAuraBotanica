@@ -14,7 +14,9 @@ export async function getMercadoPagoPaymentDetails(paymentId) {
   try {
     const payment = new Payment(client);
     console.log(
-      "getMercadoPagoPaymentDetails called with paymentId:",
+      "getMercadoPagoPaymentDetails called:",
+      client,
+      payment,
       paymentId,
     );
     const response = await payment.get({ id: paymentId });
