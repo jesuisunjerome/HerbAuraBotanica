@@ -14,7 +14,11 @@ export const useGetAllOrders = () => {
 };
 
 export const useGetOrderById = (orderId) => {
-  const { isPending, data: order } = useQuery({
+  const {
+    isPending,
+    data: order,
+    error,
+  } = useQuery({
     queryKey: ["order", orderId],
     queryFn: async () => {
       const response = await axiosInstance.get(`/orders/${orderId}`);
@@ -23,7 +27,7 @@ export const useGetOrderById = (orderId) => {
     enabled: !!orderId,
   });
 
-  return { isPending, order };
+  return { isPending, order, error };
 };
 
 export const useGetOrderByConfirmationNumber = (confirmationNumber) => {

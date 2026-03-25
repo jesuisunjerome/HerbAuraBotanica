@@ -13,32 +13,34 @@ import {
   TruckIcon,
 } from "lucide-react";
 import { useEffect } from "react";
-import { Link, useNavigate, useParams } from "react-router";
+import { Link, useNavigate, useParams, useSearchParams } from "react-router";
 import GradientBg from "../../components/common/GradientBg";
 import NoData from "../../components/common/NoData";
 import SEORender from "../../components/common/SEORender";
 import { useGetOrderById } from "../../hooks/orders/queries";
 import {
-  calculateCartTotals,
   formatCurrency,
   formatLongDateToString,
+  IVA_RATE,
 } from "../../lib/helper";
 import { useCartStore } from "../../store/useCartStore";
 
 export default function OrderConfirmationPage() {
   const navigate = useNavigate();
   const { orderId } = useParams();
-  const { isPending, order } = useGetOrderById(orderId);
-  const { shippingDetails, orderItems, totalAmount, confirmationNumber } =
-    order || {};
-  const { user } = shippingDetails || {};
-
-  const { clearCart } = useCartStore();
-  const { subtotal, tax, shipping } = calculateCartTotals(orderItems || []);
+  const [searchParams] = useSearchParams();
+  const status = searchParams.get("status");
+  const { isPending, error, order } = useGetOrderById(orderId);
+  const { cart, clearCart } = useCartStore();
 
   useEffect(() => {
-    if (!isPending && order) clearCart();
-  }, [order, isPending, clearCart, navigate]);
+    // Clear cart if the order is successfully paid or MP status is success
+    if (order?.isPaid || status === "success") {
+      if (cart.length > 0) {
+        clearCart();
+      }
+    }
+  }, [order, status, clearCart, cart.length]);
 
   if (isPending) {
     return (
@@ -48,7 +50,7 @@ export default function OrderConfirmationPage() {
     );
   }
 
-  if (!order) {
+  if (error || !order) {
     return <NoData message="No se encontró el pedido." />;
   }
 
@@ -68,12 +70,12 @@ export default function OrderConfirmationPage() {
           </p>
           <div className="lg:inline-block mb-4 lg:min-w-sm px-3 py-2 rounded-lg bg-[#dbf3e1] border border-[#3f6b4c]">
             <span className="text-sm text-[#3f6b4c]">Número de Pedido</span>
-            <h2 className="text-xl font-medium">{confirmationNumber}</h2>
+            <h2 className="text-xl font-medium">{order.confirmationNumber}</h2>
           </div>
           <p className="text-gray-600 leading-tight">
             <MailCheckIcon className="w-5 h-5 inline-block mr-2" />
             Se ha enviado un correo de confirmación a{" "}
-            <span className="font-medium">{user?.email}</span>.
+            <span className="font-medium">{order.customer.email}</span>.
           </p>
         </div>
 
@@ -87,10 +89,10 @@ export default function OrderConfirmationPage() {
               <ChevronDownIcon className="w-5 h-5 text-gray-400 group-hover:text-gray-700 group-open:rotate-180" />
             </summary>
             <div className="px-6 py-4 space-y-3">
-              {orderItems?.map((item) => (
+              {order.orderItems?.map((item) => (
                 <div
                   className="flex items-center justify-between py-2 border-b gap-2 border-gray-100"
-                  key={item.productId}
+                  key={item.product}
                 >
                   <div className="flex items-center gap-2">
                     <div className="bg-gray-100 overflow-hidden rounded-xl p-2 shrink-0">
@@ -119,19 +121,19 @@ export default function OrderConfirmationPage() {
               <div className="mt-7 space-y-4">
                 <div className="flex justify-between">
                   <span>Subtotal</span>
-                  <span>{formatCurrency(subtotal)}</span>
+                  <span>{formatCurrency(order.itemsPrice)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>IVA (19%)</span>
-                  <span>{formatCurrency(tax)}</span>
+                  <span>IVA ({IVA_RATE * 100}%)</span>
+                  <span>{formatCurrency(order.taxPrice)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Envío</span>
-                  <span>{formatCurrency(shipping)}</span>
+                  <span>{formatCurrency(order.shippingPrice)}</span>
                 </div>
                 <div className="flex justify-between font-semibold">
                   <span>Total:</span>
-                  <span>{formatCurrency(totalAmount)}</span>
+                  <span>{formatCurrency(order.totalPrice)}</span>
                 </div>
               </div>
             </div>
@@ -169,22 +171,23 @@ export default function OrderConfirmationPage() {
                     Enviar a
                   </span>
                   <span className="text-gray-500 leading-tight">
-                    {user?.name}
+                    {order.customer.name}
                   </span>
                   <a
-                    href={`tel:${user?.phone}`}
+                    href={`tel:${order.customer.phone}`}
                     className="text-gray-500 leading-tight"
                   >
-                    {user?.phone}
+                    {order.customer.phone}
                   </a>
                   <span className="text-gray-500 leading-tight">
-                    {user?.address}, C.P: {user?.postalCode}
+                    {order.shippingAddress.address}, C.P:{" "}
+                    {order.shippingAddress.postalCode}
                   </span>
                   <span className="text-gray-500 leading-tight">
-                    {user?.city}, {user?.state}
+                    {order.shippingAddress.city}, {order.shippingAddress.state}
                   </span>
                   <span className="text-gray-500 leading-tight">
-                    {user?.country}
+                    {order.shippingAddress.country}
                   </span>
                 </div>
               </div>
@@ -199,7 +202,7 @@ export default function OrderConfirmationPage() {
                     Método de envío
                   </span>
                   <span className="text-gray-500 leading-tight">
-                    Envío Estándar - {formatCurrency(19.0)}
+                    Envío Estándar - {formatCurrency(order.shippingPrice)}
                   </span>
                   {/* <span className="text-gray-500 leading-tight">
                     Envío gratis en pedidos superiores a {formatCurrency(999)}.
@@ -257,9 +260,15 @@ export default function OrderConfirmationPage() {
                     <span className="font-medium leading-tight">
                       Confirmado
                     </span>
-                    <span className="text-gray-500 leading-tight">
-                      {formatLongDateToString(new Date(order?.paidAt), true)}
-                    </span>
+                    {order.isPaid ? (
+                      <span className="text-gray-500 leading-tight">
+                        {formatLongDateToString(new Date(order.paidAt), true)}
+                      </span>
+                    ) : (
+                      <span className="text-gray-500 leading-tight">
+                        Tu pedido no ha sido pagado.
+                      </span>
+                    )}
                   </div>
                 </li>
                 <li className="flex items-start gap-3 relative">
@@ -326,7 +335,10 @@ export default function OrderConfirmationPage() {
               <ChevronDownIcon className="w-5 h-5 text-gray-400 group-hover:text-gray-700 group-open:rotate-180" />
             </summary>
             <div className="px-6 py-4 grid grid-cols-1 md:grid-cols-2 gap-3">
-              <button className="flex gap-2 border border-gray-200 rounded-lg p-3 hover:bg-gray-50 w-full relative">
+              <button
+                onClick={() => navigate(`/track/${order.confirmationNumber}`)}
+                className="flex gap-2 border border-gray-200 rounded-lg p-3 hover:bg-gray-50 w-full relative"
+              >
                 <span className="flex shrink-0 size-10 items-center justify-center rounded-lg bg-gray-100">
                   <BoxIcon className="w-5 h-5 text-gray-600" />
                 </span>

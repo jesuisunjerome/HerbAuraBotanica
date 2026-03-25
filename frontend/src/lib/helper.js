@@ -22,7 +22,7 @@ export function base64ToFile(base64String, filename) {
 }
 
 export function calculateCartTotals(cartItems) {
-  const subtotal = cartItems.reduce((total, item) => {
+  const itemsPrice = cartItems.reduce((total, item) => {
     const { discountedPrice } = getDiscountedPrice(
       item.price,
       item.discountPercentage,
@@ -30,14 +30,21 @@ export function calculateCartTotals(cartItems) {
     return total + discountedPrice * item.quantity;
   }, 0);
 
-  const tax = subtotal * IVA_RATE;
-  const shipping = cartItems.length > 0 ? SHIPPING_COST : 0;
-  const total = subtotal + tax + shipping;
-  return { subtotal, tax, shipping, total };
+  const shippingPrice = itemsPrice > 100 ? 0 : SHIPPING_COST;
+  let totalPrice = itemsPrice + shippingPrice;
+  const taxPrice = totalPrice * IVA_RATE;
+  totalPrice += taxPrice;
+
+  return {
+    subtotal: itemsPrice,
+    tax: taxPrice,
+    shipping: shippingPrice,
+    total: totalPrice,
+  };
 }
 
 export function formatLongDateToString(date, time = false) {
-  return new Intl.DateTimeFormat(navigator.language, {
+  return new Intl.DateTimeFormat("es-MX", {
     year: "numeric",
     month: "long",
     day: "2-digit",
@@ -46,7 +53,7 @@ export function formatLongDateToString(date, time = false) {
 }
 
 export function formatShortDateToString(date, time = false) {
-  return new Intl.DateTimeFormat(navigator.language, {
+  return new Intl.DateTimeFormat("es-MX", {
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
@@ -118,6 +125,20 @@ export const MODAL_SIZES = {
   full: "max-w-full",
 };
 
+export const COUNTRY_LIST = [
+  { value: "MX", label: "México", supportsStripe: true },
+  { value: "US", label: "Estados Unidos", supportsStripe: true },
+  {
+    value: "HT",
+    label: "Haití",
+    supportsStripe: false,
+  },
+  { value: "DO", label: "República Dominicana", supportsStripe: false },
+  { value: "CA", label: "Canadá", supportsStripe: true },
+  { value: "BR", label: "Brasil", supportsStripe: true },
+  { value: "CL", label: "Chile", supportsStripe: true },
+];
+
 export const CART = {
   PAYMENT_METHODS: [
     {
@@ -128,9 +149,9 @@ export const CART = {
     },
     {
       id: 3,
-      name: "MercadoPago",
+      name: "Mercado Pago",
       description:
-        "Utiliza MercadoPago para una experiencia de pago rápida y segura.",
+        "Utiliza Mercado Pago para una experiencia de pago rápida y segura.",
       img: "/images/payments/mercadopago-icon.png",
     },
     {
@@ -138,6 +159,12 @@ export const CART = {
       name: "Stripe",
       description: "Paga con tarjeta de crédito o débito a través de Stripe.",
       img: "/images/payments/stripe-icon.png",
+    },
+    {
+      id: 5,
+      name: "Apple Pay",
+      description: "Paga de forma rápida y segura con Apple Pay.",
+      img: "/images/payments/applepay-icon.png",
     },
   ],
   STEPS: {
@@ -166,5 +193,5 @@ export const SORT_BY_OPTIONS = [
   { value: "newest", label: "Novedades" },
 ];
 
-export const IVA_RATE = 0.19;
-export const SHIPPING_COST = 19.0;
+export const IVA_RATE = 0.16;
+export const SHIPPING_COST = 16.0;

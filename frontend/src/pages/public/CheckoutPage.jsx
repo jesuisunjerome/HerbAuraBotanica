@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router";
 import NoData from "../../components/common/NoData";
 import SEORender from "../../components/common/SEORender";
 import CheckoutForm from "../../components/public/checkout/CheckoutForm";
+import StripeProvider from "../../providers/StripeProvider";
 import { useCartStore } from "../../store/useCartStore";
 
 export default function CheckoutPage() {
@@ -16,8 +17,11 @@ export default function CheckoutPage() {
         description="Finaliza tu compra en HerbAura Botanica. Revisa tu carrito, proporciona tu información de envío y elige tu método de pago para completar tu pedido."
       />
       <section className="md:px-5 px-3 lg:px-20 pt-10 pb-20 relative">
+        {/* StripeProvider envuelve el CheckoutForm para proporcionar el contexto de Stripe */}
         {cart.length > 0 ? (
-          <CheckoutForm />
+          <StripeProvider>
+            <CheckoutForm />
+          </StripeProvider>
         ) : (
           <div className="w-full md:w-8/12 xl:w-9/12 p-5 mx-auto rounded-2xl">
             <div className="mb-5 text-center">

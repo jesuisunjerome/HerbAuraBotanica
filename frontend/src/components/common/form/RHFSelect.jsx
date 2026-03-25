@@ -31,7 +31,11 @@ export default function RHFSelect({
         >
           <option value="">Selecciona una opción</option>
           {options.map((opt) => (
-            <option key={opt.value} value={opt.value}>
+            <option
+              disabled={opt.disabled || false}
+              key={opt.value}
+              value={opt.value}
+            >
               {opt.label}
             </option>
           ))}

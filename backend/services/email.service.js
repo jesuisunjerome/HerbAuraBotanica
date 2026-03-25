@@ -1,5 +1,6 @@
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
+import { IVA } from "../lib/constants.js";
 
 dotenv.config();
 
@@ -16,7 +17,7 @@ export const sendOrderConfirmationEmail = async (order, type = "client") => {
   const isAdminEmail = type === "admin";
   const toAddress = isAdminEmail
     ? process.env.EMAIL_USER
-    : order.shippingDetails.user.email;
+    : order.customer.email;
   const subject = isAdminEmail
     ? "Nuevo pedido recibido - Detalles del cliente"
     : "Confirmación de tu pedido en HerbAura Botánica";
@@ -35,10 +36,10 @@ export const sendOrderConfirmationEmail = async (order, type = "client") => {
             <h4 style="margin: 0">${item.name}</h4>
             <small style="color: #6a7282; display: block; margin-bottom: 8px; font-size: 11px;">
             ${item.quantity} x $${item.price.toFixed(2)} MXN
-            </small>          
+            </small>
           </td>
           <td style="padding: 5px; border-bottom: 1px solid #f3f4f6;">
-            $${item.price.toFixed(2)} MXN
+            $${(item.quantity * item.price).toFixed(2)} MXN
           </td>
         </tr>
       `,
@@ -63,32 +64,32 @@ export const sendOrderConfirmationEmail = async (order, type = "client") => {
             <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
              ${itemsListHtml}
               <tr>
-                <td style="padding: 15px; padding-bottom: 5px;">
+                <td style="padding: 10px; padding-bottom: 5px;">
                   Subtotal
                 </td>
-                <td style="padding: 15px; padding-bottom: 5px;"></td>
-                <td style="padding: 15px; padding-bottom: 5px;">$${order?.totalAmount?.toFixed(2)} MXN</td>
+                <td style="padding: 10px; padding-bottom: 5px;"></td>
+                <td style="padding: 10px; padding-bottom: 5px;">$${order?.itemsPrice?.toFixed(2)} MXN</td>
               </tr>
               <tr>
                 <td style="padding: 10px; padding-bottom: 5px;">
-                  IVA (19%)
+                  IVA (${(IVA * 100).toFixed(2)}%)
                 </td>
                 <td style="padding: 10px; padding-bottom: 5px;"></td>
-                <td style="padding: 10px; padding-bottom: 5px;">$${(order?.totalAmount * 0.19).toFixed(2)} MXN</td>
+                <td style="padding: 10px; padding-bottom: 5px;">$${order?.taxPrice?.toFixed(2)} MXN</td>
               </tr>
               <tr>
                 <td style="padding: 10px; padding-bottom: 5px;">
                   Envío
                 </td>
                 <td style="padding: 10px; padding-bottom: 5px;"></td>
-                <td style="padding: 10px; padding-bottom: 5px;">$${order?.shippingCost?.toFixed(2)} MXN</td>
+                <td style="padding: 10px; padding-bottom: 5px;">$${order?.shippingPrice?.toFixed(2)} MXN</td>
               </tr>
               <tr style="font-weight: 700;">
                 <td style="padding: 10px; padding-bottom: 5px;">
                   Total
                 </td>
                 <td style="padding: 10px; padding-bottom: 5px;"></td>
-                <td style="padding: 10px; padding-bottom: 5px;">$${order?.totalAmount?.toFixed(2)} MXN</td>
+                <td style="padding: 10px; padding-bottom: 5px;">$${order?.totalPrice?.toFixed(2)} MXN</td>
               </tr>
             </table>
 
@@ -103,9 +104,9 @@ export const sendOrderConfirmationEmail = async (order, type = "client") => {
                 <td style="width: 50%; background-color: #e5e7eb2e; border-radius: 8px; padding: 20px; vertical-align: top;">
                   <h3 style="color: #964900;">Enviar a</h3>
                   <p style="margin:0; line-height: 1.5;">
-                    ${order.shippingDetails.user.address},<br />
-                    ${order.shippingDetails.user.city}, ${order.shippingDetails.user.state} ${order.shippingDetails.user.postalCode},<br />
-                    ${order.shippingDetails.user.country}
+                    ${order.shippingAddress.address},<br />
+                    ${order.shippingAddress.city}, ${order.shippingAddress.state} ${order.shippingAddress.postalCode},<br />
+                    ${order.shippingAddress.country}
                   </p>
                 </td>
                 <td style="width: 50%; background-color: #e5e7eb2e; border-radius: 8px; padding: 20px; vertical-align: top;">

@@ -48,7 +48,7 @@ export const checkoutSchema = z.object({
     .nonempty("El país es obligatorio")
     .trim(),
   paymentMethod: z.enum(
-    ["PayPal", "MercadoPago", "Stripe"],
+    ["PayPal", "Mercado Pago", "Stripe", "Apple Pay"],
     "El método de pago es obligatorio",
   ),
 });

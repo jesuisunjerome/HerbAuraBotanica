@@ -17,3 +17,6 @@ export const CHECKOUT_STATUS = {
   DELIVERED: "Delivered",
   CANCELLED: "Cancelled",
 };
+
+export const IVA = 0.16; // 16% IVA
+export const SHIPPING_COST = 16.0; // Flat shipping cost
