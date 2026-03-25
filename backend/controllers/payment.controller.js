@@ -64,7 +64,7 @@ export const handleStripeWebhook = async (req, res) => {
 };
 
 // @desc    Create Mercado Page preference
-// @route   POST /api/payments/mercadopago/preference
+// @route   POST /api/payments/mercadopago/webhook
 // @access  Mercado Pago only
 export const handleMercadoPagoWebhook = async (req, res) => {
   let body = req.body;

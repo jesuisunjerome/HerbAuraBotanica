@@ -13,7 +13,12 @@ const client = new MercadoPagoConfig({
 export async function getMercadoPagoPaymentDetails(paymentId) {
   try {
     const payment = new Payment(client);
+    console.log(
+      "getMercadoPagoPaymentDetails called with paymentId:",
+      paymentId,
+    );
     const response = await payment.get({ id: paymentId });
+    console.log("getMercadoPagoPaymentDetails response:", response);
     return response;
   } catch (error) {
     console.error("Error fetching Mercado Pago payment details:", error);
