@@ -36,23 +36,27 @@ export async function createMercadoPagoPreference(order, orderItems) {
       currency_id: "MXN",
     }));
 
+    console.log("createMercadoPagoPreference items:", items);
+
     const response = await preference.create({
-      items,
-      shipments: {
-        cost: order.shippingPrice,
-        mode: "not_specified",
-      },
-      back_urls: {
-        success: `${process.env.FRONTEND_URL}/order-confirmation/${order._id}?status=success`,
-        failure: `${process.env.FRONTEND_URL}/order-confirmation/${order._id}?status=failure`,
-        pending: `${process.env.FRONTEND_URL}/order-confirmation/${order._id}?status=pending`,
-      },
-      auto_return: "approved",
-      // redirectMode:"modal",
-      notification_url: `${process.env.BACKEND_URL}/api/payments/mercadopago/webhook`,
-      external_reference: order._id.toString(),
-      metadata: {
-        orderId: order._id.toString(),
+      body: {
+        items,
+        shipments: {
+          cost: order.shippingPrice,
+          mode: "not_specified",
+        },
+        back_urls: {
+          success: `${process.env.FRONTEND_URL}/order-confirmation/${order._id}?status=success`,
+          failure: `${process.env.FRONTEND_URL}/order-confirmation/${order._id}?status=failure`,
+          pending: `${process.env.FRONTEND_URL}/order-confirmation/${order._id}?status=pending`,
+        },
+        auto_return: "approved",
+        // redirectMode:"modal",
+        notification_url: `${process.env.BACKEND_URL}/api/payments/mercadopago/webhook`,
+        external_reference: order._id.toString(),
+        metadata: {
+          orderId: order._id.toString(),
+        },
       },
     });
 
