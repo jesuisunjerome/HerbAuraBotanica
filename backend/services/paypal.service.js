@@ -10,6 +10,8 @@ const PAYPAL_BASE_URL =
  *  * @see https://developer.paypal.com/api/rest/authentication/
  */
 async function generateAccessToken() {
+  console.log(process.env.NODE_ENV);
+
   if (!PAYPAL_CLIENT_ID || !PAYPAL_CLIENT_SECRET) {
     throw new Error(
       "PayPal client ID and secret must be set in environment variables.",
