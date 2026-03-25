@@ -13,14 +13,7 @@ const client = new MercadoPagoConfig({
 export async function getMercadoPagoPaymentDetails(paymentId) {
   try {
     const payment = new Payment(client);
-    console.log(
-      "getMercadoPagoPaymentDetails called:",
-      client,
-      payment,
-      paymentId,
-    );
     const response = await payment.get({ id: paymentId });
-    console.log("getMercadoPagoPaymentDetails response:", response);
     return response;
   } catch (error) {
     console.error("Error fetching Mercado Pago payment details:", error);
@@ -42,8 +35,6 @@ export async function createMercadoPagoPreference(order, orderItems) {
       unit_price: item.price,
       currency_id: "MXN",
     }));
-
-    console.log("createMercadoPagoPreference items:", items);
 
     const response = await preference.create({
       body: {

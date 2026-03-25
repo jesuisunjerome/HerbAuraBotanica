@@ -68,12 +68,11 @@ export const handleStripeWebhook = async (req, res) => {
 // @access  Mercado Pago only
 export const handleMercadoPagoWebhook = async (req, res) => {
   let body = req.body;
-  console.log("handleMercadoPagoWebhook body:", body);
 
   try {
-    if (Buffer.isBuffer(body)) {
+    if (Buffer.isBuffer(req.body)) {
       try {
-        body = JSON.parse(body.toString());
+        body = JSON.parse(req.body.toString());
       } catch (error) {
         console.error(
           "Error parsing Mercado Pago webhook body:",
