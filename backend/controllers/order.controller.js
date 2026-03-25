@@ -106,7 +106,11 @@ export const createOrder = async (req, res) => {
         createdOrder,
         verifiedOrderItems,
       );
-      responseData.mercadoPagoPreference = preference;
+
+      responseData.mercadoPago = {
+        preferenceId: preference.preferenceId,
+        initPoint: preference.initPoint,
+      };
     }
 
     // 4. Send response

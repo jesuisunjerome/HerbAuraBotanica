@@ -27,6 +27,7 @@ export async function getMercadoPagoPaymentDetails(paymentId) {
 export async function createMercadoPagoPreference(order, orderItems) {
   try {
     const preference = new Preference(client);
+
     const items = orderItems.map((item) => ({
       id: item.product.toString(),
       title: item.name,
