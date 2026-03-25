@@ -10,12 +10,14 @@ import {
   getProductsByCategory,
   getSimilarProducts,
   updateProductById,
+  getBestSellers,
 } from "../controllers/product.controller.js";
 
 const router = express.Router();
 
 // PUBLIC ROUTES
 router.get("/active", getAllActiveProducts);
+router.get("/best-sellers", getBestSellers);
 router.get("/new-arrivals", getNewArrivals);
 router.get("/similar/:id", getSimilarProducts);
 router.get("/category/:category", getProductsByCategory);

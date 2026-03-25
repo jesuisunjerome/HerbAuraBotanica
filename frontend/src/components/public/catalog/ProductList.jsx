@@ -11,7 +11,10 @@ export default function ProductList({
     <>
       <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-10">
         {filteredProducts.length === 0 && (
-          <NoData message="No se encontraron productos." />
+          <NoData
+            img="/images/no-products.png"
+            message="No se encontraron productos."
+          />
         )}
 
         {filteredProducts.map((item) => (

@@ -29,7 +29,7 @@ export async function createStripePaymentIntent(
     );
     return paymentIntent;
   } catch (error) {
-    console.error("Error creating Stripe payment intent:", error);
+    console.error("Error al crear el intento de pago de Stripe:", error);
     throw error;
   }
 }
@@ -41,7 +41,7 @@ export function verifyStripeWebhookSignature(request) {
   const signature = request.headers["stripe-signature"];
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
   if (!signature || !webhookSecret) {
-    throw new Error("Missing Stripe webhook signature or secret");
+    throw new Error("Falta la firma o el secreto del webhook de Stripe");
   }
 
   try {
@@ -52,7 +52,7 @@ export function verifyStripeWebhookSignature(request) {
     );
     return event;
   } catch (error) {
-    console.error("Error verifying Stripe webhook signature:", error);
-    throw new Error("Invalid Stripe webhook signature");
+    console.error("Error al verificar la firma del webhook de Stripe:", error);
+    throw new Error("Firma del webhook de Stripe inválida");
   }
 }

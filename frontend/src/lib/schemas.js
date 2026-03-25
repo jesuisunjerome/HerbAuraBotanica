@@ -1,5 +1,23 @@
 import { z } from "zod";
 
+export const contactFormSchema = z.object({
+  name: z
+    .string()
+    .min(1, "El nombre es obligatorio")
+    .nonempty("El nombre es obligatorio")
+    .trim(),
+  email: z
+    .email("El correo no es válido")
+    .min(1, "El correo es obligatorio")
+    .nonempty("El correo es obligatorio")
+    .trim(),
+  message: z
+    .string()
+    .min(1, "El mensaje es obligatorio")
+    .nonempty("El mensaje es obligatorio")
+    .trim(),
+});
+
 // Esquema de validación para la información del carrito de compras
 export const checkoutSchema = z.object({
   firstName: z

@@ -1,4 +1,5 @@
 import cloudinary, { uploadImage } from "../lib/cloudinary.js";
+import Order from "../models/Order.js";
 import Product from "../models/Product.js";
 
 export const getAllProducts = async (_, res) => {
@@ -9,7 +10,7 @@ export const getAllProducts = async (_, res) => {
     res.json(products);
   } catch (error) {
     console.log("Server error in getAllProducts controller", error);
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "Error del servidor: " + error.message });
   }
 };
 
@@ -21,7 +22,46 @@ export const getAllActiveProducts = async (_, res) => {
     res.json(products);
   } catch (error) {
     console.log("Server error in getAllActiveProducts controller", error);
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "Error del servidor: " + error.message });
+  }
+};
+
+export const getBestSellers = async (_, res) => {
+  try {
+    console.log("getBestSellers controller");
+
+    // Best seller logic based on sales data
+    const orders = await Order.find({ isPaid: true }).populate(
+      "orderItems.product",
+    );
+
+    // If there are no orders, return last 3 created products
+    if (orders.length === 0) {
+      const products = await Product.find({ isActive: true })
+        .sort({ createdAt: -1 })
+        .limit(3);
+      return res.json(products);
+    }
+
+    const productSales = {};
+    orders.forEach((order) => {
+      order.orderItems.forEach((item) => {
+        const productId = item.product._id.toString();
+        if (!productSales[productId]) {
+          productSales[productId] = { product: item.product, quantity: 0 };
+        }
+        productSales[productId].quantity += item.quantity;
+      });
+    });
+
+    const bestSellers = Object.values(productSales)
+      .sort((a, b) => b.quantity - a.quantity)
+      .slice(0, 3);
+
+    res.json(bestSellers);
+  } catch (error) {
+    console.log("Server error in getBestSellers controller", error);
+    res.status(500).json({ message: "Error del servidor: " + error.message });
   }
 };
 
@@ -36,7 +76,7 @@ export const getNewArrivals = async (_, res) => {
     res.json(products);
   } catch (error) {
     console.log("Server error in getNewArrivals controller", error);
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "Error del servidor: " + error.message });
   }
 };
 
@@ -61,7 +101,7 @@ export const getSimilarProducts = async (req, res) => {
     res.json(products);
   } catch (error) {
     console.log("Server error in getSimilarProducts controller", error);
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "Error del servidor: " + error.message });
   }
 };
 
@@ -79,7 +119,7 @@ export const getProductById = async (req, res) => {
     res.json(product);
   } catch (error) {
     console.log("Server error in getProductById controller", error.message);
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "Error del servidor: " + error.message });
   }
 };
 
@@ -94,7 +134,7 @@ export const getProductsByCategory = async (req, res) => {
     res.json(products);
   } catch (error) {
     console.log("Server error in getProductsByCategory controller", error);
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "Error del servidor: " + error.message });
   }
 };
 
@@ -130,7 +170,7 @@ export const createProduct = async (req, res) => {
     res.status(201).json(newProduct);
   } catch (error) {
     console.log("Server error in createProduct controller", error.message);
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "Error del servidor: " + error.message });
   }
 };
 
@@ -197,7 +237,7 @@ export const updateProductById = async (req, res) => {
     res.json(updatedProduct);
   } catch (error) {
     console.log("Server error in updateProductById controller", error.message);
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "Error del servidor: " + error.message });
   }
 };
 
@@ -220,7 +260,7 @@ export const updateProductStatusById = async (req, res) => {
       "Server error in updateProductStatusById controller",
       error.message,
     );
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "Error del servidor: " + error.message });
   }
 };
 
@@ -251,11 +291,11 @@ export const filterProducts = async (req, res) => {
     res.json(products);
   } catch (error) {
     console.log("Server error in filterProducts controller", error.message);
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "Error del servidor: " + error.message });
   }
 };
 
 export const paginateProducts = (req, res) => {
   const { page, limit } = req.query;
-  res.send(`Paginate products - Page: ${page}, Limit: ${limit}`);
+  res.send(`Paginación de productos - Página: ${page}, Límite: ${limit}`);
 };

@@ -17,7 +17,7 @@ export const handleStripeWebhook = async (req, res) => {
       "Stripe webhook signature verification failed:",
       error.message,
     );
-    return res.status(400).send(`Webhook Error: ${error.message}`);
+    return res.status(400).send(`Error de Webhook: ${error.message}`);
   }
 
   if (event.type === "payment_intent.succeeded") {
@@ -26,13 +26,15 @@ export const handleStripeWebhook = async (req, res) => {
 
     if (!orderId) {
       console.error("Stripe webhook missing orderId in metadata");
-      return res.status(400).send("Webhook Error: Missing orderId in metadata");
+      return res
+        .status(400)
+        .send("Error de Webhook: Falta orderId en metadata");
     }
 
     const order = await Order.findById(orderId);
     if (!order) {
       console.error(`Order not found for ID: ${orderId}`);
-      return res.status(404).send("Webhook Error: Order not found");
+      return res.status(404).send("Error de Webhook: Orden no encontrada");
     }
 
     if (order.isPaid) {
@@ -78,7 +80,7 @@ export const handleMercadoPagoWebhook = async (req, res) => {
           "Error parsing Mercado Pago webhook body:",
           error.message,
         );
-        return res.status(400).send("Webhook Error: Invalid JSON");
+        return res.status(400).send("Error de Webhook: JSON inválido");
       }
     }
 
@@ -92,7 +94,7 @@ export const handleMercadoPagoWebhook = async (req, res) => {
       const paymentId = data?.id || body.resource?.split("/").pop();
       if (!paymentId) {
         console.error("Mercado Pago webhook missing payment ID");
-        return res.status(400).send("Webhook Error: Missing payment ID");
+        return res.status(400).send("Error de Webhook: Falta ID de pago");
       }
 
       const { getMercadoPagoPaymentDetails } =
@@ -107,13 +109,13 @@ export const handleMercadoPagoWebhook = async (req, res) => {
           console.error("Mercado Pago webhook missing orderId in metadata");
           return res
             .status(400)
-            .send("Webhook Error: Missing orderId in metadata");
+            .send("Error de Webhook: Falta orderId en metadata");
         }
 
         const order = await Order.findById(orderId);
         if (!order) {
           console.error(`Order not found for ID: ${orderId}`);
-          return res.status(404).send("Webhook Error: Order not found");
+          return res.status(404).send("Error de Webhook: Orden no encontrada");
         }
 
         if (!order.isPaid) {
@@ -136,10 +138,10 @@ export const handleMercadoPagoWebhook = async (req, res) => {
         }
       }
 
-      return res.status(200).send("Payment processed successfully");
+      return res.status(200).send("Pago procesado correctamente");
     }
   } catch (error) {
     console.error("Error handling Mercado Pago webhook:", error.message);
-    return res.status(500).send(`Webhook Error: ${error.message}`);
+    return res.status(500).send(`Error de Webhook: ${error.message}`);
   }
 };

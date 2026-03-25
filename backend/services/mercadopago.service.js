@@ -16,7 +16,10 @@ export async function getMercadoPagoPaymentDetails(paymentId) {
     const response = await payment.get({ id: paymentId });
     return response;
   } catch (error) {
-    console.error("Error fetching Mercado Pago payment details:", error);
+    console.error(
+      "Error al obtener los detalles del pago de Mercado Pago:",
+      error,
+    );
     throw error;
   }
 }
@@ -64,7 +67,7 @@ export async function createMercadoPagoPreference(order, orderItems) {
       sandboxInitPoint: response.sandbox_init_point, // For testing in sandbox mode
     };
   } catch (error) {
-    console.error("Error creating Mercado Pago preference:", error);
+    console.error("Error al crear la preferencia de Mercado Pago:", error);
     throw error;
   }
 }

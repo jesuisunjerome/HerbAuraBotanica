@@ -134,50 +134,41 @@ function LoadingSkeleton() {
     <div className="w-full mx-auto sm:w-9/12 md:w-8/12 lg:w-7/12 animate-pulse">
       <div className="mx-auto lg:mx-0 lg:max-w-lg">
         <div className="pb-5 mb-5 border-b border-gray-300/50">
-          <div className="h-8 bg-gray-200 rounded w-3/4 mb-2" />
-          <div className="h-5 bg-gray-200 rounded w-1/4 mb-2" />
-          <div className="h-8 bg-gray-200 rounded w-1/4 mb-5" />
-          <div className="h-5 bg-gray-200 rounded w-full mb-2" />
-          <div className="h-5 bg-gray-200 rounded w-full mb-2" />
-          <div className="h-5 bg-gray-200 rounded w-5/6 mb-2" />
+          <div className="h-8 bg-gray-100 rounded w-3/4 mb-2" />
+          <div className="h-5 bg-gray-100 rounded w-1/4 mb-2" />
+          <div className="h-8 bg-gray-100 rounded w-1/4 mb-5" />
+          <div className="h-5 bg-gray-100 rounded w-full mb-2" />
+          <div className="h-5 bg-gray-100 rounded w-full mb-2" />
+          <div className="h-5 bg-gray-100 rounded w-5/6 mb-2" />
         </div>
         <div className="flex flex-wrap items-end gap-5 pb-5 mb-5 border-b border-gray-300/50">
           <div>
-            <div className="h-12 bg-gray-200 rounded w-48 mb-2" />
+            <div className="h-12 bg-gray-100 rounded w-48 mb-2" />
           </div>
           <div>
-            <div className="h-12 bg-gray-200 rounded w-48 mb-2" />
+            <div className="h-12 bg-gray-100 rounded w-48 mb-2" />
           </div>
         </div>
         <div className="flex flex-col sm:flex-row gap-5">
-          <div className="flex-1 px-3 py-2 border border-gray-300 rounded-lg flex items-center gap-2">
-            <div className="h-7 w-7 bg-gray-200 rounded-full" />
-            <div className="h-5 bg-gray-200 rounded w-32" />
-          </div>
-          <div className="flex-1 px-3 py-2 border border-gray-300 rounded-lg flex items-center gap-2">
-            <div className="h-7 w-7 bg-gray-200 rounded-full" />
-            <div className="h-5 bg-gray-200 rounded w-48" />
-          </div>
+          {[...Array(2)].map((_, index) => (
+            <div
+              key={index}
+              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg flex items-center gap-2"
+            >
+              <div className="h-7 w-7 bg-gray-100 rounded-full shrink-0" />
+              <div className="h-5 bg-gray-100 rounded w-full" />
+            </div>
+          ))}
         </div>
         <div className="mt-5 pt-5 border-t border-gray-300/50">
-          <div className="h-6 bg-gray-200 rounded w-1/2 mb-4" />
+          <div className="h-6 bg-gray-100 rounded w-1/2 mb-4" />
           <div className="space-y-2">
-            <div>
-              <div className="h-5 bg-gray-200 rounded w-3/4 mb-1" />
-              <div className="h-5 bg-gray-200 rounded w-full mb-1" />
-            </div>
-            <div>
-              <div className="h-5 bg-gray-200 rounded w-3/4 mb-1" />
-              <div className="h-5 bg-gray-200 rounded w-full mb-1" />
-            </div>
-            <div>
-              <div className="h-5 bg-gray-200 rounded w-3/4 mb-1" />
-              <div className="h-5 bg-gray-200 rounded w-full mb-1" />
-            </div>
-            <div>
-              <div className="h-5 bg-gray-200 rounded w-3/4 mb-1" />
-              <div className="h-5 bg-gray-200 rounded w-full mb-1" />
-            </div>
+            {[...Array(4)].map((_, index) => (
+              <div key={index}>
+                <div className="h-5 bg-gray-100 rounded w-3/4 mb-1" />
+                <div className="h-5 bg-gray-100 rounded w-full mb-1" />
+              </div>
+            ))}
           </div>
         </div>
       </div>

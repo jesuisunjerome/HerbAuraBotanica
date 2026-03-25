@@ -59,10 +59,10 @@ function LoadingSkeleton() {
   return (
     <div className="w-full sm:w-9/12 md:w-8/12 mx-auto lg:w-5/12 animate-pulse">
       <div className="sticky top-20">
-        <div className="p-3 rounded-2xl overflow-hidden bg-gray-200 h-96" />
+        <div className="p-3 rounded-2xl overflow-hidden bg-gray-100 h-96" />
         <div className="mt-5 flex gap-3">
-          <div className="bg-gray-200 overflow-hidden rounded-2xl p-2 w-24 h-24" />
-          <div className="bg-gray-200 overflow-hidden rounded-2xl p-2 w-24 h-24" />
+          <div className="bg-gray-100 overflow-hidden rounded-2xl p-2 w-24 h-24" />
+          <div className="bg-gray-100 overflow-hidden rounded-2xl p-2 w-24 h-24" />
         </div>
       </div>
     </div>

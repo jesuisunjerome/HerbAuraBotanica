@@ -25,7 +25,7 @@ export default function NewsLetter() {
 
       <small>
         Respetamos tu privacidad. Desuscríbete en cualquier momento. Lee nuestra{" "}
-        <Link className="text-amber-600" to="/privacy-policy">
+        <Link className="text-amber-600" to="/terms">
           Política de Privacidad
         </Link>
         .

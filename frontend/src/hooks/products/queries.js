@@ -154,6 +154,29 @@ export const useFetchActiveProducts = (enabled = true) => {
   return { isPending, products, refetch };
 };
 
+// Hook para obtener los productos más vendidos
+export const useFetchBestSellers = () => {
+  const {
+    isPending,
+    data: bestSellers,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ["best-sellers"],
+    queryFn: async () => {
+      const response = await axiosInstance.get("/products/best-sellers");
+      return response.data;
+    },
+  });
+
+  if (error)
+    toast.error(
+      error.response?.data?.message || "Error al cargar los productos",
+    );
+
+  return { isPending, bestSellers, refetch };
+};
+
 // Hook para obtener los nuevos productos
 export const useFetchNewArrivals = () => {
   const {

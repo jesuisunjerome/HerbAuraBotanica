@@ -16,15 +16,21 @@ export default function CheckoutPage() {
         title="Checkout :: HerbAura Botanica"
         description="Finaliza tu compra en HerbAura Botanica. Revisa tu carrito, proporciona tu información de envío y elige tu método de pago para completar tu pedido."
       />
-      <section className="md:px-5 px-3 lg:px-20 pt-10 pb-20 relative">
+      <section
+        className={`md:px-5 px-3 lg:px-20 pt-10 pb-20 relative ${cart.length === 0 ? "bg-white" : ""}`}
+      >
         {/* StripeProvider envuelve el CheckoutForm para proporcionar el contexto de Stripe */}
         {cart.length > 0 ? (
           <StripeProvider>
             <CheckoutForm />
           </StripeProvider>
         ) : (
-          <div className="w-full md:w-8/12 xl:w-9/12 p-5 mx-auto rounded-2xl">
-            <div className="mb-5 text-center">
+          <div className="w-full bg-white md:w-8/12 xl:w-9/12 p-5 mx-auto rounded-2xl">
+            <NoData
+              img="/images/empty-cart.png"
+              message="Tu carrito está vacío."
+            />
+            <div className="mb-10 -mt-17 text-center">
               <button
                 onClick={() => navigate("/products")}
                 className="text-amber-600 hover:underline inline-flex items-center gap-1 group"
@@ -33,12 +39,6 @@ export default function CheckoutPage() {
                 <span>Volver a Productos</span>
               </button>
             </div>
-
-            <NoData
-              img="/images/empty-cart.png"
-              message="Tu carrito está vacío."
-            />
-
             <div className="text-center mt-5">
               <p className="text-sm text-gray-600">
                 ¿Necesitas ayuda? Revisa nuestro{" "}
