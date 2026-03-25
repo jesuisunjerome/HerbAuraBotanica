@@ -13,6 +13,7 @@ const transporter = nodemailer.createTransport({
     user: process.env.EMAIL_USER,
     pass: process.env.GOOGLE_APP_PASSWORD, // Utiliza una contraseña de aplicación generada en tu cuenta de Google
   },
+  family: 4, // Forzar IPv4 para evitar problemas de conexión
 });
 
 export const sendOrderConfirmationEmail = async (order, type = "client") => {
