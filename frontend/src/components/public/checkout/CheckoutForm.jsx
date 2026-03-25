@@ -1,114 +1,61 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ChevronLeftIcon, LoaderIcon } from "lucide-react";
-import { useState } from "react";
+import { ChevronLeftIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
-import { useNavigate } from "react-router";
-import {
-  useCreateCheckoutSession,
-  useFinalizeCheckoutSession,
-  useUpdateCheckoutPaymentStatus,
-} from "../../../hooks/checkout/mutations";
+import { Link, useNavigate } from "react-router";
 import { mocckCheckoutClientData } from "../../../lib/data";
 import {
   calculateCartTotals,
   CART,
+  COUNTRY_LIST,
   formatCurrency,
-  getDiscountedPrice,
-  PAYMENT_STATUS,
+  IVA_RATE,
 } from "../../../lib/helper";
 import { checkoutSchema } from "../../../lib/schemas";
 import { useCartStore } from "../../../store/useCartStore";
 import RHFInput from "../../common/form/RHFInput";
-import PayPalButton from "./PayPalButton";
+import RHFSelect from "../../common/form/RHFSelect";
+import PaymentButton from "./PaymentButton";
 
 export default function CheckoutForm() {
   const { cart } = useCartStore();
   const navigate = useNavigate();
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(
-    mocckCheckoutClientData.paymentMethod,
-  );
-
-  const { isCreatingSession, checkoutId, createCheckoutSession } =
-    useCreateCheckoutSession();
-  const { isUpdatingPaymentStatus, updatePaymentStatus } =
-    useUpdateCheckoutPaymentStatus();
-  const { isFinalizing, finalizeOrder } = useFinalizeCheckoutSession();
   const { subtotal, tax, shipping, total } = calculateCartTotals(cart);
 
   const {
     register,
-    setValue,
-    handleSubmit,
     formState: { errors, isValid },
+    getValues,
+    handleSubmit,
+    setValue,
+    watch,
   } = useForm({
     defaultValues: mocckCheckoutClientData,
     resolver: zodResolver(checkoutSchema),
     mode: "all",
   });
 
-  const handlePaymentMethodSelect = (name) => {
-    setSelectedPaymentMethod(name);
-    setValue("paymentMethod", name);
+  const paymentMethod = watch("paymentMethod");
+  const disabled = Object.keys(errors).length > 0 || !paymentMethod;
+
+  const onSubmit = async () => {
+    return;
   };
 
-  const handlePaymentSuccess = async (details) => {
-    const checkoutData = {
-      checkoutId,
-      paymentStatus: PAYMENT_STATUS.PAID,
-      paymentDetails: details,
-    };
-
-    updatePaymentStatus(checkoutData, {
-      onSuccess: () => {
-        finalizeOrder(checkoutId, {
-          onSuccess: (data) => {
-            navigate(`/order-confirmation/${data._id}`, { replace: true });
-          },
-        });
-      },
-    });
-  };
-
-  const onSubmit = (data) => {
-    const shippingDetails = {
-      user: {
-        firstName: data.firstName,
-        lastName: data.lastName,
-        email: data.email,
-        phone: data.phone,
-        address: data.address,
-        city: data.city,
-        postalCode: data.postalCode,
-        state: data.state,
-        country: data.country,
-      },
-    };
-
-    const checkoutItems = cart.map((item) => ({
-      productId: item._id,
-      name: item.name,
-      image: item.images[0].url,
-      price: getDiscountedPrice(item.price, item.discountPercentage)
-        .discountedPrice,
-      quantity: item.quantity,
-    }));
-
-    const checkoutData = {
-      shippingDetails,
-      paymentMethod: data.paymentMethod,
-      checkoutItems,
-      totalAmount: total,
-    };
-
-    createCheckoutSession(checkoutData);
-  };
-
-  const handlePaymentError = (error) => {
-    console.error("Payment Error:", error);
-    toast.error(
-      "There was an error processing your payment. Please try again.",
-    );
+  // Data shape expected
+  const formData = {
+    customer: {
+      name: `${getValues("firstName")} ${getValues("lastName")}`,
+      email: getValues("email"),
+      phone: getValues("phone"),
+    },
+    shippingAddress: {
+      address: getValues("address"),
+      city: getValues("city"),
+      state: getValues("state"),
+      postalCode: getValues("postalCode"),
+      country: getValues("country"),
+    },
+    paymentMethod: getValues("paymentMethod"),
   };
 
   return (
@@ -208,10 +155,21 @@ export default function CheckoutForm() {
               />
             </div>
             <div>
-              <RHFInput
+              {/* <RHFInput
                 label="País"
                 id="country"
                 required={true}
+                register={register}
+                error={errors.country}
+              /> */}
+              <RHFSelect
+                label="País"
+                id="country"
+                options={COUNTRY_LIST.map((country) => ({
+                  value: country.value,
+                  label: country.label,
+                  // disabled: !country.supportsStripe,
+                }))}
                 register={register}
                 error={errors.country}
               />
@@ -228,7 +186,7 @@ export default function CheckoutForm() {
               <span>{formatCurrency(subtotal)}</span>
             </div>
             <div className="flex justify-between mb-3 border-b border-gray-300 pb-3 text-sm">
-              <span>IVA (19%)</span>
+              <span>IVA ({IVA_RATE * 100}%)</span>
               <span>{formatCurrency(tax)}</span>
             </div>
             <div className="flex justify-between mb-3 border-b border-gray-300 pb-3 text-sm">
@@ -242,13 +200,13 @@ export default function CheckoutForm() {
 
             <div>
               <p className="mb-2">Selecciona un método de pago:</p>
-              <div className="flex gap-2 items-center text-sm mb-7">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 items-center text-sm mb-7">
                 {CART.PAYMENT_METHODS.map((method) => (
                   <button
                     type="button"
-                    onClick={() => handlePaymentMethodSelect(method.name)}
-                    className={`w-1/${CART.PAYMENT_METHODS.length} p-2 rounded-lg border border-gray-200 flex items-center justify-center ${isCreatingSession ? "cursor-not-allowed" : "cursor-pointer"} ${
-                      selectedPaymentMethod === method.name
+                    onClick={() => setValue("paymentMethod", method.name)}
+                    className={`p-2 rounded-lg border border-gray-200 flex items-center justify-center cursor-pointer"} ${
+                      paymentMethod === method.name
                         ? "ring-2 bg-amber-100 ring-amber-500"
                         : "bg-white"
                     }`}
@@ -260,43 +218,31 @@ export default function CheckoutForm() {
                       alt={method.name}
                       className="h-8 mx-auto object-contain"
                     />
-                    <input
-                      {...register("paymentMethod")}
-                      type="hidden"
-                      value={method.name}
-                    />
                   </button>
                 ))}
               </div>
 
-              {!checkoutId && (
-                <button
-                  type="submit"
-                  disabled={
-                    !isValid || !selectedPaymentMethod || isCreatingSession
-                  }
-                  className="w-full bg-amber-500 hover:bg-amber-600 text-white py-3 rounded-lg transition-colors disabled:hover:bg-amber-500 mb-4"
-                >
-                  {isCreatingSession
-                    ? "Creando sesión de pago..."
-                    : "Proceder al Pago"}
-                </button>
-              )}
+              <PaymentButton
+                paymentMethod={paymentMethod}
+                formData={formData}
+                disabled={disabled}
+                onSuccess={(orderId) =>
+                  navigate(`/order-confirmation/${orderId}`)
+                }
+              />
 
-              {checkoutId && (
-                <RenderPaymentMethods
-                  method={selectedPaymentMethod}
-                  total={total}
-                  handlePaymentSuccess={handlePaymentSuccess}
-                  handlePaymentError={handlePaymentError}
-                />
-              )}
+              <p className="text-center text-slate-400 text-[10px] uppercase tracking-widest mt-5">
+                Al hacer clic, aceptas nuestros{" "}
+                <Link to="/terms" className="underline">
+                  Términos y Condiciones y Política de Privacidad.
+                </Link>
+              </p>
             </div>
           </div>
         </div>
       </form>
 
-      {(isCreatingSession || isUpdatingPaymentStatus || isFinalizing) && (
+      {/* {(isCreatingSession || isUpdatingPaymentStatus || isFinalizing) && (
         <div className="fixed top-0 left-0 w-full z-50 h-full bg-black/60 flex justify-center items-center">
           <div className="flex items-center justify-center min-h-[60vh]">
             <div className="bg-gray-800 text-center p-8 rounded-lg flex flex-col items-center">
@@ -309,45 +255,7 @@ export default function CheckoutForm() {
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </>
   );
 }
-
-const RenderPaymentMethods = ({
-  method,
-  total,
-  handlePaymentSuccess,
-  handlePaymentError,
-}) => {
-  switch (method) {
-    case "PayPal":
-      return (
-        <PayPalButton
-          amount={total.toFixed(2)}
-          onSuccess={handlePaymentSuccess}
-          onError={handlePaymentError}
-        />
-      );
-    case "MercadoPago":
-      return (
-        <button
-          type="button"
-          className="w-full bg-indigo-500 hover:bg-indigo-600 text-white py-3 rounded-lg transition-colors disabled:hover:bg-indigo-500"
-        >
-          MercadoPago Button
-        </button>
-      );
-    case "Stripe":
-      return (
-        <button
-          type="button"
-          className="w-full bg-violet-500 hover:bg-violet-600 text-white py-3 rounded-lg transition-colors disabled:hover:bg-violet-500"
-        >
-          Stripe Button
-        </button>
-      );
-    default:
-      return null;
-  }
-};

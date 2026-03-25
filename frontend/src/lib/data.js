@@ -172,7 +172,7 @@ export const mocckCheckoutClientData = {
   phone: "1234567890",
   address: "Calle Falsa 123",
   city: "Ciudad Ejemplo",
-  country: "País Ejemplo",
+  country: "MX",
   postalCode: "12345",
   state: "Estado Ejemplo",
   paymentMethod: "PayPal",

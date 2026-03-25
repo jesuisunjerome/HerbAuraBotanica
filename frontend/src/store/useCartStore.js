@@ -1,6 +1,7 @@
 import toast from "react-hot-toast";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
+import { IVA_RATE } from "../lib/helper";
 
 export const useCartStore = create(
   persist(
@@ -48,6 +49,17 @@ export const useCartStore = create(
         set((state) => ({
           cart: state.cart.filter((p) => p._id !== _id),
         })),
+
+      getCartSubtotal: () => {
+        const { cart } = get();
+        const subtotal = cart.reduce((total, item) => total + item.price, 0);
+        return subtotal;
+      },
+
+      getCartTotalWithIVA: () => {
+        const { getCartSubtotal } = get();
+        return getCartSubtotal() * (1 + IVA_RATE);
+      },
 
       isInCart: (_id) => get().cart.some((p) => p._id === _id),
 

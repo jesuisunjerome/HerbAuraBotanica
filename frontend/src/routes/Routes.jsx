@@ -51,7 +51,7 @@ const router = createBrowserRouter([
         element: <OrderConfirmationPage />,
       },
       {
-        path: "/order/:orderId",
+        path: "/track/:orderId",
         element: <OrderTrakingPage />,
       },
       {
