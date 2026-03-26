@@ -24,7 +24,10 @@ export const USER_ROLES = {
 };
 
 export const COOKIE_NAME = {
-  name: "herbaura_token",
+  accessToken: "herbaura_access_token",
+  refreshToken: "herbaura_refresh_token",
+  jwtTokenInMinute: "15", // Token válido por 15 minutos
+  refreshTokenInDay: "7", // Refresh token válido por 7 días
 };
 
 export const IVA = 0.16; // 16% IVA

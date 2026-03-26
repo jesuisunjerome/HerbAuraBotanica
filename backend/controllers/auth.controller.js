@@ -1,138 +1,369 @@
-import {
-  clearCookieToken,
-  createCookieToken,
-} from "../middlewares/auth.middleware.js";
-import User from "../models/User.js";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import { OAuth2Client } from "google-auth-library";
+import User from "../models/User.js";
+import { COOKIE_NAME } from "../lib/constants.js";
+import crypto from "crypto";
+import fetch from "node-fetch";
 
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+/**
+ * Utilidad para generar tokens y guardar la sesión
+ */
+const generateTokensAndSetCookies = async (res, user) => {
+  const jwtSecret = process.env.JWT_SECRET;
+  const accessTimeStr = COOKIE_NAME.jwtTokenInMinute;
+  const refreshTimeStr = COOKIE_NAME.refreshTokenInDay;
+
+  // Validaciones
+  if (!jwtSecret) {
+    throw new Error("Missing JWT_SECRET in environment variables");
+  }
+
+  // Generar Access Token
+  const accessToken = jwt.sign({ id: user._id, role: user.role }, jwtSecret, {
+    expiresIn: `${accessTimeStr}m`,
+  });
+
+  // Generar Refresh Token (usando crpyto o jwt, usaremos jwt para ser consistentes)
+  const refreshToken = jwt.sign({ id: user._id, role: user.role }, jwtSecret, {
+    expiresIn: `${refreshTimeStr}d`,
+  });
+
+  // Guardar en la base de datos la sesión codificada por seguridad (Hashing)
+  const hashedRefreshToken = crypto
+    .createHash("sha256")
+    .update(refreshToken)
+    .digest("hex");
+  const expiresAt = new Date();
+  expiresAt.setDate(expiresAt.getDate() + parseInt(refreshTimeStr));
+
+  const session = {
+    tokenId: crypto.randomBytes(16).toString("hex"),
+    refreshToken: hashedRefreshToken,
+    expiresAt,
+    // Puedes opcionalmente agregar datos de ip o device req.ip / req.headers['user-agent'] etc
+  };
+
+  user.sessions.push(session);
+  await user.save();
+
+  // Opciones de cookie
+  const isProd = process.env.NODE_ENV === "production";
+
+  res.cookie(COOKIE_NAME.accessToken, accessToken, {
+    httpOnly: true,
+    secure: isProd,
+    sameSite: isProd ? "none" : "strict",
+    maxAge: parseInt(accessTimeStr) * 60 * 1000, // milisegundos
+  });
+
+  res.cookie(COOKIE_NAME.refreshToken, refreshToken, {
+    httpOnly: true,
+    secure: isProd,
+    sameSite: isProd ? "none" : "strict",
+    maxAge: parseInt(refreshTimeStr) * 24 * 60 * 60 * 1000, // milisegundos
+  });
+
+  return { accessToken, refreshToken, session };
+};
+
+// @desc    Register user
+// @route   POST /api/auth/register
+// @access  Public
+export const registerUser = async (req, res, next) => {
+  try {
+    const { name, email, password } = req.body;
+
+    if (!name || !email || !password) {
+      return res
+        .status(400)
+        .json({ message: "Please provide all required fields" });
+    }
+
+    const unformattedEmail = email.toLowerCase();
+
+    const userExists = await User.findOne({ email: unformattedEmail });
+    if (userExists) {
+      return res.status(400).json({ message: "User already exists" });
+    }
+
+    const user = new User({
+      name,
+      email: unformattedEmail,
+      password,
+    });
+
+    await user.save();
+
+    await generateTokensAndSetCookies(res, user);
+
+    res.status(201).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      avatar: user.avatar,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 // @desc    Login user
 // @route   POST /api/auth/login
 // @access  Public
-export const login = async (req, res) => {
-  const { email, password } = req.body;
-
-  console.log("login controller");
-
+export const loginUser = async (req, res, next) => {
   try {
-    const user = await User.findOne({ email });
-    if (!user || user.password !== password) {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res
+        .status(400)
+        .json({ message: "Please provide email and password" });
+    }
+
+    const user = await User.findOne({ email: email.toLowerCase() });
+
+    if (!user || !user.password) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
-    createCookieToken(user, res);
-    res.json({ message: "Login successful" });
+    // Comprobar la contraseña mediante bycrypt
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
+
+    await generateTokensAndSetCookies(res, user);
+
+    res.json({ message: "Login successfull" });
   } catch (error) {
-    console.log("Server error in login controller", error.message);
-    return res
-      .status(500)
-      .json({ message: "Error del servidor: " + error.message });
+    next(error);
   }
 };
 
 // @desc    Google login
 // @route   POST /api/auth/google
 // @access  Public
-export const googleLogin = async (req, res) => {
-  const { token } = req.body;
-
-  console.log("googleLogin controller");
-
+export const googleLogin = async (req, res, next) => {
   try {
-    const ticket = await client.verifyIdToken({
-      idToken: token,
+    const { credential } = req.body;
+    if (!credential) {
+      return res.status(400).json({ message: "No Google token provided" });
+    }
+
+    const ticket = await googleClient.verifyIdToken({
+      idToken: credential,
       audience: process.env.GOOGLE_CLIENT_ID,
     });
 
     const payload = ticket.getPayload();
-    const { sub, email, name, picture } = payload;
+    const { sub: googleId, email, name, picture } = payload;
 
-    let user = await User.findOne({ googleId: sub });
-    if (!user) {
-      user = new User({ googleId: sub, email, name, avatar: picture });
-      await user.save();
+    let user = await User.findOne({
+      $or: [{ googleId }, { email: email.toLowerCase() }],
+    });
+
+    if (user) {
+      if (!user.googleId) {
+        user.googleId = googleId;
+      }
+      if (!user.avatar) {
+        user.avatar = picture;
+      }
+    } else {
+      user = new User({
+        name,
+        email: email.toLowerCase(),
+        googleId,
+        avatar: picture,
+      });
     }
 
-    createCookieToken(user, res);
-    res.json({ message: "Login successful" });
+    await user.save();
+    await generateTokensAndSetCookies(res, user);
+
+    res.json({ message: "Google login successfull" });
   } catch (error) {
-    console.log("Server error in Google login controller", error.message);
-    return res
-      .status(500)
-      .json({ message: "Error del servidor: " + error.message });
+    next(error);
   }
 };
 
 // @desc    Facebook login
 // @route   POST /api/auth/facebook
 // @access  Public
-export const facebookLogin = async (req, res) => {
-  const { token } = req.body;
-
-  console.log("facebookLogin controller");
-
+export const facebookLogin = async (req, res, next) => {
   try {
-    // Verificar token con Graph API de Facebook
-    const fbResponse = await fetch(
-      `https://graph.facebook.com/me?fields=id,name,email,picture&access_token=${token}`,
+    const { accessToken } = req.body;
+
+    if (!accessToken) {
+      return res.status(400).json({ message: "No Facebook token provided" });
+    }
+
+    // Validate the token and get user profile
+    const response = await fetch(
+      `https://graph.facebook.com/me?fields=id,name,email,picture&access_token=${accessToken}`,
     );
-    if (!fbResponse.ok) {
-      throw new Error("Invalid Facebook token");
+    const data = await response.json();
+
+    if (data.error) {
+      return res.status(401).json({ message: "Invalid Facebook token" });
     }
 
-    const { id, name, email, picture } = await fbResponse.json();
+    const { id: facebookId, name, email, picture } = data;
 
-    let user = await User.findOne({ facebookId: id });
-    if (!user) {
+    // Email might be missing from FB depending on permissions
+    let userQuery = [];
+    if (facebookId) userQuery.push({ facebookId });
+    if (email) userQuery.push({ email: email.toLowerCase() });
+
+    let user = await User.findOne({ $or: userQuery });
+
+    if (user) {
+      if (!user.facebookId) {
+        user.facebookId = facebookId;
+      }
+      if (!user.avatar && picture && picture.data && picture.data.url) {
+        user.avatar = picture.data.url;
+      }
+    } else {
       user = new User({
-        facebookId: id,
-        email,
         name,
-        avatar: picture?.data?.url || null,
+        email: email ? email.toLowerCase() : undefined,
+        facebookId,
+        avatar: picture?.data?.url,
       });
-
-      await user.save();
     }
 
-    createCookieToken(user, res);
-    res.json({ message: "Login successful" });
+    await user.save();
+    await generateTokensAndSetCookies(res, user);
+
+    res.json({ message: "Facebook login successfull" });
   } catch (error) {
-    console.log("Server error in Facebook login controller", error.message);
-    return res
-      .status(500)
-      .json({ message: "Error del servidor: " + error.message });
-  }
-};
-
-// @desc    Get connected user
-// @route   GET /api/auth/me
-// @access  Private
-export const getConnectedUser = async (req, res) => {
-  console.log("getConnectedUser controller");
-
-  try {
-    const user = await User.findById(req.user.id).select("-password");
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    res.json(user);
-  } catch (error) {
-    console.log("Server error in getConnectedUser controller", error.message);
-    return res
-      .status(500)
-      .json({ message: "Error del servidor: " + error.message });
+    next(error);
   }
 };
 
 // @desc    Logout user
 // @route   POST /api/auth/logout
 // @access  Private
-export const logout = (_, res) => {
-  console.log("logout controller");
+export const logoutUser = async (req, res, next) => {
+  try {
+    // Tomamos el refresh token que nos manda
+    const currentRefreshToken = req.cookies[COOKIE_NAME.refreshToken];
 
-  clearCookieToken(res);
+    // Limpiamos las cookies primero
+    const isProd = process.env.NODE_ENV === "production";
+    res.cookie(COOKIE_NAME.accessToken, "", {
+      maxAge: 0,
+      httpOnly: true,
+      secure: isProd,
+      sameSite: isProd ? "none" : "strict",
+    });
+    res.cookie(COOKIE_NAME.refreshToken, "", {
+      maxAge: 0,
+      httpOnly: true,
+      secure: isProd,
+      sameSite: isProd ? "none" : "strict",
+    });
 
-  res.json({ message: "Logout successful" });
+    // Si había usuario y token, borrar la sesión calculando el hash primero
+    if (req.user && currentRefreshToken) {
+      const hashedToken = crypto
+        .createHash("sha256")
+        .update(currentRefreshToken)
+        .digest("hex");
+        
+      // Como el middleware 'protect' excluye -sessions, usamos $pull directamente sobre la DB
+      await User.findByIdAndUpdate(req.user._id, {
+        $pull: { sessions: { refreshToken: hashedToken } }
+      });
+    }
+
+    res.json({ message: "Logged out successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Refresh token
+// @route   POST /api/auth/refresh-token
+// @access  Public
+export const refreshToken = async (req, res, next) => {
+  try {
+    const currentRefreshToken = req.cookies[COOKIE_NAME.refreshToken];
+
+    if (!currentRefreshToken) {
+      return res.status(401).json({ message: "No refresh token provided" });
+    }
+
+    let decoded;
+    try {
+      decoded = jwt.verify(currentRefreshToken, process.env.JWT_SECRET);
+    } catch (err) {
+      return res
+        .status(401)
+        .json({ message: "Invalid or expired refresh token" });
+    }
+
+    const user = await User.findById(decoded.id);
+
+    if (!user) {
+      return res.status(401).json({ message: "User not found" });
+    }
+
+    // Verificar si el refresh token existe consultando su hash
+    const hashedToken = crypto
+      .createHash("sha256")
+      .update(currentRefreshToken)
+      .digest("hex");
+    const session = user.sessions.find((s) => s.refreshToken === hashedToken);
+
+    if (!session) {
+      // Token Reuse Detection: el jwt validó pero el hash no está en DB.
+      // Posible robo de token. Por seguridad, invalidamos TODAS las sesiones del usuario.
+      user.sessions = [];
+      await user.save();
+      return res
+        .status(401)
+        .json({ message: "Session revoked due to token reuse detection" });
+    }
+
+    if (new Date(session.expiresAt) < new Date()) {
+      // Remover sesión expirada
+      user.sessions = user.sessions.filter(
+        (s) => s.refreshToken !== hashedToken,
+      );
+      await user.save();
+      return res.status(401).json({ message: "Refresh token has expired" });
+    }
+
+    // Token Rotation (Refresh Token Rotation): borramos el token anterior asegurando de un solo uso
+    user.sessions = user.sessions.filter((s) => s.refreshToken !== hashedToken);
+
+    // Generamos un nuevo par de tokens (Refresh + Access)
+    await generateTokensAndSetCookies(res, user);
+
+    res.json({ message: "Token refreshed successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Get connected user
+// @route   GET /api/auth/me
+// @access  Private
+export const getMe = async (req, res, next) => {
+  try {
+    // El middleware req.user protege esta ruta y ya contiene la información del usuario en req.user
+    if (!req.user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.json(req.user);
+  } catch (error) {
+    next(error);
+  }
 };
