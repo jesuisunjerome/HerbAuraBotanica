@@ -16,12 +16,12 @@ export default function ApplePayButton({ formData, disabled, onSuccess }) {
 
   const total = getCartTotalWithIVA();
 
-  const createPaymentRequest = () => {
+  useEffect(() => {
     if (!stripe || total <= 0 || disabled) return;
 
     const pr = stripe.paymentRequest({
       country: "MX",
-      currency: "mxn",
+      currency: "MXN",
       total: {
         label: "HerbAura Botanica",
         amount: Math.round(total * 100), // Convert to cents
@@ -118,11 +118,7 @@ export default function ApplePayButton({ formData, disabled, onSuccess }) {
         return;
       }
     });
-  };
-
-  useEffect(() => {
-    createPaymentRequest();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [stripe, total, disabled, formData, cart, clearCart, onSuccess]);
 
   if (!canPay) {
     return (
