@@ -1,5 +1,18 @@
 import { z } from "zod";
 
+export const loginSchema = z.object({
+  email: z
+    .email("El correo no es válido")
+    .min(1, "El correo es obligatorio")
+    .nonempty("El correo es obligatorio")
+    .trim(),
+  password: z
+    .string()
+    .min(1, "La contraseña es obligatoria")
+    .nonempty("La contraseña es obligatoria")
+    .trim(),
+});
+
 export const contactFormSchema = z.object({
   name: z
     .string()

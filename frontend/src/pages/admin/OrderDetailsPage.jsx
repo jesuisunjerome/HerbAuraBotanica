@@ -48,25 +48,34 @@ export default function OrderDetailsPage() {
         header: "Cantidad",
         accessorKey: "quantity",
         cell: ({ row }) => (
-          <span className="font-medium">{row.original.quantity}</span>
+          <div className="font-medium text-right">{row.original.quantity}</div>
         ),
+        meta: {
+          headerClassName: "text-right",
+        },
       },
       {
         header: "Precio Unitario",
         accessorKey: "price",
         cell: ({ row }) => (
-          <span className="font-medium text-nowrap">
+          <div className="font-medium text-nowrap text-right">
             {formatCurrency(row.original.price)}
-          </span>
+          </div>
         ),
+        meta: {
+          headerClassName: "text-right",
+        },
       },
       {
         header: "Total",
         cell: ({ row }) => (
-          <span className="text-emerald-600 font-medium text-nowrap">
+          <div className="text-emerald-600 font-medium text-nowrap text-right">
             {formatCurrency(row.original.price * row.original.quantity)}
-          </span>
+          </div>
         ),
+        meta: {
+          headerClassName: "text-right",
+        },
       },
     ],
     [],
@@ -100,9 +109,10 @@ export default function OrderDetailsPage() {
           <Timeline />
         </div>
 
-        <div className="xl:w-1/3 space-y-6">
+        <div className="xl:w-1/3 space-y-6 sticky top-50 self-start">
           <CustomerInfo
-            user={order?.shippingDetails.user}
+            customer={order?.customer}
+            shippingAddress={order?.shippingAddress}
             isPending={isPending}
           />
           <Notes isPending={isPending} />

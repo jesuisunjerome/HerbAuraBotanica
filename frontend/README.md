@@ -26,7 +26,7 @@ If you are developing a production application, we recommend using TypeScript wi
 - npm i react-slick slick-carousel
 - npm i zustand
 - npm i embla-carousel-react embla-carousel-autoplay
-- npm i lucide lucide-react
+- npm i lucide-react
 - npm i react-hook-form
 - npm i -D @hookform/devtools
 - npm i @hookform/resolvers zod
@@ -36,3 +36,5 @@ If you are developing a production application, we recommend using TypeScript wi
 - npm i @tanstack/react-query-devtools -D
 - npm i @stripe/react-stripe-js @stripe/stripe-js
 - npm i @paypal/react-paypal-js
+
+- npm i @react-oauth/google react-facebook-login

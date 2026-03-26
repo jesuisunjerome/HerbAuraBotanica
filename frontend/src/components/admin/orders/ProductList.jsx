@@ -8,7 +8,7 @@ export default function ProductList({ table, isPending }) {
       </div>
       <TableWrapper
         className="shadow-none px-0 min-h-auto"
-        table={table}
+        pagination={table}
         isPending={isPending}
         arrLength={3}
       >

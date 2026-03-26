@@ -30,13 +30,14 @@ export default function TableWrapper({
 }
 
 export function THead({ headerGroup }) {
+  console.log(headerGroup);
   return (
     <tr key={headerGroup.id}>
       {headerGroup.headers.map((header) => (
         <th
           key={header.id}
           colSpan={header.colSpan}
-          className="px-4 py-3 text-left text-sm font-medium text-gray-500 whitespace-nowrap"
+          className={`px-4 py-3 text-left text-sm font-medium text-gray-500 whitespace-nowrap ${header.column.columnDef.meta?.headerClassName || ""}`}
         >
           {header.isPlaceholder ? null : (
             <div

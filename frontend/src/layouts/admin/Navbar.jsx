@@ -1,7 +1,10 @@
 import { BellIcon, MenuIcon, MessageCircle, SearchIcon } from "lucide-react";
+import { useConnectedUser } from "../../hooks/auth/queries";
 import { formatLongDateToString } from "../../lib/helper";
 
 export default function Navbar({ handleToggleNav }) {
+  const { connectedUser } = useConnectedUser();
+
   return (
     <header className="bg-white sticky top-0 z-50 border-b border-slate-200 px-3 lg:px-8 py-2 flex items-center justify-between">
       <div className="md:hidden">
@@ -43,14 +46,19 @@ export default function Navbar({ handleToggleNav }) {
         <div className="flex items-center gap-1">
           <div className="h-9 w-9 rounded-lg bg-gray-100">
             <img
-              src="https://i.pravatar.cc/150"
+              src={connectedUser?.avatar || "https://i.pravatar.cc/150"}
               alt="Profile"
               className="h-9 w-9 object-cover rounded-lg"
             />
           </div>
           <div className="hidden lg:flex flex-col text-sm">
-            <p className="font-medium leading-tight">Karyo</p>
-            <span className="text-gray-500 leading-tight">Admin</span>
+            <p className="font-medium leading-tight">
+              {`${connectedUser?.name?.split(" ")[0]} ${connectedUser?.name?.split(" ")[1]?.[0] || ""}`}
+              .
+            </p>
+            <span className="text-gray-500 leading-tight capitalize">
+              {connectedUser?.role}
+            </span>
           </div>
         </div>
       </div>

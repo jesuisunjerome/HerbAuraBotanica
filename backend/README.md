@@ -7,4 +7,5 @@
 - npm i cors
 - npm i cloudinary
 - npm i stripe
-<!-- - npm i cookie-parser -->
+- npm i google-auth-library
+- npm i jsonwebtoken cookie-parser bcrypt

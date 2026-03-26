@@ -1,4 +1,5 @@
 import { createBrowserRouter, Navigate } from "react-router";
+import UserProvider from "../contexts/UserContext";
 import AdminLayout from "../layouts/admin/AdminLayout";
 import MainLayout from "../layouts/public/MainLayout";
 import DashboardPage from "../pages/admin/DashboardPage";
@@ -10,6 +11,7 @@ import CatalogPage from "../pages/public/CatalogPage";
 import CheckoutPage from "../pages/public/CheckoutPage";
 import ContactPage from "../pages/public/ContactPage";
 import HomePage from "../pages/public/HomePage";
+import LoginPage from "../pages/public/LoginPage";
 import OrderConfirmationPage from "../pages/public/OrderConfirmationPage";
 import OrderTrakingPage from "../pages/public/OrderTrakingPage";
 import PolicyPage from "../pages/public/PolicyPage";
@@ -73,7 +75,11 @@ const router = createBrowserRouter([
     ],
   },
   {
-    element: <AdminLayout />,
+    element: (
+      <UserProvider>
+        <AdminLayout />
+      </UserProvider>
+    ),
     path: "/admin",
     errorElement: <div>Admin Error page</div>,
     children: [
@@ -99,6 +105,10 @@ const router = createBrowserRouter([
         element: <div>Admin 404 Not Found</div>,
       },
     ],
+  },
+  {
+    path: "/login",
+    element: <LoginPage />,
   },
 ]);
 export default router;

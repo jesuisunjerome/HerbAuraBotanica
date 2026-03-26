@@ -11,14 +11,11 @@ import {
   ShoppingCartIcon,
   XIcon,
 } from "lucide-react";
-import { Link, NavLink, useNavigate } from "react-router";
+import { Link, NavLink } from "react-router";
+import { useConnectedUser } from "../../hooks/auth/queries";
 
 export default function Sidebar({ showNavMobile, handleToggleNav }) {
-  const navigate = useNavigate();
-  const handleLogout = () => {
-    // navigate('/admin/login')
-    navigate("/");
-  };
+  const { logout } = useConnectedUser();
 
   return (
     <aside
@@ -140,7 +137,7 @@ export default function Sidebar({ showNavMobile, handleToggleNav }) {
           </NavLink>
         </div>
         <button
-          onClick={handleLogout}
+          onClick={logout}
           className="flex w-full items-center text-amber-700 gap-3 px-3 py-2 rounded-md hover:bg-slate-50 hover:translate-y-0"
         >
           <LogOutIcon className="h-4 w-4" />

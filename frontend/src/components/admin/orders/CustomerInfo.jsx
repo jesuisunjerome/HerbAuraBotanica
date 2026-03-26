@@ -5,7 +5,7 @@ import {
   UserIcon,
 } from "lucide-react";
 
-export default function CustomerInfo({ user, isPending }) {
+export default function CustomerInfo({ customer, shippingAddress, isPending }) {
   return (
     <div className="rounded-2xl shadow-lg shadow-gray-100 bg-white px-5 py-4">
       <div className="border-b border-gray-100 pb-3">
@@ -22,7 +22,7 @@ export default function CustomerInfo({ user, isPending }) {
             <div>
               <p className="text-sm text-gray-500 leading-tight">Nombre</p>
               <p className="text-sm font-medium leading-tight">
-                {user.firstName} {user.lastName}
+                {customer.name}
               </p>
             </div>
           </div>
@@ -34,7 +34,9 @@ export default function CustomerInfo({ user, isPending }) {
               <p className="text-sm text-gray-500 leading-tight">
                 Correo Electrónico
               </p>
-              <p className="text-sm font-medium leading-tight">{user.email}</p>
+              <p className="text-sm font-medium leading-tight">
+                {customer.email}
+              </p>
             </div>
           </div>
           <div className="flex gap-2">
@@ -44,10 +46,10 @@ export default function CustomerInfo({ user, isPending }) {
             <div>
               <p className="text-sm text-gray-500 leading-tight">Teléfono</p>
               <a
-                href={`tel:${user.phone}`}
+                href={`tel:${customer.phone}`}
                 className="text-sm font-medium leading-tight"
               >
-                {user.phone}
+                {customer.phone}
               </a>
             </div>
           </div>
@@ -60,8 +62,9 @@ export default function CustomerInfo({ user, isPending }) {
                 Dirección de Envío
               </p>
               <p className="text-sm font-medium leading-tight">
-                {user.address}, {user.city}, {user.state}, C.P {user.postalCode}
-                , {user.country}
+                {shippingAddress.address}, {shippingAddress.city},{" "}
+                {shippingAddress.state}, C.P {shippingAddress.postalCode},{" "}
+                {shippingAddress.country}
               </p>
             </div>
           </div>

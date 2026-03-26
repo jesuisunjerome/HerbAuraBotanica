@@ -1,8 +1,6 @@
 import nodemailer from "nodemailer";
-import dotenv from "dotenv";
+import "dotenv/config";
 import { IVA } from "../lib/constants.js";
-
-dotenv.config();
 
 // Configuración del transporte de correo utilizando Gmail
 const transporter = nodemailer.createTransport({

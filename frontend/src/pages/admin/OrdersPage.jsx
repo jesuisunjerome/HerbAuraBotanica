@@ -47,16 +47,14 @@ export default function OrdersPage() {
       },
       {
         header: "Cliente",
-        // accessorKey: "shippingDetails",
+        // accessorKey: "customer",
         cell: ({ row }) => {
-          const { user } = row.original.shippingDetails;
+          const { name, email } = row.original.customer;
 
           return (
             <div>
-              <p className="leading-tight">
-                {user.firstName} {user.lastName}
-              </p>
-              <span className="text-gray-500 text-sm">{user.email}</span>
+              <p className="leading-tight">{name}</p>
+              <span className="text-gray-500 text-sm">{email}</span>
             </div>
           );
         },
@@ -93,14 +91,14 @@ export default function OrdersPage() {
               <p className="flex leading-tight items-center gap-1 font-medium">
                 {statusStyles.icon} {status}
               </p>
-              {isReturned && (
+              {/* {isReturned && (
                 <span>
                   {formatShortDateToString(new Date(row.original.returnedAt))}
                 </span>
               )}
               {deliveredAt && !isReturned && (
                 <span>{formatShortDateToString(new Date(deliveredAt))}</span>
-              )}
+              )} */}
             </div>
           );
         },
@@ -110,23 +108,33 @@ export default function OrdersPage() {
         accessorKey: "orderItems",
         cell: ({ row }) => {
           const items = row.original.orderItems;
-          return <span className="font-medium">{items.length} </span>;
+          return <div className="font-medium text-right">{items.length} </div>;
+        },
+        meta: {
+          headerClassName: "text-right",
         },
       },
       {
         header: "Total",
-        accessorKey: "totalAmount",
+        accessorKey: "totalPrice",
         cell: ({ row }) => (
-          <span className="text-emerald-600 font-medium text-nowrap">
-            {formatCurrency(row.original.totalAmount)}
-          </span>
+          <div className="text-emerald-600 font-medium text-nowrap text-right">
+            {formatCurrency(row.original.totalPrice)}
+          </div>
         ),
+        meta: {
+          headerClassName: "text-right",
+        },
       },
       {
         header: "Pago",
-        accessorKey: "paymentStatus",
+        accessorKey: "paymentResult",
         cell: ({ row }) => {
-          const status = row.original.paymentStatus;
+          // const {status} = row.original.paymentResult;
+          const isPaid = row.original.isPaid;
+
+          const status = isPaid ? PAYMENT_STATUS.PAID : PAYMENT_STATUS.PENDING;
+
           const statusStyles =
             status === PAYMENT_STATUS.PAID
               ? "text-emerald-600"
@@ -158,9 +166,9 @@ export default function OrdersPage() {
       },
       {
         header: "Dirección",
-        accessorKey: "shippingDetails",
+        accessorKey: "shippingAddress",
         cell: ({ row }) => {
-          const { address, city, country } = row.original.shippingDetails.user;
+          const { address, city, country } = row.original.shippingAddress;
           return (
             <div>
               <p className="leading-tight">{address}</p>
