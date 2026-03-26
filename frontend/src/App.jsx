@@ -2,6 +2,7 @@
 // import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import { RouterProvider } from "react-router";
 import router from "./routes/Routes";
+import FacebookInit from "./components/common/FacebookInit";
 
 // const AdminLayout = lazy(() => import("./layouts/admin/AdminLayout"));
 // const MainLayout = lazy(() => import("./layouts/public/MainLayout"));
@@ -29,6 +30,7 @@ import router from "./routes/Routes";
 function App() {
   return (
     <>
+    <FacebookInit/>
       {/* <UserProvider> */}
       <RouterProvider router={router} />
       {/* </UserProvider> */}

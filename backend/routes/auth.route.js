@@ -1,19 +1,25 @@
 import express from "express";
 import {
-  facebookLogin,
-  getConnectedUser,
+  registerUser,
+  loginUser,
   googleLogin,
-  login,
-  logout,
+  facebookLogin,
+  logoutUser,
+  refreshToken,
+  getMe,
 } from "../controllers/auth.controller.js";
-import { verifyCookieToken } from "../middlewares/auth.middleware.js";
+import { protect } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
+router.post("/register", registerUser);
+router.post("/login", loginUser);
 router.post("/google", googleLogin);
 router.post("/facebook", facebookLogin);
-router.post("/login", login);
-router.get("/me", verifyCookieToken, getConnectedUser);
-router.post("/logout", verifyCookieToken, logout);
+router.post("/refresh-token", refreshToken);
+
+// Rutas protegidas
+router.post("/logout", protect, logoutUser);
+router.get("/me", protect, getMe);
 
 export default router;
