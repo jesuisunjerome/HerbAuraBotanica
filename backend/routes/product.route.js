@@ -12,6 +12,7 @@ import {
   updateProductById,
   getBestSellers,
 } from "../controllers/product.controller.js";
+import { protect } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
@@ -25,9 +26,9 @@ router.get("/search", filterProducts);
 router.get("/:id", getProductById);
 
 // ADMIN ROUTES (protected by admin middleware)
-router.get("/", getAllProducts);
-router.post("/", createProduct);
-router.put("/:id", updateProductById);
-router.put("/:id/status", updateProductStatusById);
+router.get("/", protect, getAllProducts);
+router.post("/", protect, createProduct);
+router.put("/:id", protect, updateProductById);
+router.put("/:id/status", protect, updateProductStatusById);
 
 export default router;

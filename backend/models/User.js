@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import bcrypt from "bcrypt";
 import { USER_ROLES } from "../lib/constants.js";
 
 const sessionSchema = new mongoose.Schema({
@@ -33,9 +34,7 @@ const userSchema = new mongoose.Schema(
       sparse: true, // permite usuarios sin correo (ej. algunos proveedores sociales)
       unique: true,
     },
-    password: {
-      type: String,
-    },
+    password: String,
     role: {
       type: String,
       enum: Object.values(USER_ROLES),
@@ -57,12 +56,19 @@ const userSchema = new mongoose.Schema(
     avatar: {
       type: String,
     },
-    // sessions: [sessionSchema],
+    sessions: [sessionSchema],
   },
   {
     timestamps: true,
   },
 );
+
+// Hash password before saving (solo para usuarios con contraseña local)
+userSchema.pre("save", async function () {
+  if (this.isModified("password") && this.password) {
+    this.password = await bcrypt.hash(this.password, 10);
+  }
+});
 
 const User = mongoose.models.User || mongoose.model("User", userSchema);
 export default User;
