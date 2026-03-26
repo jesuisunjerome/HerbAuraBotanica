@@ -1,14 +1,6 @@
-import {
-  calculateCartTotals,
-  formatCurrency,
-  IVA_RATE,
-} from "../../../lib/helper";
+import { formatCurrency, IVA_RATE } from "../../../lib/helper";
 
 export default function PaymentStatus({ order, isPending }) {
-  const { shipping, tax, subtotal } = calculateCartTotals(
-    order?.orderItems || [],
-  );
-
   return (
     <div className="rounded-2xl shadow-lg shadow-gray-100 bg-white px-5 py-4">
       <div className="border-b border-gray-100 pb-3">
@@ -23,23 +15,29 @@ export default function PaymentStatus({ order, isPending }) {
             <p className="text-sm text-gray-500">
               {order.orderItems.length} artículos
             </p>
-            <p className="text-sm font-medium">{formatCurrency(subtotal)}</p>
+            <p className="text-sm font-medium">
+              {formatCurrency(order.itemsPrice)}
+            </p>
           </div>
           <div className="flex justify-between pb-1">
             <p className="text-sm text-gray-500">Envío</p>
             <p className="text-sm text-gray-500">Express</p>
-            <p className="text-sm font-medium">{formatCurrency(shipping)}</p>
+            <p className="text-sm font-medium">
+              {formatCurrency(order.shippingPrice)}
+            </p>
           </div>
           <div className="flex justify-between pb-1">
             <p className="text-sm text-gray-500">
               Impuestos ({IVA_RATE * 100}%)
             </p>
-            <p className="text-sm font-medium">{formatCurrency(tax)}</p>
+            <p className="text-sm font-medium">
+              {formatCurrency(order.taxPrice)}
+            </p>
           </div>
           <div className="pt-3 flex justify-between">
             <p className="text-lg font-semibold">Total</p>
-            <p className="text-lg font-semibold">
-              {formatCurrency(order.totalAmount)}
+            <p className="text-lg font-semibold text-emerald-600">
+              {formatCurrency(order.totalPrice)}
             </p>
           </div>
         </div>
