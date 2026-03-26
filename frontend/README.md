@@ -37,4 +37,4 @@ If you are developing a production application, we recommend using TypeScript wi
 - npm i @stripe/react-stripe-js @stripe/stripe-js
 - npm i @paypal/react-paypal-js
 
-- npm i @react-oauth/google react-facebook-login
+- npm i @react-oauth/google
