@@ -21,7 +21,7 @@ export default function ApplePayButton({ formData, disabled, onSuccess }) {
 
     const pr = stripe.paymentRequest({
       country: "MX",
-      currency: "MXN",
+      currency: "mxn",
       total: {
         label: "HerbAura Botanica",
         amount: Math.round(total * 100), // Convert to cents
