@@ -28,7 +28,7 @@ export default function ProductDetailsPage() {
   return (
     <>
       <SEORender
-        title={`${name || "Hair Care"} :: HerbAura Botanica`}
+        title={`${name || "Cuidado del Cabello"} :: HerbAura Botanica`}
         description={description || "Detalle del producto en HerbAura Botanica"}
       />
       <section className="md:px-5 px-3 lg:px-20 pt-10 pb-20 relative">
