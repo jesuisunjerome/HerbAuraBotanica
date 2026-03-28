@@ -1,6 +1,30 @@
 import mongoose from "mongoose";
 import { ORDER_STATUS, PAYMENT_STATUS } from "../lib/constants.js";
 
+const statusHistorySchema = new mongoose.Schema(
+  {
+    status: {
+      type: String,
+      enum: Object.values(ORDER_STATUS),
+      required: true,
+    },
+    comment: {
+      type: String,
+      default: "",
+    },
+    updatedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+    updatedByModel: {
+      type: String,
+      enum: ["User", "System", "CarrierAPI"],
+      default: "User",
+    },
+  },
+  { timestamps: { createdAt: true, updatedAt: false } },
+);
+
 const orderSchema = new mongoose.Schema(
   {
     customer: {
@@ -53,6 +77,7 @@ const orderSchema = new mongoose.Schema(
       enum: Object.values(ORDER_STATUS),
       default: ORDER_STATUS.PROCESSING,
     },
+    statusHistory: [statusHistorySchema],
   },
   {
     timestamps: true,

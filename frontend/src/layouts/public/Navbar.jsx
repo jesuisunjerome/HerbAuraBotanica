@@ -1,4 +1,4 @@
-import { HandbagIcon, MenuIcon } from "lucide-react";
+import { HandbagIcon, MenuIcon, UserIcon } from "lucide-react";
 import { useState } from "react";
 import { Link, NavLink } from "react-router";
 import CartInfo from "../../components/public/checkout/CartInfo";
@@ -73,6 +73,11 @@ export default function Navbar() {
                 )}
               </button>
             </li>
+            <li className="flex items-center">
+              <NavLink className="text-amber-600 px-1" to="/login">
+                <UserIcon className="w-6 h-6" />
+              </NavLink>
+            </li>
           </ul>
           <div className="flex items-center gap-3 md:hidden">
             <button
@@ -87,6 +92,9 @@ export default function Navbar() {
                 </span>
               )}
             </button>
+            <Link className="text-amber-600 ml-1 px-1" to="/login">
+              <UserIcon className="w-6 h-6" />
+            </Link>
           </div>
         </nav>
       </header>

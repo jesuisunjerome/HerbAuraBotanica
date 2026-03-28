@@ -11,14 +11,14 @@ const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 /**
  * Utilidad para generar tokens y guardar la sesión
  */
-const generateTokensAndSetCookies = async (res, user) => {
+const generateTokensAndSetCookies = async (req, res, user) => {
   const jwtSecret = process.env.JWT_SECRET;
   const accessTimeStr = COOKIE_NAME.jwtTokenInMinute;
   const refreshTimeStr = COOKIE_NAME.refreshTokenInDay;
 
   // Validaciones
   if (!jwtSecret) {
-    throw new Error("Missing JWT_SECRET in environment variables");
+    throw new Error("Falta JWT_SECRET en las variables de entorno");
   }
 
   // Generar Access Token
@@ -26,7 +26,7 @@ const generateTokensAndSetCookies = async (res, user) => {
     expiresIn: `${accessTimeStr}m`,
   });
 
-  // Generar Refresh Token (usando crpyto o jwt, usaremos jwt para ser consistentes)
+  // Generar Refresh Token
   const refreshToken = jwt.sign({ id: user._id, role: user.role }, jwtSecret, {
     expiresIn: `${refreshTimeStr}d`,
   });
@@ -43,7 +43,8 @@ const generateTokensAndSetCookies = async (res, user) => {
     tokenId: crypto.randomBytes(16).toString("hex"),
     refreshToken: hashedRefreshToken,
     expiresAt,
-    // Puedes opcionalmente agregar datos de ip o device req.ip / req.headers['user-agent'] etc
+    device: req.headers["user-agent"],
+    ip: req.ip,
   };
 
   user.sessions.push(session);
@@ -77,16 +78,16 @@ export const registerUser = async (req, res, next) => {
     const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
-      return res
-        .status(400)
-        .json({ message: "Please provide all required fields" });
+      return res.status(400).json({
+        message: "Por favor, proporciona todos los campos obligatorios",
+      });
     }
 
     const unformattedEmail = email.toLowerCase();
 
     const userExists = await User.findOne({ email: unformattedEmail });
     if (userExists) {
-      return res.status(400).json({ message: "User already exists" });
+      return res.status(400).json({ message: "El usuario ya existe" });
     }
 
     const user = new User({
@@ -121,25 +122,29 @@ export const loginUser = async (req, res, next) => {
     if (!email || !password) {
       return res
         .status(400)
-        .json({ message: "Please provide email and password" });
+        .json({ message: "Por favor, proporciona correo y contraseña" });
     }
 
     const user = await User.findOne({ email: email.toLowerCase() });
 
     if (!user || !user.password) {
-      return res.status(401).json({ message: "Invalid email or password" });
+      return res
+        .status(401)
+        .json({ message: "Correo y/o contraseña inválidos" });
     }
 
     // Comprobar la contraseña mediante bycrypt
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      return res.status(401).json({ message: "Invalid email or password" });
+      return res
+        .status(401)
+        .json({ message: "Correo y/o contraseña inválidos" });
     }
 
-    await generateTokensAndSetCookies(res, user);
+    await generateTokensAndSetCookies(req, res, user);
 
-    res.json({ message: "Login successfull" });
+    res.json({ message: "Inicio de sesión exitoso" });
   } catch (error) {
     next(error);
   }
@@ -152,7 +157,9 @@ export const googleLogin = async (req, res, next) => {
   try {
     const { credential } = req.body;
     if (!credential) {
-      return res.status(400).json({ message: "No Google token provided" });
+      return res
+        .status(400)
+        .json({ message: "No se proporcionó el token de Google" });
     }
 
     const ticket = await googleClient.verifyIdToken({
@@ -184,9 +191,9 @@ export const googleLogin = async (req, res, next) => {
     }
 
     await user.save();
-    await generateTokensAndSetCookies(res, user);
+    await generateTokensAndSetCookies(req, res, user);
 
-    res.json({ message: "Google login successfull" });
+    res.json({ message: "Inicio de sesión con Google exitoso" });
   } catch (error) {
     next(error);
   }
@@ -200,7 +207,9 @@ export const facebookLogin = async (req, res, next) => {
     const { accessToken } = req.body;
 
     if (!accessToken) {
-      return res.status(400).json({ message: "No Facebook token provided" });
+      return res
+        .status(400)
+        .json({ message: "No se proporcionó el token de Facebook" });
     }
 
     // Validate the token and get user profile
@@ -210,7 +219,7 @@ export const facebookLogin = async (req, res, next) => {
     const data = await response.json();
 
     if (data.error) {
-      return res.status(401).json({ message: "Invalid Facebook token" });
+      return res.status(401).json({ message: "Token de Facebook inválido" });
     }
 
     const { id: facebookId, name, email, picture } = data;
@@ -241,7 +250,7 @@ export const facebookLogin = async (req, res, next) => {
     await user.save();
     await generateTokensAndSetCookies(res, user);
 
-    res.json({ message: "Facebook login successfull" });
+    res.json({ message: "Inicio de sesión con Facebook exitoso" });
   } catch (error) {
     next(error);
   }
@@ -276,14 +285,14 @@ export const logoutUser = async (req, res, next) => {
         .createHash("sha256")
         .update(currentRefreshToken)
         .digest("hex");
-        
+
       // Como el middleware 'protect' excluye -sessions, usamos $pull directamente sobre la DB
       await User.findByIdAndUpdate(req.user._id, {
-        $pull: { sessions: { refreshToken: hashedToken } }
+        $pull: { sessions: { refreshToken: hashedToken } },
       });
     }
 
-    res.json({ message: "Logged out successfully" });
+    res.json({ message: "Sesión cerrada exitosamente" });
   } catch (error) {
     next(error);
   }
@@ -297,22 +306,24 @@ export const refreshToken = async (req, res, next) => {
     const currentRefreshToken = req.cookies[COOKIE_NAME.refreshToken];
 
     if (!currentRefreshToken) {
-      return res.status(401).json({ message: "No refresh token provided" });
+      return res
+        .status(401)
+        .json({ message: "No se proporcionó el token de actualización" });
     }
 
     let decoded;
     try {
       decoded = jwt.verify(currentRefreshToken, process.env.JWT_SECRET);
     } catch (err) {
-      return res
-        .status(401)
-        .json({ message: "Invalid or expired refresh token" });
+      return res.status(401).json({
+        message: "El token de actualización es inválido o ha expirado",
+      });
     }
 
     const user = await User.findById(decoded.id);
 
     if (!user) {
-      return res.status(401).json({ message: "User not found" });
+      return res.status(401).json({ message: "Usuario no encontrado" });
     }
 
     // Verificar si el refresh token existe consultando su hash
@@ -327,9 +338,10 @@ export const refreshToken = async (req, res, next) => {
       // Posible robo de token. Por seguridad, invalidamos TODAS las sesiones del usuario.
       user.sessions = [];
       await user.save();
-      return res
-        .status(401)
-        .json({ message: "Session revoked due to token reuse detection" });
+      return res.status(401).json({
+        message:
+          "La sesión fue revocada por detección de reutilización del token",
+      });
     }
 
     if (new Date(session.expiresAt) < new Date()) {
@@ -338,7 +350,9 @@ export const refreshToken = async (req, res, next) => {
         (s) => s.refreshToken !== hashedToken,
       );
       await user.save();
-      return res.status(401).json({ message: "Refresh token has expired" });
+      return res
+        .status(401)
+        .json({ message: "El token de actualización ha expirado" });
     }
 
     // Token Rotation (Refresh Token Rotation): borramos el token anterior asegurando de un solo uso
@@ -347,7 +361,7 @@ export const refreshToken = async (req, res, next) => {
     // Generamos un nuevo par de tokens (Refresh + Access)
     await generateTokensAndSetCookies(res, user);
 
-    res.json({ message: "Token refreshed successfully" });
+    res.json({ message: "Token actualizado exitosamente" });
   } catch (error) {
     next(error);
   }
@@ -360,7 +374,7 @@ export const getMe = async (req, res, next) => {
   try {
     // El middleware req.user protege esta ruta y ya contiene la información del usuario en req.user
     if (!req.user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "Usuario no encontrado" });
     }
     res.json(req.user);
   } catch (error) {

@@ -18,7 +18,7 @@ export default function NewsLetter() {
           placeholder="Ingresa tu correo electrónico"
           className="flex-1 border border-gray-300 rounded-md p-2"
         />
-        <button className="bg-[#3f6b4c] text-white px-4 py-2 rounded-md hover:bg-[#2e4d36]">
+        <button className="bg-[#3f6b4c] text-white px-4 py-2 rounded-md hover:bg-[#2e4d36] focus:outline-none focus:ring-2 focus:ring-[#3f6b4c] focus:ring-offset-2 transition">
           Suscribirse
         </button>
       </form>

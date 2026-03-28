@@ -20,15 +20,15 @@ const router = express.Router();
 router.get("/active", getAllActiveProducts);
 router.get("/best-sellers", getBestSellers);
 router.get("/new-arrivals", getNewArrivals);
-router.get("/similar/:id", getSimilarProducts);
+router.get("/:id/similar", getSimilarProducts);
 router.get("/category/:category", getProductsByCategory);
-router.get("/search", filterProducts);
+router.get("/filter", filterProducts);
 router.get("/:id", getProductById);
 
 // ADMIN ROUTES (protected by admin middleware)
 router.get("/", protect, getAllProducts);
 router.post("/", protect, createProduct);
 router.put("/:id", protect, updateProductById);
-router.put("/:id/status", protect, updateProductStatusById);
+router.patch("/:id/status", protect, updateProductStatusById);
 
 export default router;

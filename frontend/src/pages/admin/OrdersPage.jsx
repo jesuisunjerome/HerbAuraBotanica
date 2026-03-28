@@ -233,8 +233,7 @@ export default function OrdersPage() {
 
           <button
             title="Descargar Archivo"
-            className="flex items-center justify-center gap-2 px-4 py-2 bg-green-200 text-white hover:bg-[#16a34a]
-             rounded  transition"
+            className="bg-[#3f6b4c] text-white px-4 py-2 rounded-md hover:bg-[#2e4d36] focus:outline-none focus:ring-2 focus:ring-[#3f6b4c] focus:ring-offset-2 transition"
           >
             <FileTextIcon className="w-5 h-5" />
             {/* Descargar Archivo */}

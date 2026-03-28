@@ -38,7 +38,7 @@ function Pagination() {
       <button className="py-3 px-5 rounded-lg bg-gray-200 hover:bg-gray-300">
         <ChevronLeftIcon className="w-5 h-5" />
       </button>
-      <button className="py-3 px-5 rounded-lg bg-[#3f6b4c] text-white hover:bg-[#2e4d36]">
+      <button className="py-3 px-5 rounded-lg bg-[#3f6b4c] text-white hover:bg-[#2e4d36] focus:outline-none focus:ring-2 focus:ring-[#3f6b4c] focus:ring-offset-2 transition">
         1
       </button>
       <button className="py-3 px-5 rounded-lg bg-gray-200 hover:bg-gray-300">

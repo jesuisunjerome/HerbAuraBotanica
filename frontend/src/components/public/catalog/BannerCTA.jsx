@@ -30,7 +30,7 @@ export default function BannerCTA() {
           </div>
           <Link
             to="/contacto"
-            className="py-3 px-6 bg-[#3f6b4c] text-white rounded-lg hover:bg-[#2e4d36] transition-colors"
+            className="py-3 px-6 bg-[#3f6b4c] text-white rounded-lg hover:bg-[#2e4d36] transition-colors focus:outline-none focus:ring-2 focus:ring-[#3f6b4c] focus:ring-offset-2"
           >
             Contáctanos
           </Link>

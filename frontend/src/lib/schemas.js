@@ -13,6 +13,34 @@ export const loginSchema = z.object({
     .trim(),
 });
 
+export const registerSchema = z
+  .object({
+    name: z
+      .string()
+      .min(1, "El nombre es obligatorio")
+      .nonempty("El nombre es obligatorio")
+      .trim(),
+    email: z
+      .email("El correo no es válido")
+      .min(1, "El correo es obligatorio")
+      .nonempty("El correo es obligatorio")
+      .trim(),
+    password: z
+      .string()
+      .min(1, "La contraseña es obligatoria")
+      .nonempty("La contraseña es obligatoria")
+      .trim(),
+    confirmPassword: z
+      .string()
+      .min(1, "La confirmación de contraseña es obligatoria")
+      .nonempty("La confirmación de contraseña es obligatoria")
+      .trim(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Las contraseñas no coinciden",
+    path: ["confirmPassword"],
+  });
+
 export const contactFormSchema = z.object({
   name: z
     .string()

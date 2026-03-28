@@ -45,6 +45,11 @@
     @apply disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-0;
   }
 
+  button.bg-amber-600,
+  a.bg-amber-600 {
+    @apply focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:outline-none;
+  }
+
   input {
     @apply disabled:animate-pulse disabled:cursor-not-allowed disabled:bg-gray-50 disabled:opacity-50;
   }
