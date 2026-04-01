@@ -5,79 +5,95 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import ModalEditStatus from "./modals/ModalEditStatus";
 
-export default function Header() {
+export default function Header({ order, isPending }) {
   const navigate = useNavigate();
   const [showActions, setShowActions] = useState(false);
-
   const toggleActions = () => setShowActions((prev) => !prev);
-  const handleOrderAction = (actionName) => {
+
+  const [modal, setModal] = useState(null);
+  const handleOpenModal = ({ type }) => {
     toggleActions();
-    console.log(actionName);
+    setModal({ type, data: order });
   };
 
   return (
-    <div className="flex flex-col md:flex-row flex-wrap justify-between items-start md:items-end gap-4 bg-gray-50 pb-3 pt-4 sticky top-15 z-10">
-      <div>
-        <div className="mb-3">
-          <button
-            type="button"
-            onClick={() => navigate("/admin/orders")}
-            className="text-amber-600 hover:underline inline-flex items-center gap-1 group"
-          >
-            <ChevronLeftIcon className="h-4 w-4 group-hover:-translate-x-1 transition-all" />
-            <span>Volver a Pedidos</span>
-          </button>
+    <>
+      <div className="flex flex-col md:flex-row flex-wrap justify-between items-start md:items-end gap-4 bg-gray-50 pb-3 pt-4 sticky top-15 z-10">
+        <div>
+          <div className="mb-3">
+            <button
+              type="button"
+              onClick={() => navigate("/admin/orders")}
+              className="text-amber-600 hover:underline inline-flex items-center gap-1 group"
+            >
+              <ChevronLeftIcon className="h-4 w-4 group-hover:-translate-x-1 transition-all" />
+              <span>Volver a Pedidos</span>
+            </button>
+          </div>
+          <h1 className="text-2xl font-semibold">Detalles del Pedido</h1>
+          <div className="text-gray-600">
+            Revisa la información detallada del pedido realizado.
+          </div>
         </div>
-        <h1 className="text-2xl font-semibold">Detalles del Pedido</h1>
-        <div className="text-gray-600">
-          Revisa la información detallada del pedido realizado.
-        </div>
-      </div>
-      <div className="flex gap-2 w-full md:w-auto">
-        <button
-          title="Descargar Archivo"
-          className="bg-[#3f6b4c] text-white px-4 py-2 rounded-md hover:bg-[#2e4d36] focus:outline-none focus:ring-2 focus:ring-[#3f6b4c] focus:ring-offset-2 transition"
-        >
-          <FileTextIcon className="w-5 h-5" />
-        </button>
-        <div className="relative">
-          <button
-            title="Acciones"
-            className="bg-gray-200 px-3 py-2 text-gray-500 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition"
-            onClick={toggleActions}
-          >
-            <EllipsisVerticalIcon className="w-5 h-5" />
-          </button>
+        {!isPending && (
+          <div className="flex gap-2 w-full md:w-auto">
+            <button
+              title="Descargar Archivo"
+              className="bg-[#3f6b4c] text-white px-4 py-2 rounded-md hover:bg-[#2e4d36] focus:outline-none focus:ring-2 focus:ring-[#3f6b4c] focus:ring-offset-2 transition"
+            >
+              <FileTextIcon className="w-5 h-5" />
+            </button>
+            <div className="relative">
+              <button
+                title="Acciones"
+                className="bg-gray-200 px-3 py-2 text-gray-500 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition"
+                onClick={toggleActions}
+              >
+                <EllipsisVerticalIcon className="w-5 h-5" />
+              </button>
 
-          <ul
-            className={`absolute md:right-0 mt-2 w-50 bg-white border border-slate-100 rounded-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.2)] p-1 z-20 animate-in fade-in zoom-in-95 duration-200 max-h-100 overflow-y-auto ${showActions ? "block" : "hidden"}`}
-          >
-            {order_actions.map(({ name }) => {
-              return (
-                <li key={name}>
+              <ul
+                className={`absolute md:right-0 mt-2 w-50 bg-white border border-slate-100 rounded-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.2)] p-1 z-20 animate-in fade-in zoom-in-95 duration-200 max-h-100 overflow-y-auto ${showActions ? "block" : "hidden"}`}
+              >
+                {order_actions.map(({ name }) => {
+                  return (
+                    <li key={name}>
+                      <button
+                        onClick={() => handleOpenModal({ type: name })}
+                        title={name}
+                        className="block rounded-lg px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left hover:translate-0"
+                      >
+                        {name}
+                      </button>
+                    </li>
+                  );
+                })}
+                <li>
                   <button
-                    onClick={() => handleOrderAction(name)}
-                    title={name}
-                    className="block rounded-lg px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left hover:translate-0"
+                    title="Cancelar Pedido"
+                    onClick={() =>
+                      handleOpenModal({
+                        type: "cancelOrder",
+                        data: { name: "Cancelar Pedido" },
+                      })
+                    }
+                    className="block rounded-lg px-4 py-2 text-sm text-red-700 hover:bg-red-100 w-full text-left hover:translate-0"
                   >
-                    {name}
+                    Cancelar Pedido
                   </button>
                 </li>
-              );
-            })}
-            <li>
-              <button
-                title="Editar Pedido"
-                className="block rounded-lg px-4 py-2 text-sm text-red-700 hover:bg-red-100 w-full text-left hover:translate-0"
-              >
-                Cancelar Pedido
-              </button>
-            </li>
-          </ul>
-        </div>
+              </ul>
+            </div>
+          </div>
+        )}
       </div>
-    </div>
+
+      {modal?.type === modal_types.editStatus && (
+        <ModalEditStatus data={order} onClose={() => setModal(null)} />
+      )}
+    </>
   );
 }
 
@@ -131,8 +147,22 @@ const order_actions = [
   //   name: "Cancelar Pedido",
   //   description:
   //     "Una acción crítica. Al presionarla, debe abrirse una ventana (modal) preguntando dos cosas clave: ¿Quieres regresar estos artículos al inventario (Restock)? ¿Quieres emitir un reembolso al cliente en este momento?",
+  //   type: "cancelOrder",
   // },
 ];
+
+const modal_types = {
+  editStatus: "Cambiar Estatus",
+  editTracking: "Información de Rastreo",
+  printDocuments: "Impresión de Documentos",
+  editShippingAddress: "Editar Dirección de Envío",
+  refund: "Emitir Reembolso",
+  editItems: "Modificar Artículos",
+  viewTimeline: "Ver Historial / Timeline",
+  addInternalNote: "Añadir Nota Interna",
+  resendNotifications: "Reenviar Notificaciones",
+  cancelOrder: "Cancelar Pedido",
+};
 
 // Pasar de la arquitectura de la base de datos a la pantalla es donde ocurre la verdadera operación del día a día. Al entrar a la vista de detalle de un pedido (por ejemplo, el pedido #1050), tú y tu equipo de atención al cliente necesitarán una "torre de control".
 

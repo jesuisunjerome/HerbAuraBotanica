@@ -1,6 +1,7 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { axiosInstance } from "../../lib/axios";
+import { ORDER_KEY } from "./queries";
 
 export const useCreateOrder = () => {
   const { isPending: isCreatingOrder, mutateAsync: createOrder } = useMutation({
@@ -53,4 +54,34 @@ export const ORDER_API_CREATE_ORDER = async (orderData) => {
     console.error("Error creating order:", error);
     throw error;
   }
+};
+
+export const useUpdateOrderStatus = () => {
+  const queryClient = useQueryClient();
+
+  const { isPending: isUpdatingStatus, mutateAsync: updateOrderStatus } =
+    useMutation({
+      mutationFn: async ({ orderId, updatedStatus, comment }) => {
+        const response = await axiosInstance.put(`/orders/${orderId}/status`, {
+          updatedStatus,
+          comment,
+        });
+        return response.data;
+      },
+      onSuccess: (data) => {
+        queryClient.invalidateQueries([ORDER_KEY]);
+        toast.success(
+          data.message || "Estatus del pedido actualizado exitosamente",
+        );
+        return data;
+      },
+      onError: (error) => {
+        toast.error(
+          `${error.response?.data?.message}` ||
+            "Error al actualizar el estatus del pedido",
+        );
+      },
+    });
+
+  return { isUpdatingStatus, updateOrderStatus };
 };

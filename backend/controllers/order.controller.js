@@ -1,6 +1,7 @@
 import { IVA, ORDER_STATUS, SHIPPING_COST } from "../lib/constants.js";
 import Order from "../models/Order.js";
 import Product from "../models/Product.js";
+import User from "../models/User.js";
 import { sendOrderConfirmationEmail } from "../services/email.service.js";
 import { createMercadoPagoPreference } from "../services/mercadopago.service.js";
 import {
@@ -182,7 +183,7 @@ export const getOrderById = async (req, res) => {
   console.log(`Fetching order by ID: ${id}`);
 
   try {
-    const order = await Order.findById(id);
+    let order = await Order.findById(id);
     if (!order) {
       return res.status(404).json({ message: "Orden no encontrada" });
     }
@@ -224,7 +225,7 @@ export const getOrderByConfirmationNumber = async (req, res) => {
 // @route   PUT /api/orders/:id/status
 // @access  Admin
 export const updateOrderStatus = async (req, res) => {
-  const { status, comment } = req.body;
+  const { updatedStatus: status, comment } = req.body;
   const { id } = req.params;
 
   try {

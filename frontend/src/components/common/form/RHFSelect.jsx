@@ -16,7 +16,7 @@ export default function RHFSelect({
       {label && (
         <label
           htmlFor={id}
-          className={`block mb-2 font-medium text-${labelSize}`}
+          className={`block mb-2 text-gray-700 text-${labelSize}`}
         >
           {label}
           {required && <span className="text-red-600"> *</span>}

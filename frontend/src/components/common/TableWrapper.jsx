@@ -30,7 +30,6 @@ export default function TableWrapper({
 }
 
 export function THead({ headerGroup }) {
-  console.log(headerGroup);
   return (
     <tr key={headerGroup.id}>
       {headerGroup.headers.map((header) => (
