@@ -45,8 +45,14 @@
     @apply disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-0;
   }
 
-  input {
-    @apply disabled:animate-pulse disabled:cursor-not-allowed disabled:bg-gray-50 disabled:opacity-50;
+  button.bg-amber-600,
+  a.bg-amber-600 {
+    @apply focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:outline-none;
+  }
+
+  input,
+  select {
+    @apply disabled:animate-pulse disabled:cursor-not-allowed disabled:bg-gray-100 disabled:opacity-50;
   }
 
   p {
@@ -54,7 +60,7 @@
   }
 
   .modal-wrapper {
-    @apply fixed inset-0 z-50 flex h-full justify-center bg-black/30 py-6;
+    @apply fixed inset-0 z-100 flex h-full justify-center bg-black/30 py-6;
   }
 
   .modal-dialog {
@@ -66,7 +72,7 @@
   }
 
   .modal-header {
-    @apply shrink-0 border-b border-slate-200 px-7 py-5;
+    @apply shrink-0 border-b border-slate-200 px-7 pt-5 pb-3;
   }
 
   .btn-close-modal {

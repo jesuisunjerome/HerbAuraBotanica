@@ -2,6 +2,9 @@ import cloudinary, { uploadImage } from "../lib/cloudinary.js";
 import Order from "../models/Order.js";
 import Product from "../models/Product.js";
 
+// @desc    Get all products
+// @route   GET /api/products
+// @access  Private (Admin)
 export const getAllProducts = async (_, res) => {
   try {
     console.log("getAllProducts controller");
@@ -14,6 +17,9 @@ export const getAllProducts = async (_, res) => {
   }
 };
 
+// @desc    Get all active products
+// @route   GET /api/products/active
+// @access  Public
 export const getAllActiveProducts = async (_, res) => {
   try {
     console.log("getAllActiveProducts controller");
@@ -26,6 +32,9 @@ export const getAllActiveProducts = async (_, res) => {
   }
 };
 
+// @desc    Get best sellers, if no sales return last 3 created products
+// @route   GET /api/products/best-sellers
+// @access  Public
 export const getBestSellers = async (_, res) => {
   try {
     console.log("getBestSellers controller");
@@ -65,6 +74,9 @@ export const getBestSellers = async (_, res) => {
   }
 };
 
+// @desc    Get new arrivals
+// @route   GET /api/products/new-arrivals
+// @access  Public
 export const getNewArrivals = async (_, res) => {
   try {
     console.log("getNewArrivals controller");
@@ -80,6 +92,9 @@ export const getNewArrivals = async (_, res) => {
   }
 };
 
+// @desc    Get similar products
+// @route   GET /api/products/:id/similar
+// @access  Public
 export const getSimilarProducts = async (req, res) => {
   const { id } = req.params;
 
@@ -105,6 +120,9 @@ export const getSimilarProducts = async (req, res) => {
   }
 };
 
+// @desc    Get product by ID
+// @route   GET /api/products/:id
+// @access  Public
 export const getProductById = async (req, res) => {
   const { id } = req.params;
 
@@ -123,6 +141,9 @@ export const getProductById = async (req, res) => {
   }
 };
 
+// @desc    Get products by category
+// @route   GET /api/products/category/:category
+// @access  Public
 export const getProductsByCategory = async (req, res) => {
   const { category } = req.params;
 
@@ -138,6 +159,9 @@ export const getProductsByCategory = async (req, res) => {
   }
 };
 
+// @desc    Create new product
+// @route   POST /api/products
+// @access  Private (Admin)
 export const createProduct = async (req, res) => {
   const { images, ...rest } = req.body;
 
@@ -174,6 +198,9 @@ export const createProduct = async (req, res) => {
   }
 };
 
+// @desc    Update product by ID
+// @route   PUT /api/products/:id
+// @access  Private (Admin)
 export const updateProductById = async (req, res) => {
   const { id } = req.params;
   const { images, ...updatedData } = req.body;
@@ -241,6 +268,9 @@ export const updateProductById = async (req, res) => {
   }
 };
 
+// @desc    Update product status (active/inactive) by ID
+// @route   PATCH /api/products/:id/status
+// @access  Private (Admin)
 export const updateProductStatusById = async (req, res) => {
   const { id } = req.params;
 
@@ -264,6 +294,9 @@ export const updateProductStatusById = async (req, res) => {
   }
 };
 
+// @desc    Filter products by search and sort criteria
+// @route   GET /api/products/filter
+// @access  Public
 export const filterProducts = async (req, res) => {
   const { search, sortBy } = req.query;
 
@@ -295,6 +328,9 @@ export const filterProducts = async (req, res) => {
   }
 };
 
+// @desc    Paginate products
+// @route   GET /api/products/paginate
+// @access  Public
 export const paginateProducts = (req, res) => {
   const { page, limit } = req.query;
   res.send(`Paginación de productos - Página: ${page}, Límite: ${limit}`);

@@ -3,25 +3,23 @@ import { LoaderCircleIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router";
 import RHFInput from "../../components/common/form/RHFInput";
-import FacebookButton from "../../components/public/login/FacebookButton";
-import GoogleButton from "../../components/public/login/GoogleButton";
-import { useLogin } from "../../hooks/auth/mutations";
-import { loginSchema } from "../../lib/schemas";
+import { useRegister } from "../../hooks/auth/mutations";
+import { registerSchema } from "../../lib/schemas";
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const {
     register,
-    handleSubmit,
     formState: { errors, isSubmitting },
+    handleSubmit,
   } = useForm({
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(registerSchema),
   });
 
-  const { isLoggingIn, login } = useLogin();
-  const isDisabled = isLoggingIn || isSubmitting;
+  const { isRegistering, registerUser } = useRegister();
+  const isDisabled = isRegistering || isSubmitting;
 
   const onSubmit = async (data) => {
-    await login(data);
+    await registerUser(data);
   };
 
   return (
@@ -30,7 +28,7 @@ export default function LoginPage() {
         <div
           className="h-full flex gap-5 p-5 rounded-lg overflow-hidden relative"
           style={{
-            background: "url('/images/img-4.jpeg')",
+            background: "url('/images/img-5.png')",
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
@@ -41,7 +39,7 @@ export default function LoginPage() {
             className="absolute top-4 left-4 text-lg font-bold text-gray-800 z-10"
           >
             <img
-              src="/logos/logo.png"
+              src="/logos/logo.jpeg"
               alt="HerbAura Botánica Logo"
               className="h-20"
             />
@@ -69,60 +67,76 @@ export default function LoginPage() {
             </Link>
           </div>
           <div className="text-center md:text-left">
-            <h2 className="text-2xl font-semibold">Iniciar sesión</h2>
+            <h2 className="text-2xl font-semibold">Registrarse</h2>
             <p className="text-gray-600">
-              Por favor, ingresa tus credenciales para iniciar sesión.
+              Por favor, completa el formulario para crear una cuenta.
             </p>
           </div>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
+            <div>
+              <RHFInput
+                label="Nombre"
+                id="name"
+                required={true}
+                register={register}
+                error={errors.name}
+                autoFocus
+                disabled={isDisabled}
+              />
+            </div>
             <div>
               <RHFInput
                 label="Correo"
                 type="email"
                 id="email"
-                register={register}
                 required={true}
+                register={register}
                 error={errors.email}
-                autoFocus
+                disabled={isDisabled}
+              />
+            </div>
+            <div>
+              <RHFInput
+                label="Contraseña"
+                type="password"
+                id="password"
+                required={true}
+                register={register}
+                error={errors.password}
                 disabled={isDisabled}
               />
             </div>
             <div className="mb-6">
               <RHFInput
-                label="Contraseña"
+                label="Confirmar Contraseña"
                 type="password"
-                id="password"
+                id="confirmPassword"
                 register={register}
                 required={true}
-                error={errors.password}
+                error={errors.confirmPassword}
                 disabled={isDisabled}
               />
             </div>
             <button
-              type="submit"
               disabled={isDisabled}
+              type="submit"
               className="flex items-center justify-center gap-2 bg-amber-600 text-white px-6 py-3 rounded group hover:bg-amber-700 transition hover:shadow-lg hover:-translate-y-0.5 w-full"
             >
-              {isLoggingIn ? (
+              {isRegistering ? (
                 <>
                   <LoaderCircleIcon className="w-5 h-5 animate-spin" />
-                  Iniciando sesión...
+                  Registrando...
                 </>
               ) : (
-                "Iniciar sesión"
+                "Registrarse"
               )}
             </button>
           </form>
-          <div className="space-y-6">
-            <p className="uppercase text-center">O</p>
-            <div className="grid md:grid-cols-2 gap-4">
-              <GoogleButton />
-              <FacebookButton />
-            </div>
-            <p className="text-sm text-gray-600 -mt-4">
-              ¿No tienes una cuenta?{" "}
-              <Link to="/register" className="text-amber-600 hover:underline">
-                Regístrate aquí
+          <div className="-mt-4">
+            <p className="text-sm text-gray-600">
+              ¿Ya tienes una cuenta?{" "}
+              <Link to="/login" className="text-amber-600 hover:underline">
+                Inicia sesión aquí
               </Link>
               .
             </p>

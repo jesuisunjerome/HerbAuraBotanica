@@ -1,6 +1,7 @@
 import { IVA, ORDER_STATUS, SHIPPING_COST } from "../lib/constants.js";
 import Order from "../models/Order.js";
 import Product from "../models/Product.js";
+import User from "../models/User.js";
 import { sendOrderConfirmationEmail } from "../services/email.service.js";
 import { createMercadoPagoPreference } from "../services/mercadopago.service.js";
 import {
@@ -79,6 +80,13 @@ export const createOrder = async (req, res) => {
       taxPrice,
       totalPrice,
       isPaid: false, // Default to false until webhook confirms payment
+      statusHistory: [
+        {
+          status: ORDER_STATUS.PROCESSING,
+          comment: "Orden creada mediante el checkout.",
+          updatedByModel: "System",
+        },
+      ],
     });
 
     const createdOrder = await order.save();
@@ -175,7 +183,7 @@ export const getOrderById = async (req, res) => {
   console.log(`Fetching order by ID: ${id}`);
 
   try {
-    const order = await Order.findById(id);
+    let order = await Order.findById(id);
     if (!order) {
       return res.status(404).json({ message: "Orden no encontrada" });
     }
@@ -207,6 +215,42 @@ export const getOrderByConfirmationNumber = async (req, res) => {
       "Server error in getOrderByConfirmationNumber controller",
       error.message,
     );
+    return res
+      .status(500)
+      .json({ message: "Error del servidor: " + error.message });
+  }
+};
+
+// @desc    Update order status
+// @route   PUT /api/orders/:id/status
+// @access  Admin
+export const updateOrderStatus = async (req, res) => {
+  const { updatedStatus: status, comment } = req.body;
+  const { id } = req.params;
+
+  try {
+    const order = await Order.findById(id);
+
+    if (!order) {
+      return res.status(404).json({ message: "Orden no encontrada" });
+    }
+
+    if (!Object.values(ORDER_STATUS).includes(status)) {
+      return res.status(400).json({ message: "Estatus de orden inválido" });
+    }
+
+    order.status = status;
+    order.statusHistory.push({
+      status,
+      comment: comment || `Estatus actualizado a ${status}.`,
+      updatedBy: req.user._id,
+      updatedByModel: "User",
+    });
+
+    const updatedOrder = await order.save();
+    res.json(updatedOrder);
+  } catch (error) {
+    console.log("Server error in updateOrderStatus controller", error.message);
     return res
       .status(500)
       .json({ message: "Error del servidor: " + error.message });

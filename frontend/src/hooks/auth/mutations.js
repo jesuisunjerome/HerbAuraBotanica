@@ -18,26 +18,21 @@ import { axiosInstance } from "../../lib/axios";
 //     prompt: "select_account", // fuerza selector de cuentas
 //   });
 
-
 export const useGoogleLogin = () => {
   const navigate = useNavigate();
 
   const { isPending: isGoogleLoggingIn, mutateAsync: googleLogin } =
     useMutation({
       mutationFn: async (credential) => {
-        const response = await axiosInstance.post(
-          "/auth/google",
-          { credential },
-          {
-            withCredentials: true,
-          },
-        );
+        const response = await axiosInstance.post("/auth/google", {
+          credential,
+        });
         return response.data;
       },
       onSuccess: (data) => {
         console.log(data);
         // toast.success("Login con Google exitoso");
-        navigate("/admin/dashboard", { replace: true });
+        navigate("/admin/dashboard");
       },
       onError: (error) => {
         toast.error(
@@ -51,21 +46,67 @@ export const useGoogleLogin = () => {
 };
 
 export const handleFacebookLogin = () => {
-   window.FB.login(
-      (response) => {
-        if (response.authResponse) {
-          const accessToken = response.authResponse.accessToken;
-          // Envía el accessToken al backend para validarlo con Graph API
-          fetch("/api/auth/facebook", {
-            method: "POST",
-            credentials: "include",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ accessToken }),
-          });
-        } else {
-          console.error("Login cancelado");
-        }
-      },
-      { scope: "email,public_profile" } // permisos que necesitas
-    );
-}
+  window.FB.login(
+    (response) => {
+      if (response.authResponse) {
+        const accessToken = response.authResponse.accessToken;
+        // Envía el accessToken al backend para validarlo con Graph API
+        fetch("/api/auth/facebook", {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ accessToken }),
+        });
+      } else {
+        console.error("Login cancelado");
+      }
+    },
+    { scope: "email,public_profile" }, // permisos que necesitas
+  );
+};
+
+export const useLogin = () => {
+  const navigate = useNavigate();
+
+  const { isPending: isLoggingIn, mutateAsync: login } = useMutation({
+    mutationFn: async (data) => {
+      const response = await axiosInstance.post("/auth/login", data);
+      return response.data;
+    },
+    onSuccess: () => {
+      // toast.success("Inicio de sesión exitoso");
+      navigate("/admin/dashboard");
+    },
+    onError: (error) => {
+      toast.error(
+        `${error.response?.data?.message}` ||
+          "Error al iniciar sesión. Verifica tus credenciales",
+      );
+    },
+  });
+
+  return { isLoggingIn, login };
+};
+
+export const useRegister = () => {
+  const navigate = useNavigate();
+
+  const { isPending: isRegistering, mutateAsync: registerUser } = useMutation({
+    mutationFn: async (data) => {
+      const response = await axiosInstance.post("/auth/register", data);
+      return response.data;
+    },
+    onSuccess: () => {
+      // toast.success("Registro exitoso");
+      navigate("/admin/dashboard");
+    },
+    onError: (error) => {
+      toast.error(
+        `${error.response?.data?.message}` ||
+          "Error al registrarse. Verifica tus datos",
+      );
+    },
+  });
+
+  return { isRegistering, registerUser };
+};

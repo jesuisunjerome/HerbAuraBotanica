@@ -36,7 +36,7 @@ export default function DashboardPage() {
           </div>
           <button
             title="Descargar Reporte"
-            className="flex items-center justify-center gap-2 px-4 py-2 bg-amber-600 text-white rounded hover:bg-amber-700 transition"
+            className="bg-[#3f6b4c] text-white px-4 py-2 rounded-md hover:bg-[#2e4d36] focus:outline-none focus:ring-2 focus:ring-[#3f6b4c] focus:ring-offset-2 transition"
           >
             <FileTextIcon className="w-5 h-5" />
             {/* Descargar Reporte */}

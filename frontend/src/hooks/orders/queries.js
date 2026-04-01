@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "../../lib/axios";
+export const ORDER_KEY = "orders";
 
 export const useGetAllOrders = () => {
   const { isPending, data: orders } = useQuery({
-    queryKey: ["orders"],
+    queryKey: [ORDER_KEY],
     queryFn: async () => {
       const response = await axiosInstance.get("/orders");
       return response.data;
@@ -19,7 +20,7 @@ export const useGetOrderById = (orderId) => {
     data: order,
     error,
   } = useQuery({
-    queryKey: ["order", orderId],
+    queryKey: [ORDER_KEY, orderId],
     queryFn: async () => {
       const response = await axiosInstance.get(`/orders/${orderId}`);
       return response.data;
@@ -32,7 +33,7 @@ export const useGetOrderById = (orderId) => {
 
 export const useGetOrderByConfirmationNumber = (confirmationNumber) => {
   const { isPending, data: order } = useQuery({
-    queryKey: ["order", confirmationNumber],
+    queryKey: [ORDER_KEY, "confirmationNumber", confirmationNumber],
     queryFn: async () => {
       const response = await axiosInstance.get(
         `/orders/confirmation/${confirmationNumber}`,

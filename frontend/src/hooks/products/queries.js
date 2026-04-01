@@ -211,7 +211,7 @@ export const useFetchSimilarProducts = (productId) => {
     queryKey: ["similar-products", productId],
     queryFn: async () => {
       const response = await axiosInstance.get(
-        `/products/similar/${productId}`,
+        `/products/${productId}/similar`,
       );
       return response.data;
     },

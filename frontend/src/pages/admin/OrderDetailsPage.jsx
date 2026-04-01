@@ -7,13 +7,13 @@ import {
 } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
 import { useParams } from "react-router";
-import BasicDetails from "../../components/admin/orders/BasicDetails";
-import CustomerInfo from "../../components/admin/orders/CustomerInfo";
-import Header from "../../components/admin/orders/Header";
-import Notes from "../../components/admin/orders/Notes";
-import PaymentStatus from "../../components/admin/orders/PaymentStatus";
-import ProductList from "../../components/admin/orders/ProductList";
-import Timeline from "../../components/admin/orders/Timeline";
+import BasicDetails from "../../components/admin/order-details/BasicDetails";
+import CustomerInfo from "../../components/admin/order-details/CustomerInfo";
+import Header from "../../components/admin/order-details/Header";
+import Notes from "../../components/admin/order-details/Notes";
+import PaymentStatus from "../../components/admin/order-details/PaymentStatus";
+import ProductList from "../../components/admin/order-details/ProductList";
+import Timeline from "../../components/admin/order-details/Timeline";
 import { useGetOrderById } from "../../hooks/orders/queries";
 import { formatCurrency } from "../../lib/helper";
 
@@ -99,14 +99,14 @@ export default function OrderDetailsPage() {
 
   return (
     <section className="space-y-3">
-      <Header />
+      <Header order={order} isPending={isPending} />
       <BasicDetails order={order} isPending={isPending} />
 
       <div className="flex flex-col xl:flex-row gap-6 mt-6">
         <div className="flex-1 space-y-6">
           <ProductList table={table} isPending={isPending} />
           <PaymentStatus order={order} isPending={isPending} />
-          <Timeline />
+          <Timeline order={order} isPending={isPending} />
         </div>
 
         <div className="xl:w-1/3 space-y-6 sticky top-50 self-start">

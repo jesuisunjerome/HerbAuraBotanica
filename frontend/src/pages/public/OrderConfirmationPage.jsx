@@ -11,6 +11,7 @@ import {
   MapPinIcon,
   MessageCircleIcon,
   TruckIcon,
+  XCircleIcon,
 } from "lucide-react";
 import { useEffect } from "react";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router";
@@ -22,6 +23,7 @@ import {
   formatCurrency,
   formatLongDateToString,
   IVA_RATE,
+  ORDER_STATUS,
 } from "../../lib/helper";
 import { useCartStore } from "../../store/useCartStore";
 
@@ -32,6 +34,12 @@ export default function OrderConfirmationPage() {
   const status = searchParams.get("status");
   const { isPending, error, order } = useGetOrderById(orderId);
   const { cart, clearCart } = useCartStore();
+
+  const isCancelled = order?.status === "Cancelled";
+  const getStatusDate = (statusName) => {
+    return order?.statusHistory?.find((s) => s.status === statusName)
+      ?.createdAt;
+  };
 
   useEffect(() => {
     // Clear cart if the order is successfully paid or MP status is success
@@ -249,12 +257,16 @@ export default function OrderConfirmationPage() {
             </summary>
             <div className="px-6 py-4">
               <ul className="list-none space-y-2">
+                {/* 1. CONFIRMADO (Paid or Created) */}
                 <li className="flex items-start gap-3 relative">
                   <div className="shrink-0 flex flex-col items-center gap-1.5">
-                    <div className="size-7 flex items-center justify-center rounded-full bg-emerald-600">
+                    <div
+                      className={`size-7 flex items-center justify-center rounded-full ${order.isPaid ? "bg-emerald-600" : "bg-gray-300"}`}
+                    >
                       <CheckIcon className="w-4 h-4 text-white" />
                     </div>
-                    <div className="h-7 w-px bg-gray-300" />
+                    {!isCancelled && <div className="h-7 w-px bg-gray-300" />}
+                    {isCancelled && <div className="h-7 w-px bg-red-200" />}
                   </div>
                   <div className="flex flex-col text-sm">
                     <span className="font-medium leading-tight">
@@ -262,6 +274,7 @@ export default function OrderConfirmationPage() {
                     </span>
                     {order.isPaid ? (
                       <span className="text-gray-500 leading-tight">
+                        Pago completado el{" "}
                         {formatLongDateToString(new Date(order.paidAt), true)}
                       </span>
                     ) : (
@@ -271,60 +284,146 @@ export default function OrderConfirmationPage() {
                     )}
                   </div>
                 </li>
-                <li className="flex items-start gap-3 relative">
-                  <div className="shrink-0 flex flex-col items-center gap-1.5">
-                    <div className="size-7 flex items-center justify-center rounded-full bg-indigo-500">
-                      <LoaderIcon className="w-4 h-4 text-indigo-100" />
+
+                {/* FLUJO CANCELADO */}
+                {isCancelled && (
+                  <li className="flex items-start gap-3 relative">
+                    <div className="shrink-0 flex flex-col items-center gap-1.5">
+                      <div className="size-7 flex items-center justify-center rounded-full bg-red-600">
+                        <XCircleIcon className="w-4 h-4 text-white" />
+                      </div>
                     </div>
-                    <div className="h-7 w-px bg-gray-300" />
-                  </div>
-                  <div className="flex flex-col text-sm">
-                    <span className="font-medium leading-tight">
-                      Procesando
-                    </span>
-                    <span className="text-gray-500 leading-tight">
-                      Estamos preparando tu pedido para el envío.
-                    </span>
-                  </div>
-                </li>
-                <li className="flex items-start gap-3 relative">
-                  <div className="shrink-0 flex flex-col items-center gap-1.5">
-                    <div className="size-7 flex items-center justify-center rounded-full bg-gray-200">
-                      <TruckIcon className="w-4 h-4 text-gray-500" />
-                    </div>
-                    <div className="h-7 w-px bg-gray-300" />
-                  </div>
-                  <div className="flex flex-col text-sm">
-                    <span className="font-medium leading-tight">Enviado</span>
-                    <span className="text-gray-500 leading-tight">
-                      Te notificaremos cuando tu pedido haya sido enviado.
-                    </span>
-                  </div>
-                </li>
-                <li className="flex items-start gap-3 relative">
-                  <div className="shrink-0 flex flex-col items-center gap-1.5">
-                    <div className="size-7 flex items-center justify-center rounded-full bg-gray-200">
-                      <MapPinIcon className="w-4 h-4 text-gray-500" />
-                    </div>
-                  </div>
-                  <div className="flex flex-col text-sm">
-                    <span className="font-medium leading-tight">Entregado</span>
-                    {order.isDelivered ? (
+                    <div className="flex flex-col text-sm">
+                      <span className="font-medium text-red-600 leading-tight">
+                        Cancelado
+                      </span>
                       <span className="text-gray-500 leading-tight">
-                        `Entregado el $
+                        Este pedido ha sido cancelado el{" "}
                         {formatLongDateToString(
-                          new Date(order.deliveredAt),
+                          new Date(
+                            getStatusDate("Cancelled") || order.updatedAt,
+                          ),
                           true,
                         )}
-                        `
+                        .
                       </span>
-                    ) : (
-                      <span className="text-gray-500 leading-tight">
-                        Tu pedido será entregado en la dirección proporcionada.
+                    </div>
+                  </li>
+                )}
+
+                {/* 2. PROCESANDO */}
+                {!isCancelled && (
+                  <li className="flex items-start gap-3 relative">
+                    <div className="shrink-0 flex flex-col items-center gap-1.5">
+                      <div
+                        className={`size-7 flex items-center justify-center rounded-full ${getStatusDate(ORDER_STATUS.PROCESSING) ? "bg-indigo-500" : "bg-gray-200"}`}
+                      >
+                        {getStatusDate(ORDER_STATUS.SHIPPED) ||
+                        getStatusDate(ORDER_STATUS.DELIVERED) ? (
+                          <CheckIcon className="w-4 h-4 text-white" />
+                        ) : (
+                          <LoaderIcon
+                            className={`w-4 h-4 text-white ${getStatusDate(ORDER_STATUS.PROCESSING) ? "animate-spin" : ""}`}
+                          />
+                        )}
+                      </div>
+                      <div className="h-7 w-px bg-gray-300" />
+                    </div>
+                    <div className="flex flex-col text-sm">
+                      <span className="font-medium leading-tight">
+                        Procesando
                       </span>
-                    )}
-                  </div>
-                </li>
+                      {getStatusDate(ORDER_STATUS.PROCESSING) ? (
+                        <span className="text-gray-500 leading-tight">
+                          Preparando pedido desde el{" "}
+                          {formatLongDateToString(
+                            new Date(getStatusDate(ORDER_STATUS.PROCESSING)),
+                            true,
+                          )}
+                          .
+                        </span>
+                      ) : (
+                        <span className="text-gray-500 leading-tight">
+                          Esperando confirmación...
+                        </span>
+                      )}
+                    </div>
+                  </li>
+                )}
+
+                {/* 3. ENVIADO */}
+                {!isCancelled && (
+                  <li className="flex items-start gap-3 relative">
+                    <div className="shrink-0 flex flex-col items-center gap-1.5">
+                      <div
+                        className={`size-7 flex items-center justify-center rounded-full ${getStatusDate(ORDER_STATUS.SHIPPED) ? "bg-amber-500" : "bg-gray-200"}`}
+                      >
+                        {getStatusDate(ORDER_STATUS.DELIVERED) ? (
+                          <CheckIcon className="w-4 h-4 text-white" />
+                        ) : (
+                          <TruckIcon
+                            className={`w-4 h-4 ${getStatusDate(ORDER_STATUS.SHIPPED) ? "text-white" : "text-gray-500"}`}
+                          />
+                        )}
+                      </div>
+                      <div className="h-7 w-px bg-gray-300" />
+                    </div>
+                    <div className="flex flex-col text-sm">
+                      <span className="font-medium leading-tight">Enviado</span>
+                      {getStatusDate(ORDER_STATUS.SHIPPED) ? (
+                        <span className="text-gray-500 leading-tight">
+                          Enviado el{" "}
+                          {formatLongDateToString(
+                            new Date(getStatusDate(ORDER_STATUS.SHIPPED)),
+                            true,
+                          )}
+                          .
+                        </span>
+                      ) : (
+                        <span className="text-gray-500 leading-tight">
+                          Te notificaremos cuando el pedido haya sido enviado.
+                        </span>
+                      )}
+                    </div>
+                  </li>
+                )}
+
+                {/* 4. ENTREGADO */}
+                {!isCancelled && (
+                  <li className="flex items-start gap-3 relative">
+                    <div className="shrink-0 flex flex-col items-center gap-1.5">
+                      <div
+                        className={`size-7 flex items-center justify-center rounded-full ${order.isDelivered || getStatusDate(ORDER_STATUS.DELIVERED) ? "bg-emerald-600" : "bg-gray-200"}`}
+                      >
+                        <MapPinIcon
+                          className={`w-4 h-4 ${order.isDelivered || getStatusDate(ORDER_STATUS.DELIVERED) ? "text-white" : "text-gray-500"}`}
+                        />
+                      </div>
+                    </div>
+                    <div className="flex flex-col text-sm">
+                      <span className="font-medium leading-tight">
+                        Entregado
+                      </span>
+                      {order.isDelivered ||
+                      getStatusDate(ORDER_STATUS.DELIVERED) ? (
+                        <span className="text-emerald-600 font-medium leading-tight">
+                          Entregado el{" "}
+                          {formatLongDateToString(
+                            new Date(
+                              order.deliveredAt ||
+                                getStatusDate(ORDER_STATUS.DELIVERED),
+                            ),
+                            true,
+                          )}
+                        </span>
+                      ) : (
+                        <span className="text-gray-500 leading-tight">
+                          El pedido será entregado en tu dirección.
+                        </span>
+                      )}
+                    </div>
+                  </li>
+                )}
               </ul>
             </div>
           </details>

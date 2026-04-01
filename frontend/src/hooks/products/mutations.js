@@ -64,7 +64,7 @@ export const useUpdateProductStatus = () => {
     useMutation({
       mutationFn: async (productId) => {
         toast.loading("Actualizando...", { id: "updateProductStatus" });
-        const response = await axiosInstance.put(
+        const response = await axiosInstance.patch(
           `/products/${productId}/status`,
         );
         return response.data;

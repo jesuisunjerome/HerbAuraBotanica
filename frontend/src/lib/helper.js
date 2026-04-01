@@ -125,6 +125,14 @@ export const MODAL_SIZES = {
   full: "max-w-full",
 };
 
+export const MODAL_BUTTONS = {
+  delete: "Eliminar",
+  success: "Guardar",
+  warning: "Confirmar",
+  cancel: "Cancelar",
+  close: "Cerrar",
+};
+
 export const COUNTRY_LIST = [
   { value: "MX", label: "México", supportsStripe: true },
   { value: "US", label: "Estados Unidos", supportsStripe: true },

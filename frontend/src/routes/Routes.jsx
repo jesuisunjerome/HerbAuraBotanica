@@ -16,6 +16,7 @@ import OrderConfirmationPage from "../pages/public/OrderConfirmationPage";
 import OrderTrakingPage from "../pages/public/OrderTrakingPage";
 import PolicyPage from "../pages/public/PolicyPage";
 import ProductDetailsPage from "../pages/public/ProductDetailsPage";
+import RegisterPage from "../pages/public/RegisterPage";
 
 const router = createBrowserRouter([
   {
@@ -109,6 +110,10 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <LoginPage />,
+  },
+  {
+    path: "/register",
+    element: <RegisterPage />,
   },
 ]);
 export default router;
