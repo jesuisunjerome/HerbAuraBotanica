@@ -8,7 +8,12 @@ import authRoutes from "./routes/auth.route.js";
 import productRoutes from "./routes/product.route.js";
 import orderRoutes from "./routes/order.route.js";
 import paymentRoutes from "./routes/payment.route.js";
+import inventoryRoutes from "./routes/inventory.route.js";
+import reportingRoutes from "./routes/reporting.route.js";
 import subscriberRoutes from "./routes/subscriber.route.js";
+
+import dns from "node:dns";
+dns.setServers(["1.1.1.1", "8.8.8.8"]);
 
 // Initialize Express app
 const app = express();
@@ -43,14 +48,38 @@ app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/payments", paymentRoutes);
+app.use("/api/inventory", inventoryRoutes);
+app.use("/api/reports", reportingRoutes);
 app.use("/api/subscribe", subscriberRoutes);
 
 // Global error handler (try catch no longer needed in controllers)
 app.use((err, req, res, next) => {
   console.error("Unhandled error:", err);
-  res
-    .status(err.status || 500)
-    .json({ message: err.message || "Internal Server Error" });
+  let status = err.status || 500;
+  let message = err.message || "Internal Server Error";
+
+  // Mongoose Validation Error
+  if (err.name === "ValidationError") {
+    status = 400;
+    message = Object.values(err.errors)
+      .map((el) => el.message)
+      .join(", ");
+  }
+
+  // Mongoose duplicate key error
+  if (err.code === 11000) {
+    status = 400;
+    const field = Object.keys(err.keyValue || {})[0] || "campo";
+    message = `El ${field} ya existe y debe ser único.`;
+  }
+
+  // Mongoose CastError (invalid ObjectId)
+  if (err.name === "CastError") {
+    status = 400;
+    message = `Valor inválido para el campo: ${err.path}`;
+  }
+
+  res.status(status).json({ message });
 });
 
 // Server listening

@@ -52,22 +52,188 @@ export const useFilterDashboard = () => {
     handleDateChange,
   };
 };
+export const PRODUCTS_KEY = "products";
+export const LOW_STOCK_PRODUCTS_KEY = "low-stock-products";
+export const INVENTORY_SUMMARY_KEY = "inventory-summary";
+export const INVENTORY_HISTORY_KEY = "inventory-history";
+export const SALES_REPORT_KEY = "sales-report";
+export const INVENTORY_MOVEMENTS_REPORT_KEY = "inventory-movements-report";
 
 // Hook para obtener todos los productos
-export const useFetchProducts = () => {
+export const useFetchProducts = ({ refetchInterval } = {}) => {
   const {
     isPending,
     data: products,
     refetch,
   } = useQuery({
-    queryKey: ["products"],
+    queryKey: [PRODUCTS_KEY],
     queryFn: async () => {
       const response = await axiosInstance.get("/products");
       return response.data;
     },
+    refetchInterval,
   });
 
   return { isPending, products, refetch };
+};
+
+export const useLowStockProducts = () => {
+  const {
+    data: lowStockProducts,
+    isPending,
+    refetch,
+  } = useQuery({
+    queryKey: [LOW_STOCK_PRODUCTS_KEY],
+    queryFn: async () => {
+      const response = await axiosInstance.get("/inventory/low-stock");
+      return response.data;
+    },
+    refetchInterval: 15000,
+  });
+
+  return { lowStockProducts, isPending, refetch };
+};
+
+export const useInventorySummary = () => {
+  const {
+    data: summary,
+    isPending,
+    refetch,
+  } = useQuery({
+    queryKey: [INVENTORY_SUMMARY_KEY],
+    queryFn: async () => {
+      const response = await axiosInstance.get("/inventory/summary");
+      return response.data;
+    },
+    refetchInterval: 30000,
+  });
+
+  return { summary, isPending, refetch };
+};
+
+export const useInventoryHistory = (
+  productId,
+  { page = 1, limit = 20 } = {},
+) => {
+  const {
+    data: history,
+    isPending,
+    refetch,
+  } = useQuery({
+    queryKey: [INVENTORY_HISTORY_KEY, productId || "all", page, limit],
+    queryFn: async () => {
+      const url = productId
+        ? `/inventory/history/${productId}`
+        : "/inventory/history";
+      const response = await axiosInstance.get(url, {
+        params: { page, limit },
+      });
+      return response.data;
+    },
+    enabled: !!productId,
+  });
+
+  return { history, isPending, refetch };
+};
+
+export const useSalesReport = ({
+  from,
+  to,
+  page = 1,
+  limit = 10,
+  search = "",
+  paymentMethod = "",
+  sortBy = "paidAt",
+  sortOrder = "desc",
+}) => {
+  const {
+    data: salesReport,
+    isPending: isLoadingSalesReport,
+    refetch,
+  } = useQuery({
+    queryKey: [
+      SALES_REPORT_KEY,
+      from,
+      to,
+      page,
+      limit,
+      search,
+      paymentMethod,
+      sortBy,
+      sortOrder,
+    ],
+    queryFn: async () => {
+      const response = await axiosInstance.get("/reports/sales", {
+        params: {
+          from,
+          to,
+          page,
+          limit,
+          search,
+          paymentMethod,
+          sortBy,
+          sortOrder,
+        },
+      });
+      return response.data;
+    },
+    placeholderData: (previousData) => previousData,
+  });
+
+  return { salesReport, isLoadingSalesReport, refetch };
+};
+
+export const useInventoryMovementsReport = ({
+  from,
+  to,
+  page = 1,
+  limit = 20,
+  movementType = "",
+  category = "",
+  productId = "",
+  search = "",
+  sortBy = "createdAt",
+  sortOrder = "desc",
+}) => {
+  const {
+    data: inventoryMovements,
+    isPending: isLoadingInventoryMovements,
+    refetch,
+  } = useQuery({
+    queryKey: [
+      INVENTORY_MOVEMENTS_REPORT_KEY,
+      from,
+      to,
+      page,
+      limit,
+      movementType,
+      category,
+      productId,
+      search,
+      sortBy,
+      sortOrder,
+    ],
+    queryFn: async () => {
+      const response = await axiosInstance.get("/reports/movements", {
+        params: {
+          from,
+          to,
+          page,
+          limit,
+          movementType,
+          category,
+          productId,
+          search,
+          sortBy,
+          sortOrder,
+        },
+      });
+      return response.data;
+    },
+    placeholderData: (previousData) => previousData,
+  });
+
+  return { inventoryMovements, isLoadingInventoryMovements, refetch };
 };
 //#endregion
 
@@ -84,24 +250,24 @@ export const useRenderCatalog = () => {
   const { isPending, products } = useFetchActiveProducts();
   const filteredProducts = Array.isArray(products)
     ? products
-        ?.filter(
-          (product) =>
-            product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            product.price?.toString().includes(searchTerm) ||
-            product.description
-              ?.toLowerCase()
-              .includes(searchTerm.toLowerCase()),
-        )
-        ?.sort((a, b) => {
-          if (sortOption === "priceAsc") {
-            return parseFloat(a.price) - parseFloat(b.price);
-          } else if (sortOption === "priceDesc") {
-            return parseFloat(b.price) - parseFloat(a.price);
-          } else if (sortOption === "newest") {
-            return b.createdAt.localeCompare(a.createdAt);
-          }
-          return 0;
-        })
+      ?.filter(
+        (product) =>
+          product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          product.price?.toString().includes(searchTerm) ||
+          product.description
+            ?.toLowerCase()
+            .includes(searchTerm.toLowerCase()),
+      )
+      ?.sort((a, b) => {
+        if (sortOption === "priceAsc") {
+          return parseFloat(a.price) - parseFloat(b.price);
+        } else if (sortOption === "priceDesc") {
+          return parseFloat(b.price) - parseFloat(a.price);
+        } else if (sortOption === "newest") {
+          return b.createdAt.localeCompare(a.createdAt);
+        }
+        return 0;
+      })
     : [];
 
   const { addToCart } = useCartStore();
@@ -221,7 +387,7 @@ export const useFetchSimilarProducts = (productId) => {
   if (error)
     toast.error(
       error.response?.data?.message ||
-        "Error al cargar los productos similares",
+      "Error al cargar los productos similares",
     );
 
   return { isPending, similarProducts, refetch };

@@ -9,59 +9,63 @@ export default function CustomerInfo({ customer, shippingAddress, isPending }) {
   return (
     <div className="rounded-2xl shadow-lg shadow-gray-100 bg-white px-5 py-4">
       <div className="border-b border-gray-100 pb-3">
-        <p className="text-xl font-medium">Información del Cliente</p>
+        <p className="text-xl font-bold">Información del Cliente</p>
       </div>
       {isPending ? (
         <CustomerInfoSkeleton />
       ) : (
         <div className="py-4 space-y-5">
           <div className="flex gap-2">
-            <div className="p-2 bg-gray-100 flex items-center justify-center rounded">
-              <UserIcon className="h-5 w-6 text-gray-400" />
+            <div className="p-2 bg-[#3f6b4c]/10 flex items-center justify-center rounded">
+              <UserIcon className="h-5 w-6 text-[#3f6b4c]" />
             </div>
             <div>
-              <p className="text-sm text-gray-500 leading-tight">Nombre</p>
-              <p className="text-sm font-medium leading-tight">
+              <p className="text-sm text-gray-500 leading-tight font-medium">
+                Nombre
+              </p>
+              <p className="text-sm font-semibold leading-tight">
                 {customer.name}
               </p>
             </div>
           </div>
           <div className="flex gap-2">
-            <div className="p-2 bg-gray-100 flex items-center justify-center rounded">
-              <Calendar1Icon className="h-5 w-6 text-gray-400" />
+            <div className="p-2 bg-[#3f6b4c]/10 flex items-center justify-center rounded">
+              <Calendar1Icon className="h-5 w-6 text-[#3f6b4c]" />
             </div>
             <div>
-              <p className="text-sm text-gray-500 leading-tight">
+              <p className="text-sm text-gray-500 leading-tight font-medium">
                 Correo Electrónico
               </p>
-              <p className="text-sm font-medium leading-tight">
+              <p className="text-sm font-semibold leading-tight">
                 {customer.email}
               </p>
             </div>
           </div>
           <div className="flex gap-2">
-            <div className="p-2 bg-gray-100 flex items-center justify-center rounded">
-              <CreditCardIcon className="h-5 w-6 text-gray-400" />
+            <div className="p-2 bg-[#3f6b4c]/10 flex items-center justify-center rounded">
+              <CreditCardIcon className="h-5 w-6 text-[#3f6b4c]" />
             </div>
             <div>
-              <p className="text-sm text-gray-500 leading-tight">Teléfono</p>
+              <p className="text-sm text-gray-500 leading-tight font-medium">
+                Teléfono
+              </p>
               <a
                 href={`tel:${customer.phone}`}
-                className="text-sm font-medium leading-tight"
+                className="text-sm font-semibold text-[#3f6b4c] hover:underline leading-tight"
               >
                 {customer.phone}
               </a>
             </div>
           </div>
           <div className="flex gap-2">
-            <div className="p-2 bg-gray-100 flex items-center justify-center rounded">
-              <TruckElectricIcon className="h-5 w-6 text-gray-400" />
+            <div className="p-2 bg-[#3f6b4c]/10 flex items-center justify-center rounded">
+              <TruckElectricIcon className="h-5 w-6 text-[#3f6b4c]" />
             </div>
             <div>
-              <p className="text-sm text-gray-500 leading-tight">
+              <p className="text-sm text-gray-500 leading-tight font-medium">
                 Dirección de Envío
               </p>
-              <p className="text-sm font-medium leading-tight">
+              <p className="text-sm font-semibold leading-tight">
                 {shippingAddress.address}, {shippingAddress.city},{" "}
                 {shippingAddress.state}, C.P {shippingAddress.postalCode},{" "}
                 {shippingAddress.country}

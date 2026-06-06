@@ -18,6 +18,11 @@ export const CHECKOUT_STATUS = {
   CANCELLED: "Cancelled",
 };
 
+export const INVENTORY_MOVEMENT_TYPES = {
+  IN: "IN",
+  OUT: "OUT",
+};
+
 export const USER_ROLES = {
   USER: "user",
   ADMIN: "admin",

@@ -12,7 +12,14 @@ import {
   updateProductById,
   getBestSellers,
 } from "../controllers/product.controller.js";
-import { protect } from "../middleware/auth.middleware.js";
+import { USER_ROLES } from "../lib/constants.js";
+import { authorizeRoles, protect } from "../middleware/auth.middleware.js";
+import { validateRequest } from "../middleware/validation.middleware.js";
+import {
+  createProductSchema,
+  filterProductSchema,
+  updateProductSchema,
+} from "../schemas/product.schema.js";
 
 const router = express.Router();
 
@@ -22,13 +29,30 @@ router.get("/best-sellers", getBestSellers);
 router.get("/new-arrivals", getNewArrivals);
 router.get("/:id/similar", getSimilarProducts);
 router.get("/category/:category", getProductsByCategory);
-router.get("/filter", filterProducts);
+router.get("/filter", validateRequest(filterProductSchema), filterProducts);
 router.get("/:id", getProductById);
 
 // ADMIN ROUTES (protected by admin middleware)
-router.get("/", protect, getAllProducts);
-router.post("/", protect, createProduct);
-router.put("/:id", protect, updateProductById);
-router.patch("/:id/status", protect, updateProductStatusById);
+router.get("/", protect, authorizeRoles(USER_ROLES.ADMIN), getAllProducts);
+router.post(
+  "/",
+  protect,
+  authorizeRoles(USER_ROLES.ADMIN),
+  validateRequest(createProductSchema),
+  createProduct,
+);
+router.put(
+  "/:id",
+  protect,
+  authorizeRoles(USER_ROLES.ADMIN),
+  validateRequest(updateProductSchema),
+  updateProductById,
+);
+router.patch(
+  "/:id/status",
+  protect,
+  authorizeRoles(USER_ROLES.ADMIN),
+  updateProductStatusById,
+);
 
 export default router;

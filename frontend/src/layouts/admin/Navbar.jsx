@@ -6,14 +6,14 @@ export default function Navbar({ handleToggleNav }) {
   const { connectedUser } = useConnectedUser();
 
   return (
-    <header className="bg-white sticky top-0 z-50 border-b border-slate-200 px-3 lg:px-8 py-2 flex items-center justify-between">
+    <header className="bg-white/80 backdrop-blur sticky top-0 z-50 border-b border-[#3f6b4c]/20 px-3 lg:px-8 py-2 flex items-center justify-between">
       <div className="md:hidden">
         <button onClick={handleToggleNav} aria-label="Toggle Navigation">
           <MenuIcon className="w-6 h-6" />
         </button>
       </div>
       <div className="hidden md:flex flex-col">
-        <p className="text-lg font-medium leading-tight">Dashboard</p>
+        <p className="text-lg font-semibold leading-tight">Dashboard</p>
         <span className="text-sm text-gray-500">
           {formatLongDateToString(new Date())}
         </span>
@@ -29,17 +29,17 @@ export default function Navbar({ handleToggleNav }) {
       <div className="flex items-center gap-1 lg:gap-3">
         <div className="relative hidden lg:block">
           <input
-            className="w-64 max-w-[50vw] rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-sm focus:outline-none focus:ring-2"
+            className="w-64 max-w-[50vw] rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#3f6b4c] focus:border-[#3f6b4c]"
             placeholder="Buscar..."
           />
           <span className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400">
             <SearchIcon className="w-4 h-4" />
           </span>
         </div>
-        <button className="relative rounded-lg p-3 bg-gray-50 hover:bg-gray-100">
+        <button className="relative rounded-lg p-3 bg-[#f5f0e6]/50 hover:bg-[#f5f0e6] transition-colors">
           <MessageCircle className="w-5 h-5 text-gray-600" />
         </button>
-        <button className="relative rounded-lg p-3 bg-gray-50 hover:bg-gray-100">
+        <button className="relative rounded-lg p-3 bg-[#f5f0e6]/50 hover:bg-[#f5f0e6] transition-colors">
           <BellIcon className="w-5 h-5 text-gray-600" />
           {/* <BellDotIcon className="w-5 h-5 text-amber-600" /> */}
         </button>

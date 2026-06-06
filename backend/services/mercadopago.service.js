@@ -45,9 +45,9 @@ export async function createMercadoPagoPreference(order, orderItems) {
           mode: "not_specified",
         },
         back_urls: {
-          success: `${process.env.FRONTEND_URL}/order-confirmation/${order._id}?status=success`,
-          failure: `${process.env.FRONTEND_URL}/order-confirmation/${order._id}?status=failure`,
-          pending: `${process.env.FRONTEND_URL}/order-confirmation/${order._id}?status=pending`,
+          success: `${process.env.CLIENT_URL}/order-confirmation/${order._id}?status=success`,
+          failure: `${process.env.CLIENT_URL}/order-confirmation/${order._id}?status=failure`,
+          pending: `${process.env.CLIENT_URL}/order-confirmation/${order._id}?status=pending`,
         },
         auto_return: "approved",
         // redirectMode:"modal",

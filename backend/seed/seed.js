@@ -3,6 +3,8 @@ import "dotenv/config";
 import connectDB from "../lib/db.js";
 import Product from "../models/Product.js";
 import sampleProducts from "./ecommerce_db.products.json" with { type: "json" };
+import dns from 'node:dns';
+dns.setServers(['1.1.1.1', '8.8.8.8']);
 
 const app = express();
 const PORT = process.env.PORT || 3000;

@@ -77,6 +77,22 @@ const orderSchema = new mongoose.Schema(
       enum: Object.values(ORDER_STATUS),
       default: ORDER_STATUS.PROCESSING,
     },
+    inventoryProcessed: {
+      type: Boolean,
+      default: false,
+    },
+    inventoryProcessedAt: {
+      type: Date,
+      default: null,
+    },
+    inventoryReverted: {
+      type: Boolean,
+      default: false,
+    },
+    inventoryRevertedAt: {
+      type: Date,
+      default: null,
+    },
     statusHistory: [statusHistorySchema],
   },
   {

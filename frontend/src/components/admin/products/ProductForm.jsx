@@ -186,16 +186,16 @@ export default function ProductForm() {
               <button
                 type="button"
                 onClick={() => navigate("/admin/products")}
-                className="text-amber-600 hover:underline inline-flex items-center gap-1 group"
+                className="text-[#3f6b4c] hover:underline inline-flex items-center gap-1 group font-medium"
               >
                 <ChevronLeftIcon className="h-4 w-4 group-hover:-translate-x-1 transition-all" />
                 <span>Volver a Productos</span>
               </button>
             </div>
-            <h1 className="text-2xl font-semibold">
+            <h1 className="text-2xl font-bold">
               {product ? "Editar Producto" : "Nuevo Producto"}
             </h1>
-            <div className="text-gray-600">
+            <div className="text-gray-600 text-sm">
               {product
                 ? "Edita la información del producto seleccionado."
                 : "Crea un nuevo producto para la tienda."}
@@ -206,14 +206,14 @@ export default function ProductForm() {
               type="button"
               disabled={isSaving || isPendingProduct}
               onClick={() => navigate("/admin/products")}
-              className="flex items-center justify-center gap-2 px-4 py-2 border border-gray-200 text-gray-700 rounded bg-white transition group hover:shadow-lg hover:-translate-y-0.5"
+              className="flex items-center justify-center gap-2 px-4 py-2 border border-[#3f6b4c]/20 rounded bg-white hover:bg-[#f5f0e6]/30 transition group hover:shadow-md hover:-translate-y-0.5"
             >
               Cancelar
             </button>
             <button
               disabled={isSaving || isPendingProduct || !isValid}
               type="submit"
-              className="flex items-center justify-center gap-2 px-4 py-2 bg-amber-600 text-white rounded hover:bg-amber-700 transition"
+              className="flex items-center justify-center gap-2 px-4 py-2 bg-[#3f6b4c] text-white rounded hover:bg-[#2e4d36] focus:outline-none focus:ring-2 focus:ring-[#3f6b4c] transition font-semibold"
             >
               {isSaving ? (
                 <>
@@ -231,8 +231,8 @@ export default function ProductForm() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <div className="bg-white rounded-lg p-6">
-            <p className="text-xl mb-6">General Information</p>
+          <div className="bg-white rounded-lg p-6 shadow-md shadow-[#4b2e2e]/5 border border-[#3f6b4c]/10">
+            <p className="text-xl font-bold mb-6">Información General</p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-5">
               <div className="sm:col-span-2 lg:col-span-1 xl:col-span-2">
@@ -292,6 +292,18 @@ export default function ProductForm() {
               </div>
               <div>
                 <RHFInput
+                  label="Umbral inventario bajo"
+                  id="lowStockThreshold"
+                  type="number"
+                  required={true}
+                  register={register}
+                  error={errors.lowStockThreshold}
+                  min={0}
+                  disabled={isSaving || isPendingProduct}
+                />
+              </div>
+              <div>
+                <RHFInput
                   label="Descuento (%)"
                   id="discountPercentage"
                   type="number"
@@ -316,7 +328,7 @@ export default function ProductForm() {
               </div>
             </div>
           </div>
-          <div className="bg-white rounded-lg p-6">
+          <div className="bg-white rounded-lg p-6 shadow-md shadow-[#4b2e2e]/5 border border-[#3f6b4c]/10">
             <div className="grid grid-cols-1 2xl:grid-cols-2 gap-5">
               <div>
                 <RHFInput
@@ -349,7 +361,7 @@ export default function ProductForm() {
                   {listOfImages.map((image, index) => (
                     <div
                       key={index}
-                      className="bg-gray-100 h-35 overflow-hidden rounded-lg flex items-center justify-center relative group transition-transform duration-400"
+                      className="bg-gray-50 h-35 overflow-hidden rounded-lg flex items-center justify-center relative group border border-[#3f6b4c]/10 transition-transform duration-400"
                     >
                       <img
                         src={image.url}
@@ -372,7 +384,7 @@ export default function ProductForm() {
                           type="button"
                           onClick={() => handleReplaceImg(index)}
                           title="Cambiar imagen"
-                          className="text-white bg-black/80 rounded-full p-2 shadow-md disabled:cursor-not-allowed"
+                          className="text-[#4b2e2e] bg-[#f5f0e6] hover:bg-[#ebdcb9] rounded-full p-2 shadow-md disabled:cursor-not-allowed transition"
                           disabled={isSaving || isPendingProduct}
                         >
                           <EditIcon className="w-4 h-4" />
@@ -381,7 +393,7 @@ export default function ProductForm() {
                           type="button"
                           onClick={() => handleDeleteImg(index)}
                           title="Eliminar"
-                          className=" text-red-600 bg-white rounded-full p-2 shadow-md disabled:cursor-not-allowed"
+                          className="text-red-600 bg-white hover:bg-red-50 rounded-full p-2 shadow-md disabled:cursor-not-allowed transition"
                           disabled={isSaving || isPendingProduct}
                         >
                           <Trash2Icon className="w-4 h-4" />
@@ -394,7 +406,7 @@ export default function ProductForm() {
                       title="Agregar imágenes"
                       type="button"
                       onClick={() => imagesRef.current.click()}
-                      className="w-full bg-indigo-50/70 h-35 overflow-hidden rounded-lg flex items-center justify-center cursor-pointer disabled:cursor-not-allowed"
+                      className="w-full bg-[#f5f0e6]/50 hover:bg-[#f5f0e6]/80 border-2 border-dashed border-[#3f6b4c]/30 h-35 overflow-hidden rounded-lg flex items-center justify-center cursor-pointer disabled:cursor-not-allowed transition"
                       disabled={isSaving || isPendingProduct}
                     >
                       <input
@@ -405,12 +417,12 @@ export default function ProductForm() {
                         className="hidden"
                         onChange={handleChangeImages}
                       />
-                      <PlusCircleIcon className="w-6 h-6 text-indigo-600" />
+                      <PlusCircleIcon className="w-6 h-6 text-[#3f6b4c]" />
                     </button>
                   </div>
                 </div>
                 <p className="flex gap-2 text-sm text-gray-500 mt-2 items-center leading-tight">
-                  <InfoIcon className="w-6 h-6" />{" "}
+                  <InfoIcon className="w-6 h-6 text-[#3f6b4c]" />{" "}
                   <span>
                     Necesitas al menos 2 imágenes. Presta atención a la calidad
                     de las imágenes para una mejor presentación del producto.
@@ -422,7 +434,7 @@ export default function ProductForm() {
               <button
                 disabled={isSaving || isPendingProduct || !isValid}
                 type="submit"
-                className="flex items-center justify-center gap-2 px-4 py-2 bg-amber-600 text-white rounded hover:bg-amber-700 transition"
+                className="flex items-center justify-center gap-2 px-4 py-2 bg-[#3f6b4c] text-white rounded hover:bg-[#2e4d36] focus:outline-none focus:ring-2 focus:ring-[#3f6b4c] transition font-semibold"
               >
                 {isSaving ? (
                   <>
@@ -440,7 +452,7 @@ export default function ProductForm() {
                 type="button"
                 disabled={isSaving || isPendingProduct}
                 onClick={() => navigate("/admin/products")}
-                className="flex items-center justify-center gap-2 px-4 py-2 border border-gray-200 text-gray-700 rounded bg-white transition group hover:shadow-lg hover:-translate-y-0.5"
+                className="flex items-center justify-center gap-2 px-4 py-2 border border-[#3f6b4c]/20 rounded bg-white hover:bg-[#f5f0e6]/30 transition group hover:shadow-md hover:-translate-y-0.5"
               >
                 Cancelar
               </button>

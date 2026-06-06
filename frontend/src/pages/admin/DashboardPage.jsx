@@ -1,11 +1,39 @@
-import { FileTextIcon } from "lucide-react";
+import { AlertTriangleIcon, FileTextIcon } from "lucide-react";
 import { useEffect } from "react";
 import { useSearchParams } from "react-router";
-import { useFilterDashboard } from "../../hooks/products/queries";
+import { useGetAllOrders } from "../../hooks/orders/queries";
+import {
+  useFilterDashboard,
+  useLowStockProducts,
+  useSalesReport,
+} from "../../hooks/products/queries";
+import { axiosInstance } from "../../lib/axios";
+import { formatCurrency } from "../../lib/helper";
 
 export default function DashboardPage() {
   const { from, to, minDate, maxDate, handleDateChange } = useFilterDashboard();
+  const { salesReport } = useSalesReport({ from, to });
+  const { lowStockProducts = [] } = useLowStockProducts();
+  const { orders = [] } = useGetAllOrders();
   const [_, setSearchParams] = useSearchParams();
+
+  const pendingOrders = orders.filter((order) => !order.isPaid).length;
+
+  const handleDownloadReport = async () => {
+    const response = await axiosInstance.get("/reports/sales/export.csv", {
+      params: { from, to },
+      responseType: "blob",
+    });
+
+    const blobUrl = URL.createObjectURL(response.data);
+    const link = document.createElement("a");
+    link.href = blobUrl;
+    link.download = `sales-report-${Date.now()}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(blobUrl);
+  };
 
   useEffect(() => {
     setSearchParams({ from, to });
@@ -36,10 +64,10 @@ export default function DashboardPage() {
           </div>
           <button
             title="Descargar Reporte"
+            onClick={handleDownloadReport}
             className="bg-[#3f6b4c] text-white px-4 py-2 rounded-md hover:bg-[#2e4d36] focus:outline-none focus:ring-2 focus:ring-[#3f6b4c] focus:ring-offset-2 transition"
           >
             <FileTextIcon className="w-5 h-5" />
-            {/* Descargar Reporte */}
           </button>
         </div>
       </div>
@@ -48,64 +76,96 @@ export default function DashboardPage() {
         <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="rounded-2xl shadow-lg shadow-gray-100 bg-white px-5 py-4">
             <p className="text-sm text-gray-500">Ingresos Totales</p>
-            <p className="mt-1 text-2xl font-medium">$145,500</p>
-            <p className="mt-2 text-xs text-emerald-600">
-              ↑ 12.25% desde la semana pasada
+            <p className="mt-1 text-2xl font-bold">
+              {formatCurrency(salesReport?.summary?.totalRevenue || 0)}
+            </p>
+            <p className="mt-2 text-xs text-[#3f6b4c] font-semibold">
+              Datos del rango seleccionado
             </p>
           </div>
-          <div className="rounded-2xl shadow-lg shadow-gray-100 bg-white px-5 py-4">
-            <p className="text-sm text-gray-500">Pedido Promedio</p>
-            <p className="mt-1 text-2xl font-medium">$1,250</p>
-            <p className="mt-2 text-xs text-emerald-600">↑ 10%</p>
+          <div className="rounded-2xl shadow-lg shadow-[#4b2e2e]/5 bg-white px-5 py-4 border-t-4 border-transparent hover:shadow-xl transition-all duration-300">
+            <p className="text-sm text-gray-500 font-medium">Pedidos Pagados</p>
+            <p className="mt-1 text-2xl font-bold">
+              {salesReport?.summary?.totalOrders || 0}
+            </p>
+            <p className="mt-2 text-xs text-[#3f6b4c] font-semibold">
+              Ventas confirmadas
+            </p>
           </div>
-          <div className="rounded-2xl shadow-lg shadow-gray-100 bg-white px-5 py-4">
-            <p className="text-sm text-gray-500">Total de Clientes</p>
-            <p className="mt-1 text-2xl font-medium">650</p>
-            <p className="mt-2 text-xs text-emerald-600">↑ 8%</p>
+          <div className="rounded-2xl shadow-lg shadow-[#4b2e2e]/5 bg-white px-5 py-4 border-t-4 border-transparent hover:shadow-xl transition-all duration-300">
+            <p className="text-sm text-gray-500 font-medium">
+              Pedidos Pendientes
+            </p>
+            <p className="mt-1 text-2xl font-bold">{pendingOrders}</p>
+            <p className="mt-2 text-xs text-[#3f6b4c] font-semibold">
+              Requieren seguimiento
+            </p>
           </div>
-          <div className="rounded-2xl shadow-lg shadow-gray-100 bg-white px-5 py-4">
-            <p className="text-sm text-gray-500">Productos Vendidos</p>
-            <p className="mt-1 text-2xl font-medium">450</p>
-            <p className="mt-2 text-xs text-rose-600">↓ 2.5%</p>
+          <div className="rounded-2xl shadow-lg shadow-[#4b2e2e]/5 bg-white px-5 py-4 border-t-4 border-transparent hover:shadow-xl transition-all duration-300">
+            <p className="text-sm text-gray-500 font-medium">
+              Productos Vendidos
+            </p>
+            <p className="mt-1 text-2xl font-bold">
+              {salesReport?.summary?.totalItemsSold || 0}
+            </p>
+            <p className="mt-2 text-xs text-rose-600 font-semibold">
+              Unidades del periodo
+            </p>
           </div>
         </div>
-        <div className="xl:w-1/3 rounded-2xl shadow-lg shadow-gray-100 bg-white px-5 py-4">
-          <p className="mb-3 text-2xl font-medium">Información de Pedidos</p>
-          <div className="h-50 bg-gray-50 rounded-xl">{/* Chart circle */}</div>
-          <div className="grid grid-cols-3 gap-3 mt-4">
-            <div className="flex items-center justify-center gap-1">
-              <span className="inline-block h-3 w-3 bg-yellow-400 rounded-sm"></span>
-              <p className="text-xs leading-tight text-gray-500">Enviados</p>
-            </div>
-            <div className="flex items-center justify-center gap-1">
-              <span className="inline-block h-3 w-3 bg-blue-500 rounded-sm"></span>
-              <p className="text-xs leading-tight text-gray-500">Entregados</p>
-            </div>
-            <div className="flex items-center justify-center gap-1">
-              <span className="inline-block h-3 w-3 bg-rose-500 rounded-sm"></span>
-              <p className="text-xs leading-tight text-gray-500">Devueltos</p>
-            </div>
+        <div className="xl:w-1/3 rounded-2xl shadow-lg shadow-[#4b2e2e]/5 bg-white px-5 py-4 border-t-4 border-transparent hover:shadow-xl transition-all duration-300">
+          <p className="mb-3 text-xl font-bold">Alerta de Inventario</p>
+          <div className="h-50 bg-[#f5f0e6]/30 rounded-xl p-3 overflow-auto">
+            {lowStockProducts.length === 0 ? (
+              <p className="text-gray-500 font-medium text-sm">
+                No hay alertas activas.
+              </p>
+            ) : (
+              <ul className="space-y-2">
+                {lowStockProducts.slice(0, 8).map((product) => (
+                  <li
+                    key={product._id}
+                    className="flex items-center justify-between rounded-md bg-amber-50 border border-amber-200 px-2 py-2"
+                  >
+                    <span className="text-sm text-amber-900 font-medium">
+                      {product.name}
+                    </span>
+                    <span className="text-xs text-amber-800">
+                      {product.stockQuantity}/{product.lowStockThreshold}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+          <div className="mt-4 inline-flex items-center gap-2 rounded-md bg-amber-100 px-3 py-2 text-xs font-semibold text-amber-900">
+            <AlertTriangleIcon className="h-4 w-4" />
+            {lowStockProducts.length} productos en bajo inventario
           </div>
         </div>
       </div>
 
-      <div className="rounded-2xl shadow-lg shadow-gray-100 bg-white px-5 py-4">
-        <p className="mb-3 text-2xl font-medium">Pedidos Pendientes</p>
-        <div className="h-50 bg-gray-50 rounded-xl overflow-auto">
+      <div className="rounded-2xl shadow-lg shadow-[#4b2e2e]/5 bg-white px-5 py-4 hover:shadow-xl transition-all duration-300">
+        <p className="mb-3 text-xl font-bold">Pedidos Pendientes</p>
+        <div className="h-50 bg-[#f5f0e6]/20 rounded-xl overflow-auto flex items-center justify-center text-gray-400 font-medium">
           {/* Table recent orders */}
+          Cargando pedidos recientes...
         </div>
       </div>
 
       <div className="flex flex-col lg:flex-row gap-4">
-        <div className="flex-1 rounded-2xl shadow-lg shadow-gray-100 bg-white px-5 py-4">
-          <p className="mb-3 text-2xl font-medium">Mejores Ventas</p>
-          <div className="h-50 bg-gray-50 rounded-xl">
+        <div className="flex-1 rounded-2xl shadow-lg shadow-[#4b2e2e]/5 bg-white px-5 py-4 hover:shadow-xl transition-all duration-300">
+          <p className="mb-3 text-xl font-bold">Mejores Ventas</p>
+          <div className="h-50 bg-[#f5f0e6]/20 rounded-xl flex items-center justify-center text-gray-400 font-medium">
             {/* Chart sales daily */}
+            Gráfico de Ventas Diarias
           </div>
         </div>
-        <div className="lg:w-[45%] rounded-2xl shadow-lg shadow-gray-100 bg-white px-5 py-4">
-          <p className="mb-3 text-2xl font-medium">Productos Más Vendidos</p>
-          <div className="h-50 bg-gray-50 rounded-xl"></div>
+        <div className="lg:w-[45%] rounded-2xl shadow-lg shadow-[#4b2e2e]/5 bg-white px-5 py-4 hover:shadow-xl transition-all duration-300">
+          <p className="mb-3 text-xl font-bold">Productos Más Vendidos</p>
+          <div className="h-50 bg-[#f5f0e6]/20 rounded-xl flex items-center justify-center text-gray-400 font-medium">
+            Gráfico de Más Vendidos
+          </div>
         </div>
       </div>
     </section>

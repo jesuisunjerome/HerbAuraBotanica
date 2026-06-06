@@ -38,6 +38,15 @@ const productSchema = new mongoose.Schema(
       required: true,
       min: 0,
     },
+    lowStockThreshold: {
+      type: Number,
+      default: 5,
+      min: 0,
+    },
+    lastLowStockAlertAt: {
+      type: Date,
+      default: null,
+    },
     discountPercentage: {
       type: Number,
       min: 0,

@@ -5,6 +5,7 @@ import {
   HandshakeIcon,
   TruckElectricIcon,
 } from "lucide-react";
+import React from "react";
 import { useNavigate } from "react-router";
 import { formatCurrency, getDiscountedPrice } from "../../../lib/helper";
 import { useCartStore } from "../../../store/useCartStore";
@@ -39,12 +40,10 @@ export default function ProductDetails({ product, isPending }) {
           {tags && (
             <div className="flex flex-wrap gap-0.5 text-sm font-semibold">
               {tags.split(",").map((tag, index) => (
-                <>
-                  <span className="text-amber-700" key={index}>
-                    {tag.trim()}
-                  </span>
+                <React.Fragment key={index}>
+                  <span className="text-amber-700">{tag.trim()}</span>
                   {index < tags.split(",").length - 1 && <DotIcon />}
-                </>
+                </React.Fragment>
               ))}
             </div>
           )}

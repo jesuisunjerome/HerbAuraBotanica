@@ -169,3 +169,45 @@ export const sendOrderConfirmationEmail = async (order, type = "client") => {
     console.error("Error al enviar el correo electrónico:", error);
   }
 };
+
+export const sendLowStockAlertEmail = async ({
+  name,
+  stockQuantity,
+  lowStockThreshold,
+}) => {
+  const subject = `Alerta de inventario bajo: ${name}`;
+
+  const html = `
+    <div style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #364153; background-color: #f9f9f9; padding: 20px;">
+      <div style="max-width: 560px; margin: 0 auto; background: #fff; border-radius: 8px; padding: 20px;">
+        <h2 style="margin-top: 0; color: #4b2e2e;">Alerta de inventario bajo</h2>
+        <p>Se detecto un producto por debajo del umbral configurado.</p>
+        <table style="width:100%; border-collapse: collapse; margin-top: 16px;">
+          <tr>
+            <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;"><strong>Producto</strong></td>
+            <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">${name}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;"><strong>Stock actual</strong></td>
+            <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">${stockQuantity}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px;"><strong>Umbral</strong></td>
+            <td style="padding: 8px;">${lowStockThreshold}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  `;
+
+  try {
+    await transporter.sendMail({
+      from: `HerbAura Botanica <${process.env.EMAIL_USER}>`,
+      to: process.env.EMAIL_USER,
+      subject,
+      html,
+    });
+  } catch (error) {
+    console.error("Error al enviar alerta de inventario bajo:", error);
+  }
+};

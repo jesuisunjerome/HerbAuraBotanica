@@ -142,6 +142,10 @@ export const productSchema = z.object({
   stockQuantity: z.coerce
     .number({ invalid_type_error: "Cantidad en stock debe ser un número" })
     .min(0, "La cantidad en stock no puede ser negativa"),
+  lowStockThreshold: z.coerce
+    .number({ invalid_type_error: "El umbral debe ser un número" })
+    .min(0, "El umbral no puede ser negativo")
+    .default(5),
   discountPercentage: z.coerce
     .number({
       invalid_type_error: "El porcentaje de descuento debe ser un número",

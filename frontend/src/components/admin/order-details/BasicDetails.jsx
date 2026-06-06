@@ -8,34 +8,34 @@ import { formatLongDateToString } from "../../../lib/helper";
 
 export default function BasicDetails({ order, isPending }) {
   return (
-    <div className="rounded-2xl shadow-lg shadow-gray-100 bg-white px-5 py-4">
+    <div className="rounded-2xl shadow-lg shadow-[#4b2e2e]/5 bg-white px-5 py-4 border-t-4 border-[#3f6b4c]/30">
       <div className="border-b border-gray-100 pb-3">
-        <p className="text-xl font-medium">Detalles básicos</p>
+        <p className="text-xl font-bold">Detalles básicos</p>
       </div>
       {isPending ? (
         <BasicDetailsSkeleton />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-5 gap-4 py-3">
           <div className="flex items-start gap-2">
-            <div className="p-2 bg-gray-100 flex items-center justify-center rounded">
-              <FileTextIcon className="h-6 w-6 text-gray-400" />
+            <div className="p-2 bg-[#3f6b4c]/10 flex items-center justify-center rounded">
+              <FileTextIcon className="h-6 w-6 text-[#3f6b4c]" />
             </div>
             <div>
-              <p className="text-sm text-gray-500 leading-tight">
+              <p className="text-sm text-gray-500 leading-tight font-medium">
                 ID del Pedido
               </p>
-              <p className="font-medium">{order?.confirmationNumber}</p>
+              <p className="font-semibold">{order?.confirmationNumber}</p>
             </div>
           </div>
           <div className="flex items-start gap-2">
-            <div className="p-2 bg-gray-100 flex items-center justify-center rounded">
-              <Calendar1Icon className="h-6 w-6 text-gray-400" />
+            <div className="p-2 bg-[#3f6b4c]/10 flex items-center justify-center rounded">
+              <Calendar1Icon className="h-6 w-6 text-[#3f6b4c]" />
             </div>
             <div>
-              <p className="text-sm text-gray-500 leading-tight">
+              <p className="text-sm text-gray-500 leading-tight font-medium">
                 Fecha del Pedido
               </p>
-              <p className="font-medium -mb-2">
+              <p className="font-semibold -mb-2">
                 {formatLongDateToString(new Date(order?.createdAt))}
               </p>
               <span className="text-gray-500 text-sm">
@@ -47,36 +47,36 @@ export default function BasicDetails({ order, isPending }) {
             </div>
           </div>
           <div className="flex items-start gap-2">
-            <div className="p-2 bg-gray-100 flex items-center justify-center rounded">
-              <TruckElectricIcon className="h-6 w-6 text-gray-400" />
+            <div className="p-2 bg-[#3f6b4c]/10 flex items-center justify-center rounded">
+              <TruckElectricIcon className="h-6 w-6 text-[#3f6b4c]" />
             </div>
             <div>
-              <p className="text-sm text-gray-500 leading-tight">
+              <p className="text-sm text-gray-500 leading-tight font-medium">
                 Estado del Pedido
               </p>
-              <p className="font-medium">{order?.status}</p>
+              <p className="font-semibold">{order?.status}</p>
             </div>
           </div>
           <div className="flex items-start gap-2">
-            <div className="p-2 bg-gray-100 flex items-center justify-center rounded">
-              <CreditCardIcon className="h-6 w-6 text-gray-400" />
+            <div className="p-2 bg-[#3f6b4c]/10 flex items-center justify-center rounded">
+              <CreditCardIcon className="h-6 w-6 text-[#3f6b4c]" />
             </div>
             <div>
-              <p className="text-sm text-gray-500 leading-tight">
+              <p className="text-sm text-gray-500 leading-tight font-medium">
                 Método de Pago
               </p>
-              <p className="font-medium">{order?.paymentMethod}</p>
+              <p className="font-semibold">{order?.paymentMethod}</p>
             </div>
           </div>
           <div className="flex items-start gap-2">
-            <div className="p-2 bg-gray-100 flex items-center justify-center rounded">
-              <Calendar1Icon className="h-6 w-6 text-gray-400" />
+            <div className="p-2 bg-[#3f6b4c]/10 flex items-center justify-center rounded">
+              <Calendar1Icon className="h-6 w-6 text-[#3f6b4c]" />
             </div>
             <div>
-              <p className="text-sm text-gray-500 leading-tight">
+              <p className="text-sm text-gray-500 leading-tight font-medium">
                 Fecha estimada de entrega
               </p>
-              <p className="font-medium">-</p>
+              <p className="font-semibold">-</p>
             </div>
           </div>
         </div>

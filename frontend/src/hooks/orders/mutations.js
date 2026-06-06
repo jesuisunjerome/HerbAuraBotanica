@@ -1,6 +1,12 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { axiosInstance } from "../../lib/axios";
+import {
+  INVENTORY_HISTORY_KEY,
+  INVENTORY_SUMMARY_KEY,
+  LOW_STOCK_PRODUCTS_KEY,
+  PRODUCTS_KEY,
+} from "../products/queries";
 import { ORDER_KEY } from "./queries";
 
 export const useCreateOrder = () => {
@@ -69,7 +75,11 @@ export const useUpdateOrderStatus = () => {
         return response.data;
       },
       onSuccess: (data) => {
-        queryClient.invalidateQueries([ORDER_KEY]);
+        queryClient.invalidateQueries({ queryKey: [ORDER_KEY] });
+        queryClient.invalidateQueries({ queryKey: [PRODUCTS_KEY] });
+        queryClient.invalidateQueries({ queryKey: [LOW_STOCK_PRODUCTS_KEY] });
+        queryClient.invalidateQueries({ queryKey: [INVENTORY_SUMMARY_KEY] });
+        queryClient.invalidateQueries({ queryKey: [INVENTORY_HISTORY_KEY] });
         toast.success(
           data.message || "Estatus del pedido actualizado exitosamente",
         );

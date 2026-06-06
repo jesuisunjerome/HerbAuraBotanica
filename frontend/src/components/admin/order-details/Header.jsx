@@ -26,14 +26,14 @@ export default function Header({ order, isPending }) {
             <button
               type="button"
               onClick={() => navigate("/admin/orders")}
-              className="text-amber-600 hover:underline inline-flex items-center gap-1 group"
+              className="text-[#3f6b4c] hover:underline inline-flex items-center gap-1 group font-medium"
             >
               <ChevronLeftIcon className="h-4 w-4 group-hover:-translate-x-1 transition-all" />
               <span>Volver a Pedidos</span>
             </button>
           </div>
-          <h1 className="text-2xl font-semibold">Detalles del Pedido</h1>
-          <div className="text-gray-600">
+          <h1 className="text-2xl font-bold">Detalles del Pedido</h1>
+          <div className="text-gray-600 text-sm">
             Revisa la información detallada del pedido realizado.
           </div>
         </div>
@@ -48,14 +48,14 @@ export default function Header({ order, isPending }) {
             <div className="relative">
               <button
                 title="Acciones"
-                className="bg-gray-200 px-3 py-2 text-gray-500 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition"
+                className="bg-[#f5f0e6] px-3 py-2 rounded-md hover:bg-[#ebdcb9] focus:outline-none focus:ring-2 focus:ring-[#3f6b4c] focus:ring-offset-2 transition duration-300 font-semibold"
                 onClick={toggleActions}
               >
                 <EllipsisVerticalIcon className="w-5 h-5" />
               </button>
 
               <ul
-                className={`absolute md:right-0 mt-2 w-50 bg-white border border-slate-100 rounded-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.2)] p-1 z-20 animate-in fade-in zoom-in-95 duration-200 max-h-100 overflow-y-auto ${showActions ? "block" : "hidden"}`}
+                className={`absolute md:right-0 mt-2 w-50 bg-white border border-[#3f6b4c]/10 rounded-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.2)] p-1 z-20 animate-in fade-in zoom-in-95 duration-200 max-h-100 overflow-y-auto ${showActions ? "block" : "hidden"}`}
               >
                 {order_actions.map(({ name }) => {
                   return (
@@ -63,7 +63,7 @@ export default function Header({ order, isPending }) {
                       <button
                         onClick={() => handleOpenModal({ type: name })}
                         title={name}
-                        className="block rounded-lg px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left hover:translate-0"
+                        className="block rounded-lg px-4 py-2 text-sm hover:bg-[#f5f0e6] w-full text-left hover:translate-0 transition"
                       >
                         {name}
                       </button>
@@ -79,7 +79,7 @@ export default function Header({ order, isPending }) {
                         data: { name: "Cancelar Pedido" },
                       })
                     }
-                    className="block rounded-lg px-4 py-2 text-sm text-red-700 hover:bg-red-100 w-full text-left hover:translate-0"
+                    className="block rounded-lg px-4 py-2 text-sm text-red-700 hover:bg-red-50 w-full text-left hover:translate-0 transition"
                   >
                     Cancelar Pedido
                   </button>

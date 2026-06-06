@@ -78,7 +78,9 @@ export default function StripeButton({ formData, disabled, onSuccess }) {
       }
     } catch (error) {
       console.error(error);
-      toast.error(`Error en el pago: ${error.message}`);
+      toast.error(
+        `Error en el pago: ${error?.response?.data?.message || error.message}`,
+      );
     } finally {
       setIsProcessing(false);
     }

@@ -5,6 +5,7 @@ import {
   ChartNoAxesColumnIcon,
   CreditCardIcon,
   HeadsetIcon,
+  HistoryIcon,
   LayoutDashboard,
   LogOutIcon,
   SettingsIcon,
@@ -72,13 +73,13 @@ export default function Sidebar({ showNavMobile, handleToggleNav }) {
             <BoxIcon className="h-4 w-4" />
             <span>Productos</span>
           </NavLink>
-          {/* <NavLink
-            to="/admin/customers"
+          <NavLink
+            to="/admin/inventory"
             className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-slate-50"
           >
-            <UsersIcon className="h-4 w-4" />
-            <span>Clientes</span>
-          </NavLink> */}
+            <HistoryIcon className="h-4 w-4" />
+            <span>Inventario</span>
+          </NavLink>
           <NavLink
             to="/admin/reports"
             className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-slate-50"

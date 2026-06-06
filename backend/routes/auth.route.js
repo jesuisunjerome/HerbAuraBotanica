@@ -9,11 +9,13 @@ import {
   getMe,
 } from "../controllers/auth.controller.js";
 import { protect } from "../middleware/auth.middleware.js";
+import { validateRequest } from "../middleware/validation.middleware.js";
+import { loginSchema, registerSchema } from "../schemas/auth.schema.js";
 
 const router = express.Router();
 
-router.post("/register", registerUser);
-router.post("/login", loginUser);
+router.post("/register", validateRequest(registerSchema), registerUser);
+router.post("/login", validateRequest(loginSchema), loginUser);
 router.post("/google", googleLogin);
 router.post("/facebook", facebookLogin);
 router.post("/refresh-token", refreshToken);

@@ -3,9 +3,11 @@ import UserProvider from "../contexts/UserContext";
 import AdminLayout from "../layouts/admin/AdminLayout";
 import MainLayout from "../layouts/public/MainLayout";
 import DashboardPage from "../pages/admin/DashboardPage";
+import InventoryPage from "../pages/admin/InventoryPage";
 import OrderDetailsPage from "../pages/admin/OrderDetailsPage";
 import OrdersPage from "../pages/admin/OrdersPage";
 import ProductsPage from "../pages/admin/ProductsPage";
+import ReportsPage from "../pages/admin/ReportsPage";
 import AboutPage from "../pages/public/AboutPage";
 import CatalogPage from "../pages/public/CatalogPage";
 import CheckoutPage from "../pages/public/CheckoutPage";
@@ -95,6 +97,14 @@ const router = createBrowserRouter([
       {
         path: "products/:tab?",
         element: <ProductsPage />,
+      },
+      {
+        path: "inventory",
+        element: <InventoryPage />,
+      },
+      {
+        path: "reports",
+        element: <ReportsPage />,
       },
       { path: "orders", element: <OrdersPage /> },
       {

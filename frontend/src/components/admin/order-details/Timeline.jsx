@@ -11,11 +11,10 @@ export default function Timeline({ order, isPending }) {
   const { statusHistory } = order || {};
   const isCancelled = order?.status === ORDER_STATUS.CANCELLED;
 
-  console.log(order);
   return (
     <div className="rounded-2xl shadow-lg shadow-gray-100 bg-white px-5 py-4">
       <div className="border-b border-gray-100 pb-3">
-        <p className="text-xl font-medium">Línea de Tiempo</p>
+        <p className="text-xl font-bold">Línea de Tiempo</p>
       </div>
       <div className="py-4">
         {isPending ? (
@@ -26,7 +25,7 @@ export default function Timeline({ order, isPending }) {
             <li className="flex items-start gap-3 relative">
               <div className="shrink-0 flex flex-col items-center gap-1.5">
                 <div
-                  className={`size-7 flex items-center justify-center rounded-full ${order.isPaid ? "bg-emerald-600" : "bg-gray-300"}`}
+                  className={`size-7 flex items-center justify-center rounded-full ${order.isPaid ? "bg-[#3f6b4c]" : "bg-gray-300"}`}
                 >
                   <CheckIcon className="w-4 h-4 text-white" />
                 </div>
@@ -34,7 +33,7 @@ export default function Timeline({ order, isPending }) {
                 {isCancelled && <div className="h-7 w-px bg-red-200" />}
               </div>
               <div className="flex flex-col text-sm">
-                <span className="font-medium leading-tight">Confirmado</span>
+                <span className="font-semibold leading-tight">Confirmado</span>
                 {order.isPaid ? (
                   <span className="text-gray-500 leading-tight">
                     Pago completado el{" "}
@@ -73,7 +72,7 @@ export default function Timeline({ order, isPending }) {
                       </div>
                     </div>
                     <div className="flex flex-col text-sm">
-                      <span className="font-medium text-red-600 leading-tight">
+                      <span className="font-bold text-red-600 leading-tight">
                         Cancelado
                       </span>
                       <span className="text-gray-500 leading-tight">
@@ -81,7 +80,9 @@ export default function Timeline({ order, isPending }) {
                         {formatLongDateToString(new Date(createdAt), true)}.
                       </span>
                       {comment && (
-                        <div className="text-red-600 text-xs">{comment}</div>
+                        <div className="text-red-600 text-xs mt-1 bg-red-50 p-2 rounded border border-red-100">
+                          {comment}
+                        </div>
                       )}
                     </div>
                   </li>
@@ -89,16 +90,16 @@ export default function Timeline({ order, isPending }) {
 
               if (!isCancelled)
                 return (
-                  <>
+                  <div key={id}>
                     {/* 2. PROCESANDO */}
                     {isProcessing && (
                       <li className="flex items-start gap-3 relative">
                         <div className="shrink-0 flex flex-col items-center gap-1.5">
                           <div
-                            className={`size-7 flex items-center justify-center rounded-full ${createdAt ? "bg-indigo-500" : "bg-gray-200"}`}
+                            className={`size-7 flex items-center justify-center rounded-full ${createdAt ? "bg-[#f4c95d]" : "bg-gray-200"}`}
                           >
                             {createdAt ? (
-                              <CheckIcon className="w-4 h-4 text-white" />
+                              <CheckIcon className="w-4 h-4" />
                             ) : (
                               <LoaderIcon
                                 className={`w-4 h-4 text-white ${createdAt ? "animate-spin" : ""}`}
@@ -108,7 +109,7 @@ export default function Timeline({ order, isPending }) {
                           <div className="h-7 w-px bg-gray-300" />
                         </div>
                         <div className="flex flex-col text-sm">
-                          <span className="font-medium leading-tight">
+                          <span className="font-semibold leading-tight">
                             {status} (
                             {updatedByModel === "System"
                               ? "Sistema"
@@ -130,7 +131,7 @@ export default function Timeline({ order, isPending }) {
                             </span>
                           )}
                           {comment && (
-                            <div className="text-indigo-600 text-xs">
+                            <div className="text-[#3f6b4c] font-medium text-xs mt-1 bg-[#3f6b4c]/5 p-2 rounded border border-[#3f6b4c]/10">
                               {comment}
                             </div>
                           )}
@@ -143,7 +144,7 @@ export default function Timeline({ order, isPending }) {
                       <li className="flex items-start gap-3 relative">
                         <div className="shrink-0 flex flex-col items-center gap-1.5">
                           <div
-                            className={`size-7 flex items-center justify-center rounded-full ${createdAt ? "bg-amber-500" : "bg-gray-200"}`}
+                            className={`size-7 flex items-center justify-center rounded-full ${createdAt ? "bg-[#3f6b4c]" : "bg-gray-200"}`}
                           >
                             {createdAt ? (
                               <CheckIcon className="w-4 h-4 text-white" />
@@ -156,7 +157,7 @@ export default function Timeline({ order, isPending }) {
                           <div className="h-7 w-px bg-gray-300" />
                         </div>
                         <div className="flex flex-col text-sm">
-                          <span className="font-medium leading-tight">
+                          <span className="font-semibold leading-tight">
                             Enviado
                           </span>
                           {createdAt ? (
@@ -175,7 +176,7 @@ export default function Timeline({ order, isPending }) {
                             </span>
                           )}
                           {comment && (
-                            <div className="text-indigo-600 text-xs">
+                            <div className="text-[#3f6b4c] font-medium text-xs mt-1 bg-[#3f6b4c]/5 p-2 rounded border border-[#3f6b4c]/10">
                               {comment}
                             </div>
                           )}
@@ -188,7 +189,7 @@ export default function Timeline({ order, isPending }) {
                       <li className="flex items-start gap-3 relative">
                         <div className="shrink-0 flex flex-col items-center gap-1.5">
                           <div
-                            className={`size-7 flex items-center justify-center rounded-full ${order.isDelivered || createdAt ? "bg-emerald-600" : "bg-gray-200"}`}
+                            className={`size-7 flex items-center justify-center rounded-full ${order.isDelivered || createdAt ? "bg-[#3f6b4c]" : "bg-gray-200"}`}
                           >
                             <MapPinIcon
                               className={`w-4 h-4 ${order.isDelivered || createdAt ? "text-white" : "text-gray-500"}`}
@@ -196,11 +197,11 @@ export default function Timeline({ order, isPending }) {
                           </div>
                         </div>
                         <div className="flex flex-col text-sm">
-                          <span className="font-medium leading-tight">
+                          <span className="font-semibold leading-tight">
                             Entregado
                           </span>
                           {order.isDelivered || createdAt ? (
-                            <span className="text-emerald-600 font-medium leading-tight">
+                            <span className="text-[#3f6b4c] font-bold leading-tight">
                               Entregado el{" "}
                               {formatLongDateToString(
                                 new Date(order.deliveredAt || createdAt),
@@ -210,20 +211,20 @@ export default function Timeline({ order, isPending }) {
                           ) : (
                             <span className="text-gray-500 leading-tight">
                               El pedido será entregado en{" "}
-                              {shippingAddress.address} ${shippingAddress.city},
-                              ${shippingAddress.postalCode} $
+                              {shippingAddress.address}, {shippingAddress.city},{" "}
+                              {shippingAddress.postalCode},{" "}
                               {shippingAddress.country}.
                             </span>
                           )}
                           {comment && (
-                            <div className="text-indigo-600 text-xs">
+                            <div className="text-[#3f6b4c] font-medium text-xs mt-1 bg-[#3f6b4c]/5 p-2 rounded border border-[#3f6b4c]/10">
                               {comment}
                             </div>
                           )}
                         </div>
                       </li>
                     )}
-                  </>
+                  </div>
                 );
             })}
           </ul>

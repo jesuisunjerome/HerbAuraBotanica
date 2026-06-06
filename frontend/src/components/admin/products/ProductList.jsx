@@ -90,9 +90,29 @@ export default function ProductList() {
       {
         header: "Stock",
         accessorKey: "stockQuantity",
-        cell: ({ row }) => (
-          <span className="font-medium">{row.original.stockQuantity}</span>
-        ),
+        cell: ({ row }) => {
+          const stock = row.original.stockQuantity;
+          const threshold = row.original.lowStockThreshold ?? 5;
+          const isOut = stock <= 0;
+          const isLow = !isOut && stock <= threshold;
+
+          return (
+            <div className="flex flex-col">
+              <span className="font-medium">{stock}</span>
+              <span
+                className={`text-xs font-semibold ${
+                  isOut
+                    ? "text-rose-700"
+                    : isLow
+                      ? "text-amber-700"
+                      : "text-[#3f6b4c]"
+                }`}
+              >
+                {isOut ? "Agotado" : isLow ? "Bajo" : "Normal"}
+              </span>
+            </div>
+          );
+        },
       },
       {
         header: "Estado",
@@ -100,12 +120,12 @@ export default function ProductList() {
         cell: ({ row }) => {
           const isActive = row.original.isActive;
           const statusStyles = isActive
-            ? "bg-emerald-100 text-emerald-800"
-            : "bg-rose-100 text-rose-800";
+            ? "bg-[#3f6b4c]/10 text-[#3f6b4c]"
+            : "bg-rose-50 text-rose-700";
 
           return (
             <span
-              className={`px-2 py-1 text-xs font-medium rounded-full ${statusStyles}`}
+              className={`px-2 py-1 text-xs font-semibold rounded-full ${statusStyles}`}
             >
               {isActive ? "Activo" : "Inactivo"}
             </span>
@@ -144,9 +164,9 @@ export default function ProductList() {
                 title="Editar producto"
                 disabled={isUpdatingStatus}
                 onClick={() => navigate(`/admin/products/edit?id=${productId}`)}
-                className="rounded-md p-1 h-8 w-8 flex items-center justify-center transition-colors bg-blue-100 hover:bg-blue-200"
+                className="rounded-md p-1 h-8 w-8 flex items-center justify-center transition-colors bg-[#3f6b4c]/10 hover:bg-[#3f6b4c]/20"
               >
-                <SquarePenIcon className="h-4 w-4 text-blue-600" />
+                <SquarePenIcon className="h-4 w-4 text-[#3f6b4c]" />
               </button>
               <button
                 type="button"
@@ -155,7 +175,7 @@ export default function ProductList() {
                 onClick={() => updateProductStatus(productId)}
                 className={`rounded-md p-1 h-8 w-8 flex items-center justify-center transition-colors ${
                   isActive
-                    ? "bg-amber-100 hover:bg-amber-200 text-amber-800"
+                    ? "bg-[#f4c95d]/20 hover:bg-[#f4c95d]/30"
                     : "bg-gray-200 hover:bg-gray-300 text-gray-800"
                 }`}
               >
@@ -193,8 +213,8 @@ export default function ProductList() {
     <section className="space-y-3">
       <div className="flex flex-col md:flex-row flex-wrap justify-between items-start lg:items-end gap-4 bg-gray-50 pb-3 pt-4 sticky top-15 z-10">
         <div>
-          <h1 className="text-2xl font-semibold">Productos</h1>
-          <div className="text-gray-600">
+          <h1 className="text-2xl font-bold">Productos</h1>
+          <div className="text-gray-600 text-sm">
             Administra todos los productos disponibles en la tienda.
           </div>
         </div>
@@ -205,15 +225,13 @@ export default function ProductList() {
             className="bg-[#3f6b4c] text-white px-4 py-2 rounded-md hover:bg-[#2e4d36] focus:outline-none focus:ring-2 focus:ring-[#3f6b4c] focus:ring-offset-2 transition"
           >
             <FileTextIcon className="w-5 h-5" />
-            {/* Descargar Archivo */}
           </button>
           <Link
             title="Agregar Nuevo Producto"
             to="/admin/products/new"
-            className="flex items-center justify-center gap-2 px-4 py-2  rounded bg-amber-600 text-white hover:bg-amber-700 transition group hover:shadow-lg hover:-translate-y-0.5"
+            className="flex items-center justify-center gap-2 px-4 py-2 rounded bg-[#f4c95d] font-semibold hover:bg-[#e0b74c] transition group hover:shadow-lg hover:-translate-y-0.5"
           >
             <PlusCircleIcon className="w-5 h-5" />
-            {/* Nuevo Producto */}
           </Link>
         </div>
       </div>

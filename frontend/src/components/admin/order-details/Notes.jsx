@@ -2,17 +2,16 @@ export default function Notes({ isPending }) {
   return (
     <div className="rounded-2xl shadow-lg shadow-gray-100 bg-white px-5 py-4">
       <div className="border-b border-gray-100 pb-3">
-        <p className="text-xl font-medium">Nota</p>
+        <p className="text-xl font-bold">Nota Interna</p>
       </div>
       {isPending ? (
         <NotesSkeleton />
       ) : (
         <div className="py-4">
-          <p className="text-sm text-gray-500">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa
-            voluptate ex quos quisquam, rem sequi magni libero saepe, quo dolore
-            quae illum dolorem ipsam recusandae temporibus deserunt modi,
-            tempora autem!
+          <p className="text-sm text-gray-600 italic bg-[#f5f0e6]/40 p-3 rounded-lg border border-[#3f6b4c]/10">
+            "El cliente solicitó empaque especial de regalo y envío por las
+            mañanas. Se incluyó dedicatoria personalizada solicitada por
+            correo."
           </p>
         </div>
       )}

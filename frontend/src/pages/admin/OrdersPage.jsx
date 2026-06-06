@@ -68,7 +68,7 @@ export default function OrdersPage() {
           const statusStyles =
             status === ORDER_STATUS.DELIVERED
               ? {
-                  color: "text-emerald-600",
+                  color: "text-[#3f6b4c]",
                   icon: <PackageCheckIcon className="w-4 h-4" />,
                 }
               : status === ORDER_STATUS.SHIPPED
@@ -78,7 +78,7 @@ export default function OrdersPage() {
                   }
                 : status === ORDER_STATUS.PROCESSING
                   ? {
-                      color: "text-yellow-600",
+                      color: "text-[#4b2e2e]",
                       icon: <LoaderIcon className="w-4 h-4" />,
                     }
                   : {
@@ -88,17 +88,9 @@ export default function OrdersPage() {
 
           return (
             <div className={statusStyles.color}>
-              <p className="flex leading-tight items-center gap-1 font-medium">
+              <p className="flex leading-tight items-center gap-1 font-semibold">
                 {statusStyles.icon} {status}
               </p>
-              {/* {isReturned && (
-                <span>
-                  {formatShortDateToString(new Date(row.original.returnedAt))}
-                </span>
-              )}
-              {deliveredAt && !isReturned && (
-                <span>{formatShortDateToString(new Date(deliveredAt))}</span>
-              )} */}
             </div>
           );
         },
@@ -118,7 +110,7 @@ export default function OrdersPage() {
         header: "Total",
         accessorKey: "totalPrice",
         cell: ({ row }) => (
-          <div className="text-emerald-600 font-medium text-nowrap text-right">
+          <div className="text-[#3f6b4c] font-bold text-nowrap text-right">
             {formatCurrency(row.original.totalPrice)}
           </div>
         ),
@@ -130,20 +122,19 @@ export default function OrdersPage() {
         header: "Pago",
         accessorKey: "paymentResult",
         cell: ({ row }) => {
-          // const {status} = row.original.paymentResult;
           const isPaid = row.original.isPaid;
 
           const status = isPaid ? PAYMENT_STATUS.PAID : PAYMENT_STATUS.PENDING;
 
           const statusStyles =
             status === PAYMENT_STATUS.PAID
-              ? "text-emerald-600"
+              ? "text-[#3f6b4c]"
               : status === PAYMENT_STATUS.PENDING
                 ? "text-yellow-600"
                 : "text-rose-600";
 
           return (
-            <span className={`font-medium ${statusStyles}`}>{status}</span>
+            <span className={`font-semibold ${statusStyles}`}>{status}</span>
           );
         },
       },
@@ -152,10 +143,10 @@ export default function OrdersPage() {
         accessorKey: "createdAt",
         cell: ({ row }) => (
           <div>
-            <p className="leading-tight">
+            <p className="leading-tight text-sm font-medium">
               {formatShortDateToString(new Date(row.original.createdAt))}
             </p>
-            <span className="text-gray-500 text-sm">
+            <span className="text-gray-500 text-xs">
               {new Date(row.original.createdAt).toLocaleTimeString([], {
                 hour: "2-digit",
                 minute: "2-digit",
@@ -171,8 +162,8 @@ export default function OrdersPage() {
           const { address, city, country } = row.original.shippingAddress;
           return (
             <div>
-              <p className="leading-tight">{address}</p>
-              <span className="text-gray-500 text-sm">
+              <p className="leading-tight text-sm">{address}</p>
+              <span className="text-gray-500 text-xs">
                 {city}, {country}
               </span>
             </div>
@@ -191,9 +182,9 @@ export default function OrdersPage() {
               <Link
                 to={`/admin/orders/${orderId}`}
                 title="Ver detalles del pedido"
-                className="rounded-md p-1 h-8 w-8 flex items-center justify-center transition-colors bg-blue-100 hover:bg-blue-200"
+                className="rounded-md p-1 h-8 w-8 flex items-center justify-center transition-colors bg-[#3f6b4c]/10 hover:bg-[#3f6b4c]/20 text-[#3f6b4c]"
               >
-                <EllipsisIcon className="h-4 w-4 text-blue-600" />
+                <EllipsisIcon className="h-4 w-4 text-[#3f6b4c]" />
               </Link>
             </div>
           );
@@ -223,8 +214,8 @@ export default function OrdersPage() {
     <section className="space-y-3">
       <div className="flex flex-col md:flex-row flex-wrap justify-between items-start lg:items-end gap-4 bg-gray-50 pb-3 pt-4 sticky top-15 z-10">
         <div>
-          <h1 className="text-2xl font-semibold">Pedidos</h1>
-          <div className="text-gray-600">
+          <h1 className="text-2xl font-bold">Pedidos</h1>
+          <div className="text-gray-600 text-sm">
             Administra todos los pedidos realizados en la tienda.
           </div>
         </div>
@@ -236,7 +227,6 @@ export default function OrdersPage() {
             className="bg-[#3f6b4c] text-white px-4 py-2 rounded-md hover:bg-[#2e4d36] focus:outline-none focus:ring-2 focus:ring-[#3f6b4c] focus:ring-offset-2 transition"
           >
             <FileTextIcon className="w-5 h-5" />
-            {/* Descargar Archivo */}
           </button>
         </div>
       </div>
