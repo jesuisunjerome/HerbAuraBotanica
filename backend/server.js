@@ -51,6 +51,9 @@ app.use("/api/payments", paymentRoutes);
 app.use("/api/inventory", inventoryRoutes);
 app.use("/api/reports", reportingRoutes);
 app.use("/api/subscribe", subscriberRoutes);
+app.use("/", (req, res) => {
+  res.send("API is running..." + process.env.CLIENT_URL + " " + PORT);
+});
 
 // Global error handler (try catch no longer needed in controllers)
 app.use((err, req, res, next) => {
