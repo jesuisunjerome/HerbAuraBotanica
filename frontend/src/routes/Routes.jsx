@@ -27,6 +27,7 @@ const router = createBrowserRouter([
       <div>
         Error page
         <button
+          type="button"
           className="inline-block p-2"
           onClick={() => localStorage.removeItem("cart-herbaura")}
         >
