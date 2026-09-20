@@ -28,6 +28,17 @@ app.use(
   }),
 );
 
+// Middleware para conectar a BD antes de cada request
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    console.error("Database connection middleware error:", error);
+    res.status(500).json({ message: "Database connection failed" });
+  }
+});
+
 // Stripe webhook endpoint needs raw body, so we will handle it separately in the route
 app.use(
   "/api/payments/stripe/webhook",
@@ -87,6 +98,11 @@ app.use((err, req, res, next) => {
 
 // Server listening
 app.listen(PORT, async () => {
-  await connectDB();
-  console.log(`Server is running on port ${PORT}`);
+  try {
+    await connectDB();
+    console.log(`Server is running on port ${PORT}`);
+  } catch (error) {
+    console.error("Failed to start server:", error);
+    process.exit(1);
+  }
 });
