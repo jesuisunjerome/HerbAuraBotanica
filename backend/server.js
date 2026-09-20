@@ -18,6 +18,7 @@ dns.setServers(["1.1.1.1", "8.8.8.8"]);
 
 // Initialize Express app
 const app = express();
+app.disable("x-powered-by");
 const PORT = process.env.PORT || 3000;
 
 // Middleware
@@ -28,21 +29,6 @@ app.use(
     credentials: true,
   }),
 );
-
-// Stripe webhook endpoint needs raw body, so we will handle it separately in the route
-app.use(
-  "/api/payments/stripe/webhook",
-  express.raw({ type: "application/json" }),
-);
-
-// For all other routes, use JSON body parser with increased limit
-app.use(
-  express.json({
-    limit: "100mb",
-  }),
-);
-
-app.use(cookieParser());
 
 // Middleware inteligente de conexión a BD
 app.use(async (req, res, next) => {
@@ -61,6 +47,21 @@ app.use(async (req, res, next) => {
     res.status(503).json({ message: "Base de datos temporalmente inaccesible. Reintente en un momento." });
   }
 });
+
+// Stripe webhook endpoint needs raw body, so we will handle it separately in the route
+app.use(
+  "/api/payments/stripe/webhook",
+  express.raw({ type: "application/json" }),
+);
+
+// For all other routes, use JSON body parser with increased limit
+app.use(
+  express.json({
+    limit: "100mb",
+  }),
+);
+
+app.use(cookieParser());
 
 // Routes
 app.use("/api/auth", authRoutes);

@@ -27,7 +27,7 @@ export default function ProductList({
         ))}
       </div>
 
-      {filteredProducts.length > 10 && <Pagination />}
+      {/* {filteredProducts.length > 10 && <Pagination />} */}
     </>
   );
 }
