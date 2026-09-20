@@ -4,6 +4,7 @@ import { useLowStockProducts } from "../../hooks/products/queries";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react"
 
 export default function AdminLayout() {
   const { lowStockProducts = [] } = useLowStockProducts();
@@ -16,6 +17,7 @@ export default function AdminLayout() {
   return (
     <div className="admin-layout">
       <Analytics />
+      <SpeedInsights />
       <Sidebar
         showNavMobile={showNavMobile}
         handleToggleNav={handleToggleNav}
