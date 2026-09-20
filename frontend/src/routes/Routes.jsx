@@ -19,26 +19,16 @@ import OrderTrakingPage from "../pages/public/OrderTrakingPage";
 import PolicyPage from "../pages/public/PolicyPage";
 import ProductDetailsPage from "../pages/public/ProductDetailsPage";
 import RegisterPage from "../pages/public/RegisterPage";
+import ErrorPage from "../pages/public/ErrorPage";
 
 const router = createBrowserRouter([
   {
     element: <MainLayout />,
-    errorElement: (
-      <div>
-        Error page
-        <button
-          type="button"
-          className="inline-block p-2"
-          onClick={() => localStorage.removeItem("cart-herbaura")}
-        >
-          clear cart
-        </button>
-      </div>
-    ),
+    errorElement: <MainLayout><ErrorPage pathName="/" /></MainLayout>,
     children: [
       {
         path: "/",
-        element: <HomePage />,
+        element: <ErrorPage />,
       },
       {
         path: "/products",
@@ -85,7 +75,7 @@ const router = createBrowserRouter([
       </UserProvider>
     ),
     path: "/admin",
-    errorElement: <div>Admin Error page</div>,
+    errorElement: <AdminLayout><ErrorPage pathName="/admin" /></AdminLayout>,
     children: [
       {
         index: true,

@@ -30,7 +30,7 @@ import FacebookInit from "./components/common/FacebookInit";
 function App() {
   return (
     <>
-    <FacebookInit/>
+      <FacebookInit />
       {/* <UserProvider> */}
       <RouterProvider router={router} />
       {/* </UserProvider> */}

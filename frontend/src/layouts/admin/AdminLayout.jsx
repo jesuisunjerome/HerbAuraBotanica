@@ -3,6 +3,7 @@ import { Link, Outlet } from "react-router";
 import { useLowStockProducts } from "../../hooks/products/queries";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
+import { Analytics } from "@vercel/analytics/react";
 
 export default function AdminLayout() {
   const { lowStockProducts = [] } = useLowStockProducts();
@@ -14,6 +15,7 @@ export default function AdminLayout() {
 
   return (
     <div className="admin-layout">
+      <Analytics />
       <Sidebar
         showNavMobile={showNavMobile}
         handleToggleNav={handleToggleNav}
