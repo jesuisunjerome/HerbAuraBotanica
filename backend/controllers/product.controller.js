@@ -164,12 +164,16 @@ export const updateProductById = async (req, res) => {
     throw new AppError("Producto no encontrado", 404);
   }
 
-  // Delete existing images from Cloudinary
-  const imageUrlsToDelete = product.images || [];
-  if (Array.isArray(imageUrlsToDelete)) {
+  // Delete only removed images from Cloudinary
+  const newUrls = (images || []).map((img) => img.url);
+  const imagesToDelete = (product.images || []).filter(
+    (existing) => !newUrls.includes(existing.url) && existing.url.includes("res.cloudinary.com"),
+  );
+
+  if (imagesToDelete.length > 0) {
     try {
       await Promise.all(
-        imageUrlsToDelete.map(async ({ url }) => {
+        imagesToDelete.map(async ({ url }) => {
           const publicId = url.split("/").pop().split(".")[0];
           await cloudinary.uploader.destroy(
             `HerbAuraBotanica/products/${publicId}`,
