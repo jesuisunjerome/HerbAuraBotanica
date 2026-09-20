@@ -1,14 +1,22 @@
 [
   {
-    "name": "John Doe",
-    "email": "john.doe@example.com",
-    "password": "password123",
-    "role": "user"
+    "name": "Maria Fernandez",
+    "email": "maria.fernandez@gfh.com",
+    "password": "$2b$10$zE3PSaxQ0kuAUpEy8IIcBeGCRZJWnTihgzyeYP2pAGq5uAy1eFleu",
+    "role": "admin"
   },
   {
-    "name": "Jane Smith",
-    "email": "jane.smith@example.com",
-    "password": "password456",
-    "role": "admin"
+    "name": "Ralph Pierre Rhode Exy",
+    "email": "rhodeexy@gmail.com",
+    "role": "admin",
+    "googleId": "112124364749609183811",
+    "avatar": "https://lh3.googleusercontent.com/a/ACg8ocI0RBWQtP57-1K5RtaNHOTxh7I6k0s805ZyRdFRgpPFGGzIG6w=s96-c"
+  },
+  {
+    "name": "Ralph Pierre Rhode Exy",
+    "email": "ralph.exy@alumno.uttehuacan.edu.mx",
+    "role": "user",
+    "googleId": "112677011341553236636",
+    "avatar": "https://lh3.googleusercontent.com/a/ACg8ocJg_VasMvQ3SoB9Lrdmt9YjXXyWViX2LX9y_jeZbnMhiTPD-Fb_=s96-c"
   }
 ]

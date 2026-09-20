@@ -3,7 +3,9 @@ import "dotenv/config";
 import connectDB from "../lib/db.js";
 import Product from "../models/Product.js";
 import sampleProducts from "./ecommerce_db.products.json" with { type: "json" };
+import sampleUsers from "./ecommerce_db.users.json" with { type: "json" };
 import dns from 'node:dns';
+import User from "../models/User.js";
 dns.setServers(['1.1.1.1', '8.8.8.8']);
 
 const app = express();
@@ -13,6 +15,9 @@ export const seedProducts = async () => {
   try {
     await Product.deleteMany({});
     await Product.insertMany(sampleProducts);
+
+    await User.deleteMany({});
+    await User.insertMany(sampleUsers);
     console.log("Products seeded successfully");
   } catch (error) {
     console.log("Error seeding products:", error);
