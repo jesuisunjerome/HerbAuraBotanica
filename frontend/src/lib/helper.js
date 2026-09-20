@@ -23,9 +23,9 @@ export function base64ToFile(base64String, filename) {
 
 /**
  * Redimensiona y comprime una imagen antes de convertirla a Base64
- * Reduce archivos de 8MB a ~200KB sin pérdida perceptible de calidad
+ * Mantiene transparencia si es PNG o WebP. Reduce tamaño para Vercel.
  */
-export function compressImageToBase64(file, maxWidth = 900, maxHeight = 900, quality = 0.75) {
+export function compressImageToBase64(file, maxWidth = 800, maxHeight = 800, quality = 0.8) {
   return new Promise((resolve, reject) => {
     if (!file.type.startsWith("image/") || file.type === "image/svg+xml") {
       const reader = new FileReader();
@@ -41,7 +41,6 @@ export function compressImageToBase64(file, maxWidth = 900, maxHeight = 900, qua
       img.onload = () => {
         let { width, height } = img;
 
-        // Redimensionar proporcionalmente a máx 900px (ideal para web y retina)
         if (width > maxWidth || height > maxHeight) {
           if (width > height) {
             height = Math.round((height * maxWidth) / width);
@@ -55,22 +54,23 @@ export function compressImageToBase64(file, maxWidth = 900, maxHeight = 900, qua
         const canvas = document.createElement("canvas");
         canvas.width = width;
         canvas.height = height;
-
         const ctx = canvas.getContext("2d");
 
-        // Limpiar el lienzo para garantizar 100% transparencia (alpha = 0)
         ctx.clearRect(0, 0, width, height);
         ctx.drawImage(img, 0, 0, width, height);
 
-        // image/webp conserva la transparencia al 100% Y comprime de verdad con 'quality'
-        // Reduce una imagen de 4MB a ~70KB-100KB, garantizando pasar el límite de 4.5MB de Vercel
-        let compressedBase64 = canvas.toDataURL("image/webp", quality);
+        // Si la imagen original soporta transparencia (png o webp), usamos PNG
+        // para garantizar 100% que los fondos no se vuelvan negros.
+        let outputFormat = "image/jpeg";
+        let outputQuality = quality;
 
-        // Si el navegador no soporta exportar webp, fallback a png
-        if (!compressedBase64.startsWith("data:image/webp")) {
-          compressedBase64 = canvas.toDataURL("image/png");
+        if (file.type === "image/png" || file.type === "image/webp") {
+          outputFormat = "image/png";
+          // PNG no usa el parámetro de calidad, pero respetará la transparencia del canvas
+          outputQuality = undefined; 
         }
 
+        const compressedBase64 = canvas.toDataURL(outputFormat, outputQuality);
         resolve(compressedBase64);
       };
       img.onerror = reject;
