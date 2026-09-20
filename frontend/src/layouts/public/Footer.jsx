@@ -8,7 +8,7 @@ export default function Footer() {
           <h3 className="text-3xl italic mb-1 text-white!">
             HerbAura Botanica
           </h3>
-          <p className="text-2xl">Where herbs nuture your hair's aura.</p>
+          <p className="text-2xl">Where herbs nurture your hair's aura.</p>
         </div>
         <div className="mx-auto lg:mx-0 lg:ms-auto flex gap-10 items-center">
           {socialLinks.map(({ href, label, icon: Icon }) => (
@@ -19,7 +19,7 @@ export default function Footer() {
               rel="noopener noreferrer"
               aria-label={label}
               className="flex items-center gap-1 hover:text-white transition-all hover:underline"
-              // className="size-13 flex items-center bg-[#4b2626] hover:bg-(--color-beige) hover:text-(--color-brown) justify-center rounded-full hover:-translate-y-0.5 transition-all"
+            // className="size-13 flex items-center bg-[#4b2626] hover:bg-(--color-beige) hover:text-(--color-brown) justify-center rounded-full hover:-translate-y-0.5 transition-all"
             >
               <Icon className="w-5 h-5" />
               <span className="sr-only">{label}</span>
