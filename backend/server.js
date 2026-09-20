@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import "dotenv/config";
 import cookieParser from "cookie-parser";
+import mongoose from "mongoose";
 import connectDB from "./lib/db.js";
 
 import authRoutes from "./routes/auth.route.js";
@@ -42,6 +43,24 @@ app.use(
 );
 
 app.use(cookieParser());
+
+// Middleware inteligente de conexión a BD
+app.use(async (req, res, next) => {
+  // En servidor tradicional o en Serverless "caliente", readyState === 1 es true.
+  // Pasa de inmediato síncronamente: 0ms de latencia, 0 sobrecarga.
+  if (mongoose.connection.readyState === 1) {
+    return next();
+  }
+
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    // 503 (Service Unavailable) es el código HTTP correcto cuando la BD no responde
+    console.error("Database connection middleware error:", error);
+    res.status(503).json({ message: "Base de datos temporalmente inaccesible. Reintente en un momento." });
+  }
+});
 
 // Routes
 app.use("/api/auth", authRoutes);
@@ -85,13 +104,26 @@ app.use((err, req, res, next) => {
   res.status(status).json({ message });
 });
 
-// Server listening
-app.listen(PORT, async () => {
+
+// Función de arranque para servidor tradicional (VPS, Render, Railway, Docker, Local)
+const startServer = async () => {
   try {
+    // Conectar a BD primero antes de abrir el puerto
     await connectDB();
-    console.log(`Server is running on port ${PORT}`);
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
   } catch (error) {
     console.error("Failed to start server:", error);
-    process.exit(1);
+    process.exit(1); // En servidor tradicional sí es seguro salir en el boot inicial
   }
-});
+};
+
+// Si NO estamos en serverless (ej: Vercel), arrancamos con app.listen
+const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
+if (!isServerless) {
+  await startServer();
+}
+
+// Exportar app para que plataformas serverless (ej: Vercel) puedan montarla directamente
+export default app;
