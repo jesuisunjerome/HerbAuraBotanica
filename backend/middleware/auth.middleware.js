@@ -27,7 +27,7 @@ export const protect = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     // Buscar al usuario por el ID del payload y excluir el password
-    req.user = await User.findById(decoded.id).select("-password -sessions");
+    req.user = await User.findById(decoded.id).select("-password");
 
     if (!req.user) {
       return res

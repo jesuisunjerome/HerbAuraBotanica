@@ -15,6 +15,7 @@ import {
 import { USER_ROLES } from "../lib/constants.js";
 import { authorizeRoles, protect } from "../middleware/auth.middleware.js";
 import { validateRequest } from "../middleware/validation.middleware.js";
+import { cacheRoute } from "../middleware/cache.middleware.js";
 import {
   createProductSchema,
   filterProductSchema,
@@ -24,13 +25,14 @@ import {
 const router = express.Router();
 
 // PUBLIC ROUTES
-router.get("/active", getAllActiveProducts);
-router.get("/best-sellers", getBestSellers);
-router.get("/new-arrivals", getNewArrivals);
-router.get("/:id/similar", getSimilarProducts);
-router.get("/category/:category", getProductsByCategory);
-router.get("/filter", validateRequest(filterProductSchema), filterProducts);
-router.get("/:id", getProductById);
+// Aplicamos la caché en memoria para reducir los accesos a la BD.
+router.get("/active", cacheRoute(300), getAllActiveProducts); // Cache por 5 mins
+router.get("/best-sellers", cacheRoute(1800), getBestSellers); // Cache por 30 mins
+router.get("/new-arrivals", cacheRoute(1800), getNewArrivals); // Cache por 30 mins
+router.get("/:id/similar", cacheRoute(300), getSimilarProducts); // Cache por 5 mins
+router.get("/category/:category", cacheRoute(300), getProductsByCategory); // Cache por 5 mins
+router.get("/filter", validateRequest(filterProductSchema), cacheRoute(300), filterProducts); // Cache por 5 mins
+router.get("/:id", cacheRoute(300), getProductById); // Cache por 5 mins
 
 // ADMIN ROUTES (protected by admin middleware)
 router.get("/", protect, authorizeRoles(USER_ROLES.ADMIN), getAllProducts);

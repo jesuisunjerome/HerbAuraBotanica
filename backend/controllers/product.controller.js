@@ -2,21 +2,50 @@ import cloudinary, { uploadImage } from "../lib/cloudinary.js";
 import { AppError } from "../lib/error.js";
 import Order from "../models/Order.js";
 import Product from "../models/Product.js";
+import { CLOUDINARY_PRODUCTS_FOLDER } from "../lib/constants.js";
+
+// Helper for SSRF prevention
+const isValidImageUrl = (urlString) => {
+  try {
+    const url = new URL(urlString);
+    if (!["http:", "https:"].includes(url.protocol)) return false;
+    // Block common internal/local network addresses
+    const forbiddenHostnames = ["localhost", "127.0.0.1", "169.254.169.254", "0.0.0.0"];
+    if (forbiddenHostnames.some((h) => url.hostname === h || url.hostname.endsWith(`.${h}`))) {
+      return false;
+    }
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
 
 // @desc    Get all products
 // @route   GET /api/products
 // @access  Private (Admin)
-export const getAllProducts = async (_, res) => {
-  const products = await Product.find().lean();
-  res.json(products);
+export const getAllProducts = async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const skip = (page - 1) * limit;
+
+  const total = await Product.countDocuments();
+  const products = await Product.find().skip(skip).limit(limit).lean();
+  
+  res.json({ data: products, total, page, pages: Math.ceil(total / limit) });
 };
 
 // @desc    Get all active products
 // @route   GET /api/products/active
 // @access  Public
-export const getAllActiveProducts = async (_, res) => {
-  const products = await Product.find({ isActive: true }).lean();
-  res.json(products);
+export const getAllActiveProducts = async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const skip = (page - 1) * limit;
+
+  const total = await Product.countDocuments({ isActive: true });
+  const products = await Product.find({ isActive: true }).skip(skip).limit(limit).lean();
+  
+  res.json({ data: products, total, page, pages: Math.ceil(total / limit) });
 };
 
 // @desc    Get best sellers, if no sales return last 3 created products
@@ -134,8 +163,12 @@ export const createProduct = async (req, res) => {
     throw new AppError("Se requiere al menos una imagen", 400);
   }
 
+  if (images.some((img) => !isValidImageUrl(img.url))) {
+    throw new AppError("Una o más URLs de imágenes son inválidas o inseguras", 400);
+  }
+
   const uploadPromises = images.map(async ({ url }) =>
-    uploadImage(url, "HerbAuraBotanica/products"),
+    uploadImage(url, CLOUDINARY_PRODUCTS_FOLDER),
   );
 
   let cloudinaryImageUrls = await Promise.all(uploadPromises);
@@ -159,6 +192,10 @@ export const updateProductById = async (req, res) => {
   const { id } = req.params;
   const { images, ...updatedData } = req.body;
 
+  if (images && images.some((img) => !isValidImageUrl(img.url))) {
+    throw new AppError("Una o más URLs de imágenes son inválidas o inseguras", 400);
+  }
+
   const product = await Product.findById(id);
   if (!product) {
     throw new AppError("Producto no encontrado", 404);
@@ -176,7 +213,7 @@ export const updateProductById = async (req, res) => {
         imagesToDelete.map(async ({ url }) => {
           const publicId = url.split("/").pop().split(".")[0];
           await cloudinary.uploader.destroy(
-            `HerbAuraBotanica/products/${publicId}`,
+            `${CLOUDINARY_PRODUCTS_FOLDER}/${publicId}`,
           );
         }),
       );
@@ -196,7 +233,7 @@ export const updateProductById = async (req, res) => {
       )
         return url; // Return the existing URL without re-uploading
 
-      return await uploadImage(url, "HerbAuraBotanica/products");
+      return await uploadImage(url, CLOUDINARY_PRODUCTS_FOLDER);
     });
 
     // Add the complete image objects with isMain property
@@ -236,31 +273,42 @@ export const updateProductStatusById = async (req, res) => {
   res.json({ message: "Estado del producto actualizado exitosamente" });
 };
 
+// Helper function to escape special characters in regex (Kept for compatibility if needed elsewhere, but no longer used in search)
+const escapeRegex = (string) => {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+};
+
 // @desc    Filter products by search and sort criteria
 // @route   GET /api/products/filter
 // @access  Public
 export const filterProducts = async (req, res) => {
   const { search, sortBy } = req.query;
 
-  const products = await Product.find({
-    isActive: true,
-    $or: [
-      { name: { $regex: search, $options: "i" } },
-      { description: { $regex: search, $options: "i" } },
-      { category: { $regex: search, $options: "i" } },
-      { tags: { $regex: search, $options: "i" } },
-    ],
-  }).lean();
+  const query = { isActive: true };
+  const queryOptions = {};
 
-  if (sortBy) {
-    if (sortBy === "priceAsc") {
-      products.sort((a, b) => a.price - b.price);
-    } else if (sortBy === "priceDesc") {
-      products.sort((a, b) => b.price - a.price);
-    } else if (sortBy === "newest") {
-      products.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    }
+  if (search) {
+    // Usamos el índice $text optimizado de MongoDB en lugar de expresiones regulares
+    query.$text = { $search: search };
+    queryOptions.score = { $meta: "textScore" };
   }
+
+  let productsQuery = Product.find(query, queryOptions);
+
+  const sortCriteria = {
+    price_asc: { price: 1 },
+    price_desc: { price: -1 },
+    name_asc: { name: 1 },
+    name_desc: { name: -1 },
+    newest: { createdAt: -1 },
+  };
+
+  const defaultSort = search ? { score: { $meta: "textScore" } } : { createdAt: -1 };
+  const sort = sortCriteria[sortBy] || defaultSort;
+
+  productsQuery = productsQuery.sort(sort);
+
+  const products = await productsQuery.lean();
 
   res.json(products);
 };

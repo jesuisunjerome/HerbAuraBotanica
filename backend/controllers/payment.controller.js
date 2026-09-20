@@ -1,6 +1,6 @@
 import Order from "../models/Order.js";
 import { applyInventoryForPaidOrder } from "../services/inventory.service.js";
-import { sendOrderConfirmationEmail } from "../services/email.service.js";
+import { agenda } from "../lib/queue.js";
 import { verifyStripeWebhookSignature } from "../services/stripe.service.js";
 import { verifyPayPalWebhookSignature } from "../services/paypal.service.js";
 import { AppError } from "../lib/error.js";
@@ -32,34 +32,35 @@ export const handleStripeWebhook = async (req, res) => {
       throw new AppError("Error de Webhook: Falta orderId en metadata", 400);
     }
 
-    const order = await Order.findById(orderId);
-    if (!order) {
-      console.error(`Order not found for ID: ${orderId}`);
-      throw new AppError("Error de Webhook: Orden no encontrada", 404);
-    }
+    // Use atomic update to prevent race conditions from duplicate webhooks
+    const updatedOrder = await Order.findOneAndUpdate(
+      { _id: orderId, isPaid: false },
+      {
+        $set: {
+          isPaid: true,
+          paidAt: Date.now(),
+          paymentResult: {
+            id: paymentIntent.id,
+            status: paymentIntent.status,
+            update_time: new Date(paymentIntent.created * 1000).toISOString(),
+            email_address: paymentIntent.receipt_email || "",
+          },
+        },
+      },
+      { new: true }
+    );
 
-    if (order.isPaid) {
-      console.log(
-        `Order ${orderId} is already marked as paid. Ignoring duplicate webhook.`,
-      );
+    if (!updatedOrder) {
+      console.log(`Order ${orderId} is already marked as paid or not found. Ignoring duplicate webhook.`);
       return res.json({ received: true });
     }
 
-    order.isPaid = true;
-    order.paidAt = Date.now();
-    order.paymentResult = {
-      id: paymentIntent.id,
-      status: paymentIntent.status,
-      update_time: new Date(paymentIntent.created * 1000).toISOString(),
-      email_address: paymentIntent.receipt_email || "",
-    };
-
-    const updatedOrder = await applyInventoryForPaidOrder(order);
+    const orderWithInventory = await applyInventoryForPaidOrder(updatedOrder);
 
     console.log(`Order ${orderId} marked as paid via Stripe webhook.`);
 
-    sendOrderConfirmationEmail(updatedOrder, "client");
-    sendOrderConfirmationEmail(updatedOrder, "admin");
+    await agenda.now("SEND_ORDER_EMAIL", { orderId: orderWithInventory._id, type: "client" });
+    await agenda.now("SEND_ORDER_EMAIL", { orderId: orderWithInventory._id, type: "admin" });
   } else if (event.type === "payment_intent.payment_failed") {
   }
 
@@ -106,29 +107,30 @@ export const handleMercadoPagoWebhook = async (req, res) => {
         throw new AppError("Error de Webhook: Falta orderId en metadata", 400);
       }
 
-      const order = await Order.findById(orderId);
-      if (!order) {
-        console.error(`Order not found for ID: ${orderId}`);
-        throw new AppError("Error de Webhook: Orden no encontrada", 404);
-      }
+      // Atomic update
+      const updatedOrder = await Order.findOneAndUpdate(
+        { _id: orderId, isPaid: false },
+        {
+          $set: {
+            isPaid: true,
+            paidAt: Date.now(),
+            paymentResult: {
+              id: payment.id.toString(),
+              status: payment.status,
+              update_time: payment.date_approved,
+              email_address: payment.payer?.email || "",
+            },
+          },
+        },
+        { new: true }
+      );
 
-      if (!order.isPaid) {
-        order.isPaid = true;
-        order.paidAt = Date.now();
-        order.paymentResult = {
-          id: payment.id.toString(),
-          status: payment.status,
-          update_time: payment.date_approved,
-          email_address: payment.payer?.email || "",
-        };
+      if (updatedOrder) {
+        const orderWithInventory = await applyInventoryForPaidOrder(updatedOrder);
+        console.log(`Order ${orderId} marked as paid via Mercado Pago webhook.`);
 
-        const updatedOrder = await applyInventoryForPaidOrder(order);
-        console.log(
-          `Order ${orderId} marked as paid via Mercado Pago webhook.`,
-        );
-
-        sendOrderConfirmationEmail(updatedOrder, "client");
-        sendOrderConfirmationEmail(updatedOrder, "admin");
+        await agenda.now("SEND_ORDER_EMAIL", { orderId: orderWithInventory._id, type: "client" });
+        await agenda.now("SEND_ORDER_EMAIL", { orderId: orderWithInventory._id, type: "admin" });
       }
     }
 
@@ -167,25 +169,29 @@ export const handlePayPalWebhook = async (req, res) => {
       throw new AppError("Error de Webhook: Falta orderId en recurso", 400);
     }
 
-    const order = await Order.findById(orderId);
-    if (!order) {
-      throw new AppError("Error de Webhook: Orden no encontrada", 404);
-    }
+    // Atomic update
+    const updatedOrder = await Order.findOneAndUpdate(
+      { _id: orderId, isPaid: false },
+      {
+        $set: {
+          isPaid: true,
+          paidAt: Date.now(),
+          paymentResult: {
+            id: resource.id,
+            status: resource.status,
+            update_time: resource.update_time,
+            email_address: resource.payer?.email_address || "",
+          },
+        },
+      },
+      { new: true }
+    );
 
-    if (!order.isPaid) {
-      order.isPaid = true;
-      order.paidAt = Date.now();
-      order.paymentResult = {
-        id: resource.id,
-        status: resource.status,
-        update_time: resource.update_time,
-        email_address: resource.payer?.email_address || "",
-      };
+    if (updatedOrder) {
+      const orderWithInventory = await applyInventoryForPaidOrder(updatedOrder);
 
-      const updatedOrder = await applyInventoryForPaidOrder(order);
-
-      sendOrderConfirmationEmail(updatedOrder, "client");
-      sendOrderConfirmationEmail(updatedOrder, "admin");
+      await agenda.now("SEND_ORDER_EMAIL", { orderId: orderWithInventory._id, type: "client" });
+      await agenda.now("SEND_ORDER_EMAIL", { orderId: orderWithInventory._id, type: "admin" });
     }
     return res.status(200).send("Pago procesado correctamente");
   }

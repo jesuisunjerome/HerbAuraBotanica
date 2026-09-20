@@ -6,7 +6,7 @@ import {
   applyInventoryForPaidOrder,
   restoreInventoryForCancelledOrder,
 } from "../services/inventory.service.js";
-import { sendOrderConfirmationEmail } from "../services/email.service.js";
+import { agenda } from "../lib/queue.js";
 import { createMercadoPagoPreference } from "../services/mercadopago.service.js";
 import {
   capturePaypalOrder,
@@ -19,9 +19,19 @@ import { AppError } from "../lib/error.js";
 // @desc    Get all orders
 // @route   GET /api/orders
 // @access  Admin
-export const getAllOrders = async (_, res) => {
-  const orders = await Order.find().sort({ createdAt: -1 }).lean();
-  res.json(orders);
+export const getAllOrders = async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const skip = (page - 1) * limit;
+
+  const total = await Order.countDocuments();
+  const orders = await Order.find()
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit)
+    .lean();
+    
+  res.json({ data: orders, total, page, pages: Math.ceil(total / limit) });
 };
 
 // @desc    Create new order
@@ -42,22 +52,44 @@ export const createOrder = async (req, res) => {
       let itemsPrice = 0;
       const verifiedOrderItems = [];
 
+      // Obtener todos los productos en una sola consulta
+      const productIds = orderItems.map((item) => item.product);
+      const products = await Product.find({ _id: { $in: productIds } }).session(session);
+
+      const bulkOps = [];
+
       for (const item of orderItems) {
-        const product = await Product.findById(item.product).session(session);
+        const product = products.find((p) => p._id.toString() === item.product.toString());
+        
         if (!product) {
           throw new AppError(`Producto no encontrado: ${item.name}`, 404);
         }
 
         if (product.stockQuantity < item.quantity) {
-          throw new AppError(`Producto sin stock: ${item.name}`, 400);
+          throw new AppError(`Producto sin stock o inventario insuficiente para: ${item.name}`, 400);
         }
+
         const price = product.price;
         itemsPrice += price * item.quantity;
         verifiedOrderItems.push({ ...item, price }); // Snapshotted price from DB
 
-        // Decrement stock atomically
-        product.stockQuantity -= item.quantity;
-        await product.save({ session });
+        // Preparar operación atómica en bloque
+        bulkOps.push({
+          updateOne: {
+            filter: { _id: item.product, stockQuantity: { $gte: item.quantity } },
+            update: { $inc: { stockQuantity: -item.quantity } },
+          },
+        });
+      }
+
+      // Ejecutar todas las actualizaciones de stock en una sola llamada a DB
+      if (bulkOps.length > 0) {
+        const bulkResult = await Product.bulkWrite(bulkOps, { session });
+        // Si el número de documentos modificados no coincide, significa que alguien compró justo antes
+        // y el filtro de $gte evitó que el stock bajara de 0, previniendo stock negativo.
+        if (bulkResult.modifiedCount !== orderItems.length) {
+          throw new AppError("Error de concurrencia: Algunos productos se agotaron durante tu compra.", 409);
+        }
       }
 
       const shippingPrice = itemsPrice > 100 ? 0 : SHIPPING_COST;
@@ -136,25 +168,41 @@ export const captureOrder = async (req, res) => {
   const order = await Order.findById(req.params.id);
   if (!order) throw new AppError("Orden no encontrada", 404);
 
+  if (order.isPaid) {
+    throw new AppError("La orden ya ha sido pagada y procesada", 400);
+  }
+
   const captureData = await capturePaypalOrder(paypalOrderId);
   if (captureData.status !== "COMPLETED")
     throw new AppError("Pago no completado", 400);
 
-  order.isPaid = true;
-  order.paidAt = Date.now();
-  order.paymentResult = {
-    id: captureData.id,
-    status: captureData.status,
-    update_time: captureData.update_time,
-    email_address: captureData.payer.email_address,
-  };
+  const updatedOrder = await Order.findOneAndUpdate(
+    { _id: req.params.id, isPaid: false },
+    {
+      $set: {
+        isPaid: true,
+        paidAt: Date.now(),
+        paymentResult: {
+          id: captureData.id,
+          status: captureData.status,
+          update_time: captureData.update_time,
+          email_address: captureData.payer.email_address,
+        },
+      },
+    },
+    { new: true }
+  );
 
-  const updatedOrder = await applyInventoryForPaidOrder(order);
+  if (!updatedOrder) {
+    throw new AppError("La orden fue procesada concurrentemente por otro hilo", 409);
+  }
 
-  sendOrderConfirmationEmail(updatedOrder, "client");
-  sendOrderConfirmationEmail(updatedOrder, "admin");
+  const orderWithInventory = await applyInventoryForPaidOrder(updatedOrder);
 
-  res.json({ message: "Pago capturado exitosamente", order: updatedOrder });
+  await agenda.now("SEND_ORDER_EMAIL", { orderId: orderWithInventory._id, type: "client" });
+  await agenda.now("SEND_ORDER_EMAIL", { orderId: orderWithInventory._id, type: "admin" });
+
+  res.json({ message: "Pago capturado exitosamente", order: orderWithInventory });
 };
 
 // @desc    Get order by ID
