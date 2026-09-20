@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronLeftIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
-import { mocckCheckoutClientData } from "../../../lib/data";
+// import { mocckCheckoutClientData } from "../../../lib/data";
 import {
   calculateCartTotals,
   CART,
@@ -23,17 +23,18 @@ export default function CheckoutForm() {
 
   const {
     register,
-    formState: { errors, isValid },
+    formState: { errors },
     getValues,
     handleSubmit,
     setValue,
     watch,
   } = useForm({
-    defaultValues: mocckCheckoutClientData,
+    // defaultValues: mocckCheckoutClientData,
     resolver: zodResolver(checkoutSchema),
     mode: "all",
   });
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const paymentMethod = watch("paymentMethod");
   const disabled = Object.keys(errors).length > 0 || !paymentMethod;
 
@@ -205,11 +206,10 @@ export default function CheckoutForm() {
                   <button
                     type="button"
                     onClick={() => setValue("paymentMethod", method.name)}
-                    className={`p-2 rounded-lg border border-gray-200 flex items-center justify-center cursor-pointer"} ${
-                      paymentMethod === method.name
-                        ? "ring-2 bg-amber-100 ring-amber-500"
-                        : "bg-white"
-                    }`}
+                    className={`p-2 rounded-lg border border-gray-200 flex items-center justify-center cursor-pointer"} ${paymentMethod === method.name
+                      ? "ring-2 bg-amber-100 ring-amber-500"
+                      : "bg-white"
+                      }`}
                     key={method.id}
                   >
                     <img
