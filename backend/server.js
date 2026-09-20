@@ -28,17 +28,6 @@ app.use(
   }),
 );
 
-// Middleware para conectar a BD antes de cada request
-app.use(async (req, res, next) => {
-  try {
-    await connectDB();
-    next();
-  } catch (error) {
-    console.error("Database connection middleware error:", error);
-    res.status(500).json({ message: "Database connection failed" });
-  }
-});
-
 // Stripe webhook endpoint needs raw body, so we will handle it separately in the route
 app.use(
   "/api/payments/stripe/webhook",
