@@ -39,7 +39,7 @@ export default function RegisterPage() {
             className="absolute top-4 left-4 text-lg font-bold text-gray-800 z-10"
           >
             <img
-              src="/logos/logo.jpeg"
+              src="/logos/logo.png"
               alt="HerbAura Botánica Logo"
               className="h-20"
             />
