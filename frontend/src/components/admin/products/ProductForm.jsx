@@ -21,6 +21,7 @@ import { productSchema } from "../../../lib/schemas";
 import RHFCheckbox from "../../common/form/RHFCheckbox";
 import RHFInput from "../../common/form/RHFInput";
 import RHFTextarea from "../../common/form/RHFTextarea";
+import { compressImageToBase64 } from "../../../lib/helper";
 
 export default function ProductForm() {
   const [searchParams] = useSearchParams();
@@ -63,28 +64,25 @@ export default function ProductForm() {
     );
   };
 
-  const handleChangeImages = (e) => {
+  const handleChangeImages = async (e) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
-    const readers = Array.from(files).map((file) => {
-      return new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onloadend = () => resolve(reader.result);
-      });
-    });
-    Promise.all(readers).then((images) => {
-      setListOfImages((prev) => {
-        const hasMainImage = prev.some((img) => img.isMain);
-        const newImages = images.map((url, index) => ({
-          url,
-          isMain: !hasMainImage && index === 0,
-        }));
-        return [...prev, ...newImages];
-      });
+    // Comprimir todas las imágenes en paralelo
+    const compressedImages = await Promise.all(
+      Array.from(files).map((file) => compressImageToBase64(file))
+    );
+
+    setListOfImages((prev) => {
+      const hasMainImage = prev.some((img) => img.isMain);
+      const newImages = compressedImages.map((url, index) => ({
+        url,
+        isMain: !hasMainImage && index === 0,
+      }));
+      return [...prev, ...newImages];
     });
   };
+
 
   const handleDeleteImg = (index) => {
     setListOfImages((prev) => {
@@ -105,23 +103,21 @@ export default function ProductForm() {
     input.accept = "image/*";
     input.multiple = false;
 
-    input.onchange = () => {
+    input.onchange = async () => {
       const file = input.files[0];
       if (!file) return;
 
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onloadend = () => {
-        const base64Image = reader.result;
-        setListOfImages((prev) => {
-          const newImages = [...prev];
-          newImages[index] = {
-            ...newImages[index],
-            url: base64Image,
-          };
-          return newImages;
-        });
-      };
+      // Comprimir antes de guardar en el estado
+      const base64Image = await compressImageToBase64(file);
+
+      setListOfImages((prev) => {
+        const newImages = [...prev];
+        newImages[index] = {
+          ...newImages[index],
+          url: base64Image,
+        };
+        return newImages;
+      });
     };
 
     input.click();
