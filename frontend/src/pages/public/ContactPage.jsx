@@ -15,7 +15,7 @@ export default function ContactPage() {
         <div
           className="flex flex-col lg:flex-row gap-10 items-center min-h-95 px-5 py-10 md:px-10 lg:p-10 rounded-3xl mb-10 relative overflow-hidden"
           style={{
-            background: "url('/images/7.png') no-repeat center center",
+            background: "url('/images/7.webp') no-repeat center center",
             backgroundSize: "cover",
           }}
         >
@@ -45,9 +45,7 @@ export default function ContactPage() {
                   </p>
                 </div>
                 <p className="text-lg">
-                  {/* En HerbAura Botanica, estamos comprometidos con ofrecerte la
-                  mejor experiencia en cuidado capilar natural. Si tienes dudas sobre nuestros productos, ingredientes o
-                  necesitas asesoramiento personalizado,  */}
+                  
                   Nuestro equipo está listo para ayudarte. Contáctanos y
                   descubre el poder de la naturaleza para tu cabello.
                 </p>
@@ -119,7 +117,7 @@ export default function ContactPage() {
         <NewsLetter />
         <img
           loading="lazy"
-          src="/images/vector.png"
+          src="/images/vector.webp"
           className="absolute -bottom-4 left-0 h-8 w-full z-10 pointer-events-none"
           alt="Decorative vector graphic"
         />
@@ -128,3 +126,5 @@ export default function ContactPage() {
     </>
   );
 }
+
+

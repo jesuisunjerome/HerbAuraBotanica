@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useUpdateOrderStatus } from "../../../../hooks/orders/mutations";
-import { MODAL_BUTTONS, ORDER_STATUS } from "../../../../lib/helper";
+import { MODAL_BUTTONS, ORDER_STATUS, ALLOWED_STATUS_TRANSITIONS } from "../../../../lib/helper";
 import RHFInput from "../../../common/form/RHFInput";
 import RHFSelect from "../../../common/form/RHFSelect";
 import RHFTextarea from "../../../common/form/RHFTextarea";
@@ -57,6 +57,8 @@ export default function ModalEditStatus({ data, onClose }) {
     );
   }
 
+  const allowedTransitions = ALLOWED_STATUS_TRANSITIONS[data.status] || [];
+
   return (
     <ModalWrapper as="form" onSubmit={handleSubmit(onSubmit)} isOpen={true}>
       <ModalHeader onClose={onClose}>
@@ -81,28 +83,36 @@ export default function ModalEditStatus({ data, onClose }) {
               disabled
             />
           </div>
-          <div>
-            <RHFSelect
-              label="Nuevo Estatus"
-              id="updatedStatus"
-              register={register}
-              error={errors.updatedStatus}
-              required={true}
-              options={Object.values(ORDER_STATUS).map((status) => ({
-                label: status,
-                value: status,
-              }))}
-              disabled={isUpdatingStatus}
-            />
-          </div>
-          <div>
-            <RHFTextarea
-              label="Comentario (opcional)"
-              id="comment"
-              register={register}
-              disabled={isUpdatingStatus}
-            />
-          </div>
+          {allowedTransitions.length > 0 ? (
+            <>
+              <div>
+                <RHFSelect
+                  label="Nuevo Estatus"
+                  id="updatedStatus"
+                  register={register}
+                  error={errors.updatedStatus}
+                  required={true}
+                  options={allowedTransitions.map((status) => ({
+                    label: status,
+                    value: status,
+                  }))}
+                  disabled={isUpdatingStatus}
+                />
+              </div>
+              <div>
+                <RHFTextarea
+                  label="Comentario (opcional)"
+                  id="comment"
+                  register={register}
+                  disabled={isUpdatingStatus}
+                />
+              </div>
+            </>
+          ) : (
+            <div className="bg-amber-50 border border-amber-200 text-amber-800 p-4 rounded-md text-sm mt-4">
+              Este pedido ha finalizado su ciclo y no admite cambios de estatus.
+            </div>
+          )}
         </div>
       </ModalBody>
       <ModalFooter>
@@ -112,19 +122,21 @@ export default function ModalEditStatus({ data, onClose }) {
           onClick={onClose}
           disabled={isUpdatingStatus}
         />
-        <ModalButton
-          type="submit"
-          text="Guardar"
-          onClick={handleSubmit(onSubmit)}
-          disabled={isUpdatingStatus}
-        >
-          {isUpdatingStatus ? (
-            <>
-              <LoaderCircleIcon className="w-5 h-5 animate-spin" />
-              Guardando...
-            </>
-          ) : null}
-        </ModalButton>
+        {allowedTransitions.length > 0 && (
+          <ModalButton
+            type="submit"
+            text="Guardar"
+            onClick={handleSubmit(onSubmit)}
+            disabled={isUpdatingStatus}
+          >
+            {isUpdatingStatus ? (
+              <>
+                <LoaderCircleIcon className="w-5 h-5 animate-spin" />
+                Guardando...
+              </>
+            ) : null}
+          </ModalButton>
+        )}
       </ModalFooter>
     </ModalWrapper>
   );

@@ -65,6 +65,16 @@ const productSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
+// Índices estándar para acelerar consultas comunes
+productSchema.index({ category: 1 });
+productSchema.index({ isActive: 1 });
+
+// Índice de Texto para optimizar búsquedas (Full-text search)
+productSchema.index(
+  { name: "text", description: "text", category: "text", tags: "text" },
+  { weights: { name: 10, category: 8, tags: 5, description: 2 } }
+);
+
 const Product =
   mongoose.models.Product || mongoose.model("Product", productSchema);
 

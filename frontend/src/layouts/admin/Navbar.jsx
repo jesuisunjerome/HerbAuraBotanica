@@ -1,6 +1,6 @@
 import { BellIcon, MenuIcon, MessageCircle, SearchIcon } from "lucide-react";
 import { useConnectedUser } from "../../hooks/auth/queries";
-import { formatLongDateToString } from "../../lib/helper";
+import { formatLongDateToString, getOptimizedCloudinaryUrl } from "../../lib/helper";
 
 export default function Navbar({ handleToggleNav }) {
   const { connectedUser } = useConnectedUser();
@@ -17,14 +17,7 @@ export default function Navbar({ handleToggleNav }) {
         <span className="text-sm text-gray-500">
           {formatLongDateToString(new Date())}
         </span>
-        {/* <Link to="/admin/dashboard">
-          <img
-            loading="lazy"
-            src="/logos/logo.png"
-            alt="HerbAura Botanica Logo"
-            className="h-14"
-          />
-        </Link> */}
+        
       </div>
       <div className="flex items-center gap-1 lg:gap-3">
         <div className="relative hidden lg:block">
@@ -36,17 +29,17 @@ export default function Navbar({ handleToggleNav }) {
             <SearchIcon className="w-4 h-4" />
           </span>
         </div>
-        <button className="relative rounded-lg p-3 bg-[#f5f0e6]/50 hover:bg-[#f5f0e6] transition-colors">
+        <button aria-label="Ver mensajes" className="relative rounded-lg p-3 bg-[#f5f0e6]/50 hover:bg-[#f5f0e6] transition-colors">
           <MessageCircle className="w-5 h-5 text-gray-600" />
         </button>
-        <button className="relative rounded-lg p-3 bg-[#f5f0e6]/50 hover:bg-[#f5f0e6] transition-colors">
+        <button aria-label="Ver notificaciones" className="relative rounded-lg p-3 bg-[#f5f0e6]/50 hover:bg-[#f5f0e6] transition-colors">
           <BellIcon className="w-5 h-5 text-gray-600" />
-          {/* <BellDotIcon className="w-5 h-5 text-amber-600" /> */}
+          
         </button>
         <div className="flex items-center gap-1">
           <div className="h-9 w-9 rounded-lg bg-gray-100">
             <img
-              src={connectedUser?.avatar || "https://i.pravatar.cc/150"}
+              src={getOptimizedCloudinaryUrl(connectedUser?.avatar || "https://i.pravatar.cc/150", 50)}
               alt="Profile"
               className="h-9 w-9 object-cover rounded-lg"
             />
@@ -65,3 +58,5 @@ export default function Navbar({ handleToggleNav }) {
     </header>
   );
 }
+
+

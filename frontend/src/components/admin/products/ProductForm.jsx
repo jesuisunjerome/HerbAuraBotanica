@@ -1,15 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   ChevronLeftIcon,
-  EditIcon,
-  HeartIcon,
-  InfoIcon,
   LoaderCircleIcon,
-  PlusCircleIcon,
   SaveIcon,
-  Trash2Icon,
 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useSearchParams } from "react-router";
 import {
@@ -18,10 +13,8 @@ import {
 } from "../../../hooks/products/mutations";
 import { useFetchProductById } from "../../../hooks/products/queries";
 import { productSchema } from "../../../lib/schemas";
-import RHFCheckbox from "../../common/form/RHFCheckbox";
-import RHFInput from "../../common/form/RHFInput";
-import RHFTextarea from "../../common/form/RHFTextarea";
-import { compressImageToBase64 } from "../../../lib/helper";
+import GeneralInfoSection from "./GeneralInfoSection";
+import ImageUploaderSection from "./ImageUploaderSection";
 
 export default function ProductForm() {
   const [searchParams] = useSearchParams();
@@ -35,7 +28,6 @@ export default function ProductForm() {
   // If editing an existing product, verify its state, load its data then populate the form
   const isPendingProduct = isPending && !!productId;
 
-  const imagesRef = useRef(null);
   const [listOfImages, setListOfImages] = useState([]);
 
   const {
@@ -49,79 +41,10 @@ export default function ProductForm() {
     setError,
     trigger,
   } = useForm({
-    // defaultValues: product ?? newProduct,
     values: product,
     resolver: zodResolver(productSchema),
     mode: "all",
   });
-
-  const handleSaveAsMainImage = (index) => {
-    setListOfImages((prev) =>
-      prev.map((img, i) => ({
-        ...img,
-        isMain: i === index,
-      })),
-    );
-  };
-
-  const handleChangeImages = async (e) => {
-    const files = e.target.files;
-    if (!files || files.length === 0) return;
-
-    // Comprimir todas las imágenes en paralelo
-    const compressedImages = await Promise.all(
-      Array.from(files).map((file) => compressImageToBase64(file))
-    );
-
-    setListOfImages((prev) => {
-      const hasMainImage = prev.some((img) => img.isMain);
-      const newImages = compressedImages.map((url, index) => ({
-        url,
-        isMain: !hasMainImage && index === 0,
-      }));
-      return [...prev, ...newImages];
-    });
-  };
-
-
-  const handleDeleteImg = (index) => {
-    setListOfImages((prev) => {
-      const newImages = prev.filter((_, i) => i !== index);
-      const wasMain = prev[index].isMain;
-
-      if (wasMain && newImages.length > 0) {
-        newImages[0].isMain = true;
-      }
-
-      return newImages;
-    });
-  };
-
-  const handleReplaceImg = (index) => {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = "image/*";
-    input.multiple = false;
-
-    input.onchange = async () => {
-      const file = input.files[0];
-      if (!file) return;
-
-      // Comprimir antes de guardar en el estado
-      const base64Image = await compressImageToBase64(file);
-
-      setListOfImages((prev) => {
-        const newImages = [...prev];
-        newImages[index] = {
-          ...newImages[index],
-          url: base64Image,
-        };
-        return newImages;
-      });
-    };
-
-    input.click();
-  };
 
   useEffect(() => {
     const updateDataImages = () => {
@@ -146,6 +69,7 @@ export default function ProductForm() {
 
   useEffect(() => {
     if (product) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setListOfImages(product.images.sort((a, b) => b.isMain - a.isMain) || []);
     }
   }, [product]);
@@ -227,205 +151,23 @@ export default function ProductForm() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <GeneralInfoSection
+            register={register}
+            errors={errors}
+            isSaving={isSaving}
+            isPendingProduct={isPendingProduct}
+          />
+
           <div className="bg-white rounded-lg p-6 shadow-md shadow-[#4b2e2e]/5 border border-[#3f6b4c]/10">
-            <p className="text-xl font-bold mb-6">Información General</p>
+            <ImageUploaderSection
+              listOfImages={listOfImages}
+              setListOfImages={setListOfImages}
+              register={register}
+              errors={errors}
+              isSaving={isSaving}
+              isPendingProduct={isPendingProduct}
+            />
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-5">
-              <div className="sm:col-span-2 lg:col-span-1 xl:col-span-2">
-                <RHFCheckbox
-                  id="isActive"
-                  defaultChecked={true}
-                  register={register}
-                  disabled={isSaving || isPendingProduct}
-                >
-                  Mostrar producto
-                </RHFCheckbox>
-              </div>
-              <div className="sm:col-span-2 lg:col-span-1 xl:col-span-2">
-                <RHFInput
-                  label="Nombre del Producto"
-                  id="name"
-                  required={true}
-                  register={register}
-                  error={errors.name}
-                  disabled={isSaving || isPendingProduct}
-                />
-              </div>
-              <div>
-                <RHFInput
-                  label="Categoría"
-                  id="category"
-                  required={true}
-                  register={register}
-                  error={errors.category}
-                  disabled={isSaving || isPendingProduct}
-                />
-              </div>
-              <div>
-                <RHFInput
-                  label="Precio"
-                  id="price"
-                  type="number"
-                  step="0.01"
-                  required={true}
-                  register={register}
-                  error={errors.price}
-                  min={0}
-                  disabled={isSaving || isPendingProduct}
-                />
-              </div>
-              <div>
-                <RHFInput
-                  label="Cantidad"
-                  id="stockQuantity"
-                  type="number"
-                  required={true}
-                  register={register}
-                  error={errors.stockQuantity}
-                  min={0}
-                  disabled={isSaving || isPendingProduct}
-                />
-              </div>
-              <div>
-                <RHFInput
-                  label="Umbral inventario bajo"
-                  id="lowStockThreshold"
-                  type="number"
-                  required={true}
-                  register={register}
-                  error={errors.lowStockThreshold}
-                  min={0}
-                  disabled={isSaving || isPendingProduct}
-                />
-              </div>
-              <div>
-                <RHFInput
-                  label="Descuento (%)"
-                  id="discountPercentage"
-                  type="number"
-                  step="0.01"
-                  register={register}
-                  error={errors.discountPercentage}
-                  min={0}
-                  max={100}
-                  disabled={isSaving || isPendingProduct}
-                />
-              </div>
-              <div className="sm:col-span-2 lg:col-span-1 xl:col-span-2">
-                <RHFTextarea
-                  label="Descripción"
-                  id="description"
-                  required={true}
-                  register={register}
-                  error={errors.description}
-                  disabled={isSaving || isPendingProduct}
-                  rows={5}
-                />
-              </div>
-            </div>
-          </div>
-          <div className="bg-white rounded-lg p-6 shadow-md shadow-[#4b2e2e]/5 border border-[#3f6b4c]/10">
-            <div className="grid grid-cols-1 2xl:grid-cols-2 gap-5">
-              <div>
-                <RHFInput
-                  label="Etiquetas (separadas por comas)"
-                  id="tags"
-                  required={true}
-                  register={register}
-                  error={errors.tags}
-                  placeholder="Etiqueta 1, Etiqueta 2"
-                  disabled={isSaving || isPendingProduct}
-                />
-              </div>
-              <div className="2xl:col-span-2">
-                <label className="block mb-2 text-gray-700">
-                  Imagen del producto <span className="text-red-400">*</span>
-                </label>
-                <div className="grid grid-cols-3 xl:grid-cols-4 gap-5">
-                  {listOfImages.find((img) => img.isMain) && (
-                    <div className="col-span-3 xl:col-span-4">
-                      <div className="flex items-center justify-center h-70 w-full bg-gray-50 rounded-md overflow-hidden">
-                        <img
-                          src={listOfImages.find((img) => img.isMain).url}
-                          className="size-full object-contain"
-                          alt="Imagen principal del producto"
-                        />
-                      </div>
-                    </div>
-                  )}
-
-                  {listOfImages.map((image, index) => (
-                    <div
-                      key={index}
-                      className="bg-gray-50 h-35 overflow-hidden rounded-lg flex items-center justify-center relative group border border-[#3f6b4c]/10 transition-transform duration-400"
-                    >
-                      <img
-                        src={image.url}
-                        className="w-full h-full object-contain"
-                        alt={`Imagen del producto ${index + 1}`}
-                      />
-
-                      <div className="absolute top-2 left-2">
-                        <button
-                          type="button"
-                          title="Marcar como imagen principal"
-                          onClick={() => handleSaveAsMainImage(index)}
-                          className={`rounded-full p-2 shadow-lg disabled:cursor-not-allowed ${image.isMain ? "text-pink-600 bg-pink-100" : "text-gray-600 bg-gray-50"}`}
-                        >
-                          <HeartIcon className="w-4 h-4" />
-                        </button>
-                      </div>
-                      <div className="absolute bottom-2 right-2 md:-bottom-10 md:group-hover:bottom-2 transition-all flex gap-2">
-                        <button
-                          type="button"
-                          onClick={() => handleReplaceImg(index)}
-                          title="Cambiar imagen"
-                          className="text-[#4b2e2e] bg-[#f5f0e6] hover:bg-[#ebdcb9] rounded-full p-2 shadow-md disabled:cursor-not-allowed transition"
-                          disabled={isSaving || isPendingProduct}
-                        >
-                          <EditIcon className="w-4 h-4" />
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => handleDeleteImg(index)}
-                          title="Eliminar"
-                          className="text-red-600 bg-white hover:bg-red-50 rounded-full p-2 shadow-md disabled:cursor-not-allowed transition"
-                          disabled={isSaving || isPendingProduct}
-                        >
-                          <Trash2Icon className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                  <div>
-                    <button
-                      title="Agregar imágenes"
-                      type="button"
-                      onClick={() => imagesRef.current.click()}
-                      className="w-full bg-[#f5f0e6]/50 hover:bg-[#f5f0e6]/80 border-2 border-dashed border-[#3f6b4c]/30 h-35 overflow-hidden rounded-lg flex items-center justify-center cursor-pointer disabled:cursor-not-allowed transition"
-                      disabled={isSaving || isPendingProduct}
-                    >
-                      <input
-                        ref={imagesRef}
-                        type="file"
-                        multiple
-                        accept="image/*"
-                        className="hidden"
-                        onChange={handleChangeImages}
-                      />
-                      <PlusCircleIcon className="w-6 h-6 text-[#3f6b4c]" />
-                    </button>
-                  </div>
-                </div>
-                <p className="flex gap-2 text-sm text-gray-500 mt-2 items-center leading-tight">
-                  <InfoIcon className="w-6 h-6 text-[#3f6b4c]" />{" "}
-                  <span>
-                    Necesitas al menos 2 imágenes. Presta atención a la calidad
-                    de las imágenes para una mejor presentación del producto.
-                  </span>
-                </p>
-              </div>
-            </div>
             <div className="mt-7 md:hidden gap-3 flex justify-end">
               <button
                 disabled={isSaving || isPendingProduct || !isValid}

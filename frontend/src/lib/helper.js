@@ -67,7 +67,7 @@ export function compressImageToBase64(file, maxWidth = 800, maxHeight = 800, qua
         if (file.type === "image/png" || file.type === "image/webp") {
           outputFormat = "image/png";
           // PNG no usa el parámetro de calidad, pero respetará la transparencia del canvas
-          outputQuality = undefined; 
+          outputQuality = undefined;
         }
 
         const compressedBase64 = canvas.toDataURL(outputFormat, outputQuality);
@@ -213,26 +213,26 @@ export const CART = {
       id: 2,
       name: "PayPal",
       description: "Paga de forma segura a través de tu cuenta PayPal.",
-      img: "/images/payments/paypal-icon.png",
+      img: "/images/payments/paypal-icon.webp",
     },
     {
       id: 3,
       name: "Mercado Pago",
       description:
         "Utiliza Mercado Pago para una experiencia de pago rápida y segura.",
-      img: "/images/payments/mercadopago-icon.png",
+      img: "/images/payments/mercadopago-icon.webp",
     },
     {
       id: 4,
       name: "Stripe",
       description: "Paga con tarjeta de crédito o débito a través de Stripe.",
-      img: "/images/payments/stripe-icon.png",
+      img: "/images/payments/stripe-icon.webp",
     },
     {
       id: 5,
       name: "Apple Pay",
       description: "Paga de forma rápida y segura con Apple Pay.",
-      img: "/images/payments/applepay-icon.png",
+      img: "/images/payments/applepay-icon.webp",
     },
   ],
   STEPS: {
@@ -246,6 +246,17 @@ export const ORDER_STATUS = {
   SHIPPED: "Shipped",
   DELIVERED: "Delivered",
   CANCELLED: "Cancelled",
+  RETURNED: "Returned",
+  REFUNDED: "Refunded",
+};
+
+export const ALLOWED_STATUS_TRANSITIONS = {
+  [ORDER_STATUS.PROCESSING]: [ORDER_STATUS.SHIPPED, ORDER_STATUS.CANCELLED],
+  [ORDER_STATUS.SHIPPED]: [ORDER_STATUS.DELIVERED, ORDER_STATUS.CANCELLED, ORDER_STATUS.RETURNED],
+  [ORDER_STATUS.DELIVERED]: [ORDER_STATUS.RETURNED, ORDER_STATUS.REFUNDED],
+  [ORDER_STATUS.RETURNED]: [ORDER_STATUS.REFUNDED],
+  [ORDER_STATUS.REFUNDED]: [],
+  [ORDER_STATUS.CANCELLED]: [],
 };
 
 export const PAYMENT_STATUS = {
@@ -263,3 +274,9 @@ export const SORT_BY_OPTIONS = [
 
 export const IVA_RATE = 0.16;
 export const SHIPPING_COST = 16.0;
+
+export const getOptimizedCloudinaryUrl = (url, width = 800) => {
+  if (!url?.includes("res.cloudinary.com")) return url;
+  if (url.includes("/upload/f_auto")) return url;
+  return url.replace("/upload/", `/upload/f_auto,q_auto,w_${width},c_limit/`);
+};

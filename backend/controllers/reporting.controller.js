@@ -1,10 +1,12 @@
 import InventoryLog from "../models/InventoryLog.js";
 import Order from "../models/Order.js";
 import Product from "../models/Product.js";
+import { ORDER_STATUS } from "../lib/constants.js";
 
 const parseDateRange = (from, to) => {
-  const fromDate = from ? new Date(from) : new Date(new Date().setDate(1));
-  const toDate = to ? new Date(to) : new Date();
+  // Add 'T00:00:00' to force JavaScript to parse the string as LOCAL time instead of UTC
+  const fromDate = from ? new Date(`${from}T00:00:00`) : new Date(new Date().setDate(1));
+  const toDate = to ? new Date(`${to}T00:00:00`) : new Date();
 
   fromDate.setHours(0, 0, 0, 0);
   toDate.setHours(23, 59, 59, 999);
@@ -33,6 +35,7 @@ const buildSalesMatchFilter = ({ fromDate, toDate, search, paymentMethod }) => {
   const match = {
     isPaid: true,
     paidAt: { $gte: fromDate, $lte: toDate },
+    status: { $ne: ORDER_STATUS.CANCELLED },
   };
 
   if (paymentMethod) {
@@ -191,6 +194,7 @@ const getMovementReportData = async (query, { includePagination }) => {
 export const getSalesReport = async (req, res) => {
   try {
     const { fromDate, toDate } = parseDateRange(req.query.from, req.query.to);
+
     const { page, limit } = parsePagination(req.query.page, req.query.limit);
     const salesSort = parseSort(
       req.query.sortBy,
@@ -206,72 +210,291 @@ export const getSalesReport = async (req, res) => {
       paymentMethod: req.query.paymentMethod,
     });
 
-    const [summaryAgg, topProductsAgg, topCategoriesAgg, orders, total] =
-      await Promise.all([
-        Order.aggregate([
-          { $match: match },
-          {
-            $group: {
-              _id: null,
-              totalRevenue: { $sum: "$totalPrice" },
-              totalOrders: { $sum: 1 },
-              totalItemsSold: { $sum: { $sum: "$orderItems.quantity" } },
-            },
+    const [
+      summaryAgg,
+      topProductsAgg,
+      topCategoriesAgg,
+      dailySalesAgg,
+      orders,
+      total,
+      topCustomersAgg,
+      paymentMethodsAgg,
+      inventoryStatsAgg,
+      bottomProductsAgg,
+      topCitiesAgg,
+      customerTypeAgg,
+      lowStockProductsAgg,
+      adjustmentsAgg,
+      orderStatusAgg,
+      fulfillmentTimeAgg,
+      cancelledOrdersAgg,
+    ] = await Promise.all([
+      Order.aggregate([
+        { $match: match },
+        {
+          $group: {
+            _id: null,
+            totalRevenue: { $sum: "$totalPrice" },
+            totalOrders: { $sum: 1 },
+            totalItemsSold: { $sum: { $sum: "$orderItems.quantity" } },
           },
-        ]),
-        Order.aggregate([
-          { $match: match },
-          { $unwind: "$orderItems" },
-          {
-            $group: {
-              _id: "$orderItems.product",
-              name: { $first: "$orderItems.name" },
-              quantity: { $sum: "$orderItems.quantity" },
-              revenue: {
-                $sum: {
-                  $multiply: ["$orderItems.quantity", "$orderItems.price"],
-                },
+        },
+      ]),
+      Order.aggregate([
+        { $match: match },
+        { $unwind: "$orderItems" },
+        {
+          $group: {
+            _id: "$orderItems.product",
+            name: { $first: "$orderItems.name" },
+            quantity: { $sum: "$orderItems.quantity" },
+            revenue: {
+              $sum: {
+                $multiply: ["$orderItems.quantity", "$orderItems.price"],
               },
             },
           },
-          { $sort: { quantity: -1 } },
-          { $limit: 10 },
-        ]),
-        Order.aggregate([
-          { $match: match },
-          { $unwind: "$orderItems" },
-          {
-            $lookup: {
-              from: "products",
-              localField: "orderItems.product",
-              foreignField: "_id",
-              as: "productDoc",
-            },
+        },
+        { $sort: { quantity: -1 } },
+        { $limit: 10 },
+      ]),
+      Order.aggregate([
+        { $match: match },
+        { $unwind: "$orderItems" },
+        {
+          $lookup: {
+            from: "products",
+            localField: "orderItems.product",
+            foreignField: "_id",
+            as: "productDoc",
           },
-          { $unwind: "$productDoc" },
-          {
-            $group: {
-              _id: "$productDoc.category",
-              quantity: { $sum: "$orderItems.quantity" },
-              revenue: {
-                $sum: {
-                  $multiply: ["$orderItems.quantity", "$orderItems.price"],
-                },
+        },
+        { $unwind: "$productDoc" },
+        {
+          $group: {
+            _id: "$productDoc.category",
+            quantity: { $sum: "$orderItems.quantity" },
+            revenue: {
+              $sum: {
+                $multiply: ["$orderItems.quantity", "$orderItems.price"],
               },
             },
           },
-          { $sort: { quantity: -1 } },
-          { $limit: 10 },
-        ]),
-        Order.find(match)
-          .sort(salesSort)
-          .skip((page - 1) * limit)
-          .limit(limit)
-          .select(
-            "confirmationNumber customer itemsPrice taxPrice shippingPrice totalPrice paidAt paymentMethod createdAt",
-          ),
-        Order.countDocuments(match),
-      ]);
+        },
+        { $sort: { quantity: -1 } },
+        { $limit: 10 },
+      ]),
+      Order.aggregate([
+        { $match: match },
+        {
+          $group: {
+            _id: { $dateToString: { format: "%Y-%m-%d", date: "$paidAt", timezone: "America/Mexico_City" } },
+            revenue: { $sum: "$totalPrice" },
+            orders: { $sum: 1 },
+          },
+        },
+        { $sort: { _id: 1 } },
+      ]),
+      Order.find(match)
+        .sort(salesSort)
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .select(
+          "confirmationNumber customer itemsPrice taxPrice shippingPrice totalPrice paidAt paymentMethod status isPaid createdAt",
+        ),
+      Order.countDocuments(match),
+      Order.aggregate([
+        { $match: match },
+        {
+          $group: {
+            _id: "$customer.email",
+            name: { $first: "$customer.name" },
+            totalSpent: { $sum: "$totalPrice" },
+            ordersCount: { $sum: 1 },
+          },
+        },
+        { $sort: { totalSpent: -1 } },
+        { $limit: 100 },
+      ]),
+      Order.aggregate([
+        { $match: match },
+        {
+          $group: {
+            _id: "$paymentMethod",
+            revenue: { $sum: "$totalPrice" },
+            count: { $sum: 1 },
+          },
+        },
+        { $sort: { revenue: -1 } },
+      ]),
+      Product.aggregate([
+        {
+          $group: {
+            _id: null,
+            totalValue: { $sum: { $multiply: ["$price", "$stockQuantity"] } },
+            totalItems: { $sum: "$stockQuantity" },
+          },
+        },
+      ]),
+      Order.aggregate([
+        { $match: match },
+        { $unwind: "$orderItems" },
+        {
+          $group: {
+            _id: "$orderItems.product",
+            name: { $first: "$orderItems.name" },
+            quantity: { $sum: "$orderItems.quantity" },
+            revenue: {
+              $sum: {
+                $multiply: ["$orderItems.quantity", "$orderItems.price"],
+              },
+            },
+          },
+        },
+        { $sort: { quantity: 1 } },
+        { $limit: 10 },
+      ]),
+      Order.aggregate([
+        { $match: match },
+        {
+          $group: {
+            _id: "$shippingAddress.city",
+            ordersCount: { $sum: 1 },
+            revenue: { $sum: "$totalPrice" },
+          },
+        },
+        { $sort: { revenue: -1 } },
+        { $limit: 10 },
+      ]),
+      Order.aggregate([
+        { $match: match },
+        {
+          $group: {
+            _id: "$customer.email",
+            currentPeriodRevenue: { $sum: "$totalPrice" },
+          },
+        },
+        {
+          $lookup: {
+            from: "orders",
+            let: { email: "$_id" },
+            pipeline: [
+              {
+                $match: {
+                  $expr: { $eq: ["$customer.email", "$$email"] },
+                  isPaid: true,
+                  paidAt: { $lt: fromDate },
+                },
+              },
+              { $limit: 1 },
+            ],
+            as: "pastOrders",
+          },
+        },
+        {
+          $addFields: {
+            customerType: {
+              $cond: {
+                if: { $gt: [{ $size: "$pastOrders" }, 0] },
+                then: "Recurrente",
+                else: "Nuevo",
+              },
+            },
+          },
+        },
+        {
+          $group: {
+            _id: "$customerType",
+            revenue: { $sum: "$currentPeriodRevenue" },
+            count: { $sum: 1 },
+          },
+        },
+      ]),
+      Product.aggregate([
+        { $match: { stockQuantity: { $lte: 10 } } },
+        { $sort: { stockQuantity: 1 } },
+        { $limit: 15 },
+      ]),
+      InventoryLog.aggregate([
+        {
+          $match: {
+            createdAt: { $gte: fromDate, $lte: toDate },
+            order: null, // Solo movimientos manuales (mermas o ajustes)
+          },
+        },
+        {
+          $lookup: {
+            from: "products",
+            localField: "product",
+            foreignField: "_id",
+            as: "productDoc",
+          },
+        },
+        { $unwind: "$productDoc" },
+        { $sort: { createdAt: -1 } },
+        { $limit: 15 },
+        {
+          $project: {
+            productName: "$productDoc.name",
+            movementType: 1,
+            quantity: 1,
+            reason: 1,
+            createdAt: 1,
+            financialImpact: { $multiply: ["$quantity", "$productDoc.price"] },
+          },
+        },
+      ]),
+      Order.aggregate([
+        { $match: { createdAt: { $gte: fromDate, $lte: toDate } } },
+        {
+          $group: {
+            _id: "$status",
+            count: { $sum: 1 },
+          },
+        },
+      ]),
+      Order.aggregate([
+        { $match: { status: { $in: ["Shipped", "Delivered"] }, createdAt: { $gte: fromDate, $lte: toDate } } },
+        {
+          $addFields: {
+            shippedStatus: {
+              $arrayElemAt: [
+                {
+                  $filter: {
+                    input: "$statusHistory",
+                    as: "sh",
+                    cond: { $eq: ["$$sh.status", "Shipped"] }
+                  }
+                },
+                0
+              ]
+            }
+          }
+        },
+        { $match: { shippedStatus: { $exists: true } } },
+        {
+          $project: {
+            fulfillmentTimeMs: { $subtract: ["$shippedStatus.createdAt", "$createdAt"] }
+          }
+        },
+        {
+          $group: {
+            _id: null,
+            avgFulfillmentTime: { $avg: "$fulfillmentTimeMs" }
+          }
+        }
+      ]),
+      Order.aggregate([
+        { $match: { status: "Cancelled", createdAt: { $gte: fromDate, $lte: toDate } } },
+        {
+          $group: {
+            _id: null,
+            count: { $sum: 1 },
+            totalLostRevenue: { $sum: "$totalPrice" }
+          }
+        }
+      ])
+    ]);
 
     const summary = summaryAgg[0] || {
       totalRevenue: 0,
@@ -284,6 +507,18 @@ export const getSalesReport = async (req, res) => {
       summary,
       topProducts: topProductsAgg,
       topCategories: topCategoriesAgg,
+      dailySales: dailySalesAgg,
+      topCustomers: topCustomersAgg,
+      paymentMethods: paymentMethodsAgg,
+      inventoryStats: inventoryStatsAgg[0] || { totalValue: 0, totalItems: 0 },
+      bottomProducts: bottomProductsAgg,
+      topCities: topCitiesAgg,
+      customerTypes: customerTypeAgg,
+      lowStockProducts: lowStockProductsAgg,
+      adjustments: adjustmentsAgg,
+      orderStatuses: orderStatusAgg,
+      fulfillmentMetrics: fulfillmentTimeAgg[0] || { avgFulfillmentTime: 0 },
+      cancelledMetrics: cancelledOrdersAgg[0] || { count: 0, totalLostRevenue: 0 },
       orders,
       pagination: {
         page,

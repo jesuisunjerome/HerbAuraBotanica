@@ -10,11 +10,11 @@ export default function Banner() {
           <h1 className="text-4xl lg:text-5xl mb-6">
             🌱 Donde las hierbas{" "}
             <span className="text-amber-600 relative">
-              nutren
+              nutren{" "}
               <span className="absolute -bottom-1 left-0 w-full h-2 bg-amber-200 rounded-lg animate-pulse"></span>
             </span>{" "}
             <span className="text-amber-600 relative">
-              el aura
+              el aura{" "}
               <span className="absolute -bottom-1 left-0 w-full h-2 bg-amber-200 rounded-lg animate-pulse"></span>
             </span>{" "}
             de tu cabello
@@ -44,19 +44,19 @@ export default function Banner() {
         <div className="sm:w-[70%] md:w-[60%] lg:w-[75%] xl:w-[65%] h-150 lg:h-[70vh] mx-auto mt-10 overflow-hiddens lg:mt-0 sticky top-20">
           <img
             loading="lazy"
-            src="/images/7.png"
+            src="/images/7.webp"
             alt="HerbAura Botanica - Cuidado Natural del Cabello"
             className="w-full h-full object-cover bg-gray-200 rounded-2xl"
           />
           <img
             loading="lazy"
-            src="/images/2.png"
+            src="/images/2.webp"
             className="absolute bottom-0 left-6 h-60 object-cover w-[60%] pointer-events-none rounded-t-2xl ring-4 ring-white ring-offset-1"
             alt="HerbAura Botanica - Cuidado Natural del Cabello"
           />
           <img
             loading="lazy"
-            src="/images/vector-1.png"
+            src="/images/vector-1.webp"
             className="absolute -bottom-4 left-0 h-8 w-[90%] pointer-events-none"
             alt="Decorative vector graphic"
           />
@@ -66,3 +66,4 @@ export default function Banner() {
     </header>
   );
 }
+

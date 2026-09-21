@@ -2,27 +2,6 @@ import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import { USER_ROLES } from "../lib/constants.js";
 
-const sessionSchema = new mongoose.Schema({
-  tokenId: {
-    type: String,
-    required: true,
-  },
-  refreshToken: {
-    type: String,
-    required: true,
-  },
-  device: String,
-  ip: String,
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-  expiresAt: {
-    type: Date,
-    required: true,
-  },
-});
-
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -56,11 +35,10 @@ const userSchema = new mongoose.Schema(
     avatar: {
       type: String,
     },
-    sessions: [sessionSchema],
   },
   {
     timestamps: true,
-  },
+  }
 );
 
 // Hash password before saving (solo para usuarios con contraseña local)

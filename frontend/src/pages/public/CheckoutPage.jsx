@@ -27,7 +27,7 @@ export default function CheckoutPage() {
         ) : (
           <div className="w-full bg-white md:w-8/12 xl:w-9/12 p-5 mx-auto rounded-2xl">
             <NoData
-              img="/images/empty-cart.png"
+              img="/images/empty-cart.webp"
               message="Tu carrito está vacío."
             />
             <div className="mb-10 -mt-17 text-center">
@@ -54,3 +54,4 @@ export default function CheckoutPage() {
     </>
   );
 }
+

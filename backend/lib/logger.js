@@ -1,0 +1,22 @@
+import winston from "winston";
+
+const { combine, timestamp, printf, colorize } = winston.format;
+
+const logFormat = printf(({ level, message, timestamp }) => {
+  return `${timestamp} [${level}]: ${message}`;
+});
+
+const logger = winston.createLogger({
+  level: "info",
+  format: combine(timestamp(), logFormat),
+  transports: [
+    new winston.transports.Console({
+      format: combine(colorize(), timestamp(), logFormat),
+    }),
+    // Here you can add file transports for production
+    // new winston.transports.File({ filename: 'error.log', level: 'error' }),
+    // new winston.transports.File({ filename: 'combined.log' }),
+  ],
+});
+
+export default logger;

@@ -1,4 +1,4 @@
-ï»¿import { useEffect } from "react";
+import { useEffect } from "react";
 import SEORender from "../../components/common/SEORender";
 import NewsLetter from "../../components/public/catalog/NewsLetter";
 import { RichText } from "../../components/public/terms/RichText";
@@ -25,8 +25,8 @@ export default function PolicyPage() {
   return (
     <>
       <SEORender
-        title="TÃ©rminos y Condiciones :: HerbAura Botanica"
-        description="Lee los tÃ©rminos y condiciones de HerbAura Botanica. InformaciÃ³n sobre compras, envÃ­os, devoluciones y polÃ­ticas de privacidad para una experiencia segura y confiable."
+        title="Términos y Condiciones :: HerbAura Botanica"
+        description="Lee los términos y condiciones de HerbAura Botanica. Información sobre compras, envíos, devoluciones y políticas de privacidad para una experiencia segura y confiable."
       />
 
       <header className="relative px-3 lg:px-20 md:px-5 h-90 pt-10 pb-20 flex items-center justify-center overflow-hidden">
@@ -37,7 +37,7 @@ export default function PolicyPage() {
         />
         <div className="absolute inset-0 bg-linear-to-br from-green-900/70 via-green-800/60 to-amber-900/70" />
         <h1 className="relative text-4xl lg:text-5xl font-bold text-center text-white drop-shadow-lg">
-          TÃ©rminos y Condiciones
+          Términos y Condiciones
         </h1>
       </header>
 
@@ -63,8 +63,8 @@ export default function PolicyPage() {
           <div className="w-full md:w-2/3">
             <p className="mb-10">
               Bienvenido a HerbAura Botanica. Al acceder y utilizar nuestro
-              sitio web, aceptas cumplir con los siguientes tÃ©rminos y
-              condiciones. Por favor, lee atentamente esta informaciÃ³n antes de
+              sitio web, aceptas cumplir con los siguientes términos y
+              condiciones. Por favor, lee atentamente esta información antes de
               realizar cualquier compra.
             </p>
             <div className="space-y-10">
@@ -90,14 +90,14 @@ export default function PolicyPage() {
       <section className="bg-white px-3 py-20 lg:px-20 md:px-5 relative">
         <img
           loading="lazy"
-          src="/images/vector.png"
+          src="/images/vector.webp"
           className="absolute -top-4 left-0 h-8 w-full pointer-events-none"
           alt="Decorative vector graphic"
         />
         <NewsLetter />
         <img
           loading="lazy"
-          src="/images/vector.png"
+          src="/images/vector.webp"
           className="absolute -bottom-4 left-0 h-8 w-full z-10 pointer-events-none"
           alt="Decorative vector graphic"
         />
@@ -106,3 +106,4 @@ export default function PolicyPage() {
     </>
   );
 }
+

@@ -1,6 +1,7 @@
 import { ChevronRightIcon, HandbagIcon } from "lucide-react";
 import { Link } from "react-router";
 import { useCartStore } from "../../../store/useCartStore";
+import { getOptimizedCloudinaryUrl } from "../../../lib/helper";
 
 export default function FeaturedProduct({ isPending, bestSellers }) {
   const { addToCart } = useCartStore();
@@ -10,7 +11,7 @@ export default function FeaturedProduct({ isPending, bestSellers }) {
       className="px-3 lg:px-20 md:px-5 relative py-10"
       style={{
         background:
-          "url(/images/modelos/modelo-2.jpeg) center center no-repeat",
+          "url(/images/modelos/modelo-2.webp) center center no-repeat",
         backgroundSize: "cover",
         backgroundAttachment: "fixed",
       }}
@@ -27,7 +28,7 @@ export default function FeaturedProduct({ isPending, bestSellers }) {
               >
                 <img
                   loading="lazy"
-                  src={bestSellers[0].product.images[0].url}
+                  src={getOptimizedCloudinaryUrl(bestSellers[0].product.images[0].url, 300)}
                   alt={bestSellers[0].product.name}
                   className="w-full h-full bg-gray-200 object-cover"
                 />
@@ -87,7 +88,7 @@ export default function FeaturedProduct({ isPending, bestSellers }) {
 
       <img
         loading="lazy"
-        src="/images/vector.png"
+        src="/images/vector.webp"
         className="absolute -top-4 left-0 h-8 w-full rotate-180 pointer-events-none"
         alt="Decorative vector graphic"
       />
@@ -117,3 +118,4 @@ const LoadingSkeleton = () => (
     </div>
   </div>
 );
+

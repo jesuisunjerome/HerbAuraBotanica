@@ -28,7 +28,7 @@ export default function RegisterPage() {
         <div
           className="h-full flex gap-5 p-5 rounded-lg overflow-hidden relative"
           style={{
-            background: "url('/images/img-5.png')",
+            background: "url('/images/img-5.webp')",
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
@@ -146,3 +146,4 @@ export default function RegisterPage() {
     </section>
   );
 }
+

@@ -1,0 +1,131 @@
+<div
+  style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #364153; background-color: #f9f9f9; padding:15px">
+  <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 20px 10px; border-radius: 8px;">
+    <header style="text-align: center; margin-bottom: 20px; padding-top:20px">
+      <img alt="Logo de HerbAura Botanica" height="80" src="{{clientUrl}}/logos/logo.png"
+        style="height: 80px; object-fit: contain; display: block; margin: 0 auto;" />
+    </header>
+    <main>
+      <div style="margin-bottom: 20px;">
+        <h1 style="text-align: center;">{{title}}</h1>
+        <h4 style="text-align: center; color: #6a7282; max-width: 400px; margin: 0 auto;">
+          {{{message}}}
+        </h4>
+      </div>
+      <div style="padding:10px 20px; margin-bottom: 20px; border-radius: 8px;">
+        <h3 style="border-bottom: 1px solid #e5e7eb; padding-bottom: 15px;margin-bottom: 10px;">Detalles del Pedido</h3>
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+          {{#each items}}
+          <tr>
+            <td style="padding: 5px; border-bottom: 1px solid #f3f4f6;">
+              <img src="{{this.image}}" alt="{{this.name}}"
+                style="width: 48px; height: 48px; object-fit: contain; border-radius: 8px; padding:8px; background-color: #f3f4f6;" />
+            </td>
+            <td style="padding: 5px; border-bottom: 1px solid #f3f4f6;">
+              <h4 style="margin: 0">{{this.name}}</h4>
+              <small style="color: #6a7282; display: block; margin-bottom: 8px; font-size: 11px;">
+                {{this.quantity}} x ${{this.price}} MXN
+              </small>
+            </td>
+            <td style="padding: 5px; border-bottom: 1px solid #f3f4f6;">
+              ${{this.total}} MXN
+            </td>
+          </tr>
+          {{/each}}
+          <tr>
+            <td style="padding: 10px; padding-bottom: 5px;">Subtotal</td>
+            <td style="padding: 10px; padding-bottom: 5px;"></td>
+            <td style="padding: 10px; padding-bottom: 5px;">${{order.itemsPrice}} MXN</td>
+          </tr>
+          <tr>
+            <td style="padding: 10px; padding-bottom: 5px;">IVA ({{taxPercent}}%)</td>
+            <td style="padding: 10px; padding-bottom: 5px;"></td>
+            <td style="padding: 10px; padding-bottom: 5px;">${{order.taxPrice}} MXN</td>
+          </tr>
+          <tr>
+            <td style="padding: 10px; padding-bottom: 5px;">Envío</td>
+            <td style="padding: 10px; padding-bottom: 5px;"></td>
+            <td style="padding: 10px; padding-bottom: 5px;">${{order.shippingPrice}} MXN</td>
+          </tr>
+          <tr style="font-weight: 700;">
+            <td style="padding: 10px; padding-bottom: 5px;">Total</td>
+            <td style="padding: 10px; padding-bottom: 5px;"></td>
+            <td style="padding: 10px; padding-bottom: 5px;">${{order.totalPrice}} MXN</td>
+          </tr>
+        </table>
+
+        <div style="padding-left:10px; padding-right:10px">
+          <a href="{{urlTrackOrder}}"
+            style="display: block; text-align:center; padding: 10px 20px; background-color: #964900; color: #fff; text-decoration: none; border-radius: 8px; font-weight: 700;">Rastrear
+            Pedido</a>
+        </div>
+      </div>
+      <div style="padding:10px 20px; margin-bottom: 20px;">
+        <h3 style="border-bottom: 1px solid #e5e7eb; padding-bottom: 15px; margin-bottom: 10px;">Información de Envío
+        </h3>
+        <table style="width: 100%; border-collapse: separate; border-spacing: 10px 0;">
+          <tr>
+            <td
+              style="width: 50%; background-color: #e5e7eb2e; border-radius: 8px; padding: 20px; vertical-align: top;">
+              <h3 style="color: #964900;">Enviar a</h3>
+              <p style="margin:0; line-height: 1.5;">
+                {{order.shippingAddress.address}},<br />
+                {{order.shippingAddress.city}}, {{order.shippingAddress.state}}
+                {{order.shippingAddress.postalCode}},<br />
+                {{order.shippingAddress.country}}
+              </p>
+            </td>
+            <td
+              style="width: 50%; background-color: #e5e7eb2e; border-radius: 8px; padding: 20px; vertical-align: top;">
+              <h3 style="color: #964900;">Info de Pago</h3>
+              <p style="margin:0; line-height: 1.5;">
+                {{order.paymentMethod}}
+              </p>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div style="padding:20px 10px; margin-bottom: 20px;">
+        <table style="width: 100%; border-collapse: collapse;">
+          <tr>
+            <td style="width: 50%; padding-right:10px">
+              <h3>El Ritual de Recepción</h3>
+              <p style="line-height: 1.5;">
+                Nuestro empaque está diseñado para ser una extensión sensorial del bosque. Cada caja es libre de
+                plástico e infundida con el sutil aroma de la madera de cedro. Te invitamos a reutilizar los envases de
+                vidrio una vez que estén vacíos.
+              </p>
+              <div>
+                <span
+                  style="display:inline-block; margin:1px; color: #244f33; padding: 4px 10px; border-radius: 20px; background-color: #a2d2ac; font-size: 10px;">Orgánico</span>
+                <span
+                  style="display:inline-block; margin:1px; color: #244f33; padding: 4px 10px; border-radius: 20px; background-color: #a2d2ac; font-size: 10px;">Ético</span>
+                <span
+                  style="display:inline-block; margin:1px; color: #244f33; padding: 4px 10px; border-radius: 20px; background-color: #a2d2ac; font-size: 10px;">Sostenible</span>
+              </div>
+            </td>
+            <td style="width: 50%;">
+              <img src="{{clientUrl}}/images/7.webp"
+                alt="Experiencia de unboxing con productos botánicos en un entorno rústico"
+                style="width: 100%; height: 290px; background-color: #e5e7eb2e; border-radius: 8px; object-fit: cover;" />
+            </td>
+          </tr>
+        </table>
+      </div>
+    </main>
+    <footer style="text-align: center; padding:10px 20px; background-color: #f4f3f1; border-radius: 0 0 8px 8px;">
+      <h3 style="margin: 0;">HerbAura Botanica</h3>
+      <p style="margin-top: 0;">Where herbs nurture your hair's aura</p>
+      <nav>
+        <a href="{{urlTrackOrder}}" style="margin: 0 10px; color: #624242; text-decoration: none;">Rastrear Pedido</a>
+        <a href="{{clientUrl}}/terms" style="margin: 0 10px; color: #624242; text-decoration: none;">Política de
+          Envío</a>
+        <a href="{{clientUrl}}/contact" style="margin: 0 10px; color: #624242; text-decoration: none;">Contactar
+          Soporte</a>
+      </nav>
+      <p style="color: #624242; opacity: 0.6; font-size: 10px;">
+        © {{currentYear}} HERBAURA BOTANICA. ELABORADO CON DEDICACIÓN.
+      </p>
+    </footer>
+  </div>
+</div>

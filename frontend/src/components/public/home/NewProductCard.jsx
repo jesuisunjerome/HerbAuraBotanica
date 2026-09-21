@@ -1,6 +1,6 @@
 import { ChevronRightIcon, HandbagIcon } from "lucide-react";
 import { Link } from "react-router";
-import { formatCurrency, getDiscountedPrice } from "../../../lib/helper";
+import { formatCurrency, getDiscountedPrice, getOptimizedCloudinaryUrl } from "../../../lib/helper";
 
 export default function NewProductCard({ item, addToCart }) {
   const { hasDiscount, price, discountedPrice } = getDiscountedPrice(
@@ -12,7 +12,7 @@ export default function NewProductCard({ item, addToCart }) {
     <div className="rounded-2xl group overflow-hidden relative bg-gray-200 p-3  hover:scale-105 transition-transform duration-400">
       <img
         loading="lazy"
-        src={item.images.find((img) => img.isMain)?.url}
+        src={getOptimizedCloudinaryUrl(item.images.find((img) => img.isMain)?.url, 500)}
         className="w-full h-80 bg-gray-200 object-contain group-hover:scale-90 transition-transform delay-100 duration-1000"
         alt={item.name}
       />
@@ -23,8 +23,7 @@ export default function NewProductCard({ item, addToCart }) {
       >
         <HandbagIcon className="w-5 h-5" />
       </button>
-      <Link
-        title="Ver detalles"
+      <Link aria-label={`Ver detalles de ${item.name}`} title="Ver detalles"
         to={`/products/${item._id}`}
         className="flex items-center group hover:-translate-y-0.5 transition-all absolute left-1/2 transform -translate-x-1/2 w-[95%] rounded-xl overflow-hidden bottom-1 p-3 bg-white/60 backdrop-blur-sm"
       >
@@ -53,3 +52,5 @@ export default function NewProductCard({ item, addToCart }) {
     </div>
   );
 }
+
+

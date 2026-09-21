@@ -4,7 +4,7 @@ export default function Banner() {
       <div
         className="flex items-center min-h-95 py-5 px-10 rounded-3xl mb-10 relative overflow-hidden"
         style={{
-          background: "url('/images/6.png') no-repeat center center",
+          background: "url('/images/6.webp') no-repeat center center",
           backgroundSize: "cover",
         }}
       >
@@ -27,3 +27,4 @@ export default function Banner() {
     </header>
   );
 }
+

@@ -3,6 +3,7 @@ import {
   captureOrder,
   createOrder,
   getAllOrders,
+  getPendingOrdersCount,
   getOrderByConfirmationNumber,
   getOrderById,
   updateOrderStatus,
@@ -21,6 +22,7 @@ const router = express.Router();
 // ADMIN ROUTES (protected by admin middleware)
 router.get("/", protect, authorizeRoles(USER_ROLES.ADMIN), getAllOrders);
 router.post("/", validateRequest(createOrderSchema), createOrder);
+router.get("/pending/count", protect, authorizeRoles(USER_ROLES.ADMIN), getPendingOrdersCount);
 router.get("/confirmation/:confirmationNumber", getOrderByConfirmationNumber);
 router.get("/:id", getOrderById);
 router.post(

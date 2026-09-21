@@ -36,7 +36,7 @@ export default function PaymentStatus({ order, isPending }) {
           </div>
           <div className="pt-3 flex justify-between">
             <p className="text-lg font-bold">Total</p>
-            <p className="text-lg font-bold text-[#3f6b4c]">
+            <p className="text-lg font-medium text-emerald-600">
               {formatCurrency(order.totalPrice)}
             </p>
           </div>

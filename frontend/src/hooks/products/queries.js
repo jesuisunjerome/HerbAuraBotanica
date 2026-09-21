@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useSearchParams } from "react-router";
@@ -9,6 +9,7 @@ import {
   updateSearchParams,
 } from "../../lib/helper";
 import { useCartStore } from "../../store/useCartStore";
+import { useDebounce } from "../useDebounce";
 
 //#region ADMIN HOOKS
 // Hook para filtrar el dashboard por rango de fechas
@@ -33,6 +34,7 @@ export const useFilterDashboard = () => {
   useEffect(() => {
     if (new Date(dateFilter.from) > new Date(dateFilter.to)) {
       toast.error("El rango de fechas no es válido");
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setDateFilter((prev) => ({ ...prev, to: prev.from }));
     }
   }, [dateFilter]);
@@ -60,21 +62,26 @@ export const SALES_REPORT_KEY = "sales-report";
 export const INVENTORY_MOVEMENTS_REPORT_KEY = "inventory-movements-report";
 
 // Hook para obtener todos los productos
-export const useFetchProducts = ({ refetchInterval } = {}) => {
+export const useFetchProducts = ({ page = 1, limit = 10, search = "", refetchInterval } = {}) => {
   const {
     isPending,
-    data: products,
+    data,
     refetch,
   } = useQuery({
-    queryKey: [PRODUCTS_KEY],
+    queryKey: [PRODUCTS_KEY, page, limit, search],
     queryFn: async () => {
-      const response = await axiosInstance.get("/products");
+      const response = await axiosInstance.get("/products", { params: { page, limit, search } });
       return response.data;
     },
     refetchInterval,
   });
 
-  return { isPending, products, refetch };
+  return {
+    isPending,
+    products: data?.data || [],
+    pagination: { total: data?.total, page: data?.page, pages: data?.pages },
+    refetch,
+  };
 };
 
 export const useLowStockProducts = () => {
@@ -142,9 +149,6 @@ export const useSalesReport = ({
   page = 1,
   limit = 10,
   search = "",
-  paymentMethod = "",
-  sortBy = "paidAt",
-  sortOrder = "desc",
 }) => {
   const {
     data: salesReport,
@@ -158,9 +162,6 @@ export const useSalesReport = ({
       page,
       limit,
       search,
-      paymentMethod,
-      sortBy,
-      sortOrder,
     ],
     queryFn: async () => {
       const response = await axiosInstance.get("/reports/sales", {
@@ -170,9 +171,6 @@ export const useSalesReport = ({
           page,
           limit,
           search,
-          paymentMethod,
-          sortBy,
-          sortOrder,
         },
       });
       return response.data;
@@ -188,12 +186,7 @@ export const useInventoryMovementsReport = ({
   to,
   page = 1,
   limit = 20,
-  movementType = "",
-  category = "",
-  productId = "",
-  search = "",
-  sortBy = "createdAt",
-  sortOrder = "desc",
+  search = ""
 }) => {
   const {
     data: inventoryMovements,
@@ -206,12 +199,7 @@ export const useInventoryMovementsReport = ({
       to,
       page,
       limit,
-      movementType,
-      category,
-      productId,
       search,
-      sortBy,
-      sortOrder,
     ],
     queryFn: async () => {
       const response = await axiosInstance.get("/reports/movements", {
@@ -220,12 +208,7 @@ export const useInventoryMovementsReport = ({
           to,
           page,
           limit,
-          movementType,
-          category,
-          productId,
           search,
-          sortBy,
-          sortOrder,
         },
       });
       return response.data;
@@ -247,28 +230,17 @@ export const useRenderCatalog = () => {
     searchParams.get("sortBy") || "",
   );
 
-  const { isPending, products } = useFetchActiveProducts();
-  const filteredProducts = Array.isArray(products)
-    ? products
-      ?.filter(
-        (product) =>
-          product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          product.price?.toString().includes(searchTerm) ||
-          product.description
-            ?.toLowerCase()
-            .includes(searchTerm.toLowerCase()),
-      )
-      ?.sort((a, b) => {
-        if (sortOption === "priceAsc") {
-          return parseFloat(a.price) - parseFloat(b.price);
-        } else if (sortOption === "priceDesc") {
-          return parseFloat(b.price) - parseFloat(a.price);
-        } else if (sortOption === "newest") {
-          return b.createdAt.localeCompare(a.createdAt);
-        }
-        return 0;
-      })
-    : [];
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
+
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isPending,
+  } = useFetchActiveProducts({ search: debouncedSearchTerm, sortBy: sortOption, limit: 10 });
+
+  const filteredProducts = data?.pages.flatMap((page) => page.data) || [];
 
   const { addToCart } = useCartStore();
   const handleAddToCart = (product) => {
@@ -293,21 +265,35 @@ export const useRenderCatalog = () => {
     handleSearchChange,
     handleSortChange,
     handleAddToCart,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
   };
 };
 
 // Hook para obtener productos activos
-export const useFetchActiveProducts = (enabled = true) => {
+export const useFetchActiveProducts = ({ search = "", sortBy = "", limit = 10, enabled = true } = {}) => {
   const {
     isPending,
-    data: products,
+    data,
     error,
     refetch,
-  } = useQuery({
-    queryKey: ["active-products"],
-    queryFn: async () => {
-      const response = await axiosInstance.get("/products/active");
-      return response.data;
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    queryKey: ["active-products", { search, sortBy, limit }],
+    queryFn: async ({ pageParam = 1 }) => {
+      const response = await axiosInstance.get("/products/active", {
+        params: { search, sortBy, page: pageParam, limit },
+      });
+      return response.data; // { data, total, page, pages }
+    },
+    getNextPageParam: (lastPage) => {
+      if (lastPage.page < lastPage.pages) {
+        return lastPage.page + 1;
+      }
+      return undefined;
     },
     enabled,
   });
@@ -317,7 +303,15 @@ export const useFetchActiveProducts = (enabled = true) => {
       error.response?.data?.message || "Error al cargar los productos",
     );
 
-  return { isPending, products, refetch };
+  return {
+    isPending,
+    data,
+    products: data?.pages.flatMap(page => page.data) || [],
+    refetch,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  };
 };
 
 // Hook para obtener los productos más vendidos

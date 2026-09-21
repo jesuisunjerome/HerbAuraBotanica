@@ -11,7 +11,7 @@ export default function TableWrapper({
 }) {
   return (
     <div
-      className={`rounded-2xl shadow-lg shadow-gray-100 bg-white p-5 min-h-150 ${className}`}
+      className={`rounded-2xl shadow-lg shadow-gray-100 bg-white p-5 min-h-150 ${className || ""}`}
     >
       {isPending ? (
         <TableSkeleton className={className} arrLength={arrLength} />
@@ -36,7 +36,7 @@ export function THead({ headerGroup }) {
         <th
           key={header.id}
           colSpan={header.colSpan}
-          className={`px-4 py-3 text-left text-sm font-medium text-gray-500 whitespace-nowrap ${header.column.columnDef.meta?.headerClassName || ""}`}
+          className={`px-4 py-3 text-left text-sm font-semibold text-gray-800 whitespace-nowrap ${header.column.columnDef.meta?.headerClassName || ""}`}
         >
           {header.isPlaceholder ? null : (
             <div
@@ -78,6 +78,8 @@ export function TBody({ row }) {
 }
 
 export function TPagination({ table }) {
+  const results = table.getFilteredRowModel().rows.length;
+
   return (
     <div className="py-3 flex flex-col md:flex-row justify-between items-center gap-2 border-t border-gray-100 text-gray-700">
       {table.getPageCount() > 1 ? (
@@ -90,7 +92,7 @@ export function TPagination({ table }) {
                 {table.getPageCount()}
               </span>
               <span>
-                ({table.getFilteredRowModel().rows.length} resultados)
+                ({results > 1 ? results + " resultados" : results + " resultado"})
               </span>
             </div>
             <div className="hidden md:block">
@@ -111,7 +113,7 @@ export function TPagination({ table }) {
           </div>
           <div className="flex flex-col-reverse md:flex-row flex-wrap gap-2 items-center">
             <span className="flex items-center gap-1">
-              Ir a la página:
+              Ir a la página: {" "}
               <input
                 type="number"
                 min="1"
@@ -143,9 +145,13 @@ export function TPagination({ table }) {
           </div>
         </>
       ) : (
-        <span className="text-gray-400 text-sm">
-          ({table.getFilteredRowModel().rows.length} resultados encontrados)
-        </span>
+        <>
+          {results > 0 &&
+            <span className="text-gray-400 text-sm">
+              {results > 1 ? results + " resultados encontrados" : results + " resultado encontrado"}
+            </span>
+          }
+        </>
       )}
     </div>
   );
@@ -184,3 +190,4 @@ export function SearchInput({ table, placeholder = "Buscar..." }) {
     </div>
   );
 }
+

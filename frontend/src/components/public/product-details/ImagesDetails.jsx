@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { getOptimizedCloudinaryUrl } from "../../../lib/helper";
 
 export default function ImagesDetails({ product, isPending }) {
   const { images, name } = product;
@@ -12,6 +13,7 @@ export default function ImagesDetails({ product, isPending }) {
 
   useEffect(() => {
     if (images && images.length > 0) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSelectedImage(images.find((img) => img.isMain)?.url || images[0]?.url);
     }
   }, [images]);
@@ -26,7 +28,7 @@ export default function ImagesDetails({ product, isPending }) {
         <div className="p-3 rounded-2xl overflow-hidden bg-gray-100">
           <img
             loading="lazy"
-            src={selectedImage || images?.find((img) => img.isMain)?.url}
+            src={getOptimizedCloudinaryUrl(selectedImage || images?.find((img) => img.isMain)?.url, 500)}
             className="w-full object-contain h-100 bg-gray-100 rounded-2xl"
             alt={name}
           />
@@ -42,7 +44,7 @@ export default function ImagesDetails({ product, isPending }) {
               >
                 <img
                   loading="lazy"
-                  src={image.url}
+                  src={getOptimizedCloudinaryUrl(image.url, 500)}
                   className="w-24 h-24 object-contain bg-gray-100 rounded-2xl"
                   alt={name}
                   draggable={false}
@@ -68,3 +70,4 @@ function LoadingSkeleton() {
     </div>
   );
 }
+

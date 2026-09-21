@@ -11,21 +11,23 @@ export default function Footer() {
           <p className="text-2xl">Where herbs nurture your hair's aura.</p>
         </div>
         <div className="mx-auto lg:mx-0 lg:ms-auto flex gap-10 items-center">
-          {socialLinks.map(({ href, label, icon: Icon }) => (
+          {socialLinks.map((link) => {
+            const Icon = link.icon;
+            return (
             <a
-              href={href}
-              key={label}
+              href={link.href}
+              key={link.label}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={label}
+              aria-label={link.label}
               className="flex items-center gap-1 hover:text-white transition-all hover:underline"
             // className="size-13 flex items-center bg-[#4b2626] hover:bg-(--color-beige) hover:text-(--color-brown) justify-center rounded-full hover:-translate-y-0.5 transition-all"
             >
               <Icon className="w-5 h-5" />
-              <span className="sr-only">{label}</span>
-              <span>{label}</span>
+              <span className="sr-only">{link.label}</span>
+              <span>{link.label}</span>
             </a>
-          ))}
+          )})}
         </div>
       </div>
       <div className="opacity-80 pt-5 pb-10 px-3 lg:px-20 md:px-5 text-center">

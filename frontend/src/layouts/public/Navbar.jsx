@@ -27,7 +27,7 @@ export default function Navbar() {
       <header className="sticky top-0 z-50 bg-[#fdfcfb]">
         <nav className="navbar lg:px-20 md:px-5 py-1">
           <div className="md:hidden">
-            <button onClick={handleToggleNav} aria-label="Toggle Navigation">
+            <button id="hamburger-btn" onClick={handleToggleNav} aria-label="Toggle Navigation">
               <MenuIcon className="w-6 h-6" />
             </button>
           </div>
@@ -63,7 +63,7 @@ export default function Navbar() {
               <button
                 className="text-amber-600 relative"
                 onClick={handleToggleCart}
-                aria-label="Toggle Cart"
+                aria-label="Abrir carrito de compras"
               >
                 <HandbagIcon className="w-6 h-6" />
                 {quantity > 0 && (
@@ -74,7 +74,7 @@ export default function Navbar() {
               </button>
             </li>
             <li className="flex items-center">
-              <NavLink className="text-amber-600 px-1" to="/login">
+              <NavLink className="text-amber-600 px-1" to="/login" aria-label="Ir al perfil de usuario">
                 <UserIcon className="w-6 h-6" />
               </NavLink>
             </li>
@@ -83,7 +83,7 @@ export default function Navbar() {
             <button
               className="text-amber-600 relative"
               onClick={handleToggleCart}
-              aria-label="Toggle Cart"
+              aria-label="Abrir carrito de compras"
             >
               <HandbagIcon className="w-6 h-6" />
               {quantity > 0 && (
@@ -92,18 +92,19 @@ export default function Navbar() {
                 </span>
               )}
             </button>
-            <Link className="text-amber-600 ml-1 px-1" to="/login">
+            <Link className="text-amber-600 ml-1 px-1" to="/login" aria-label="Ir al perfil de usuario">
               <UserIcon className="w-6 h-6" />
             </Link>
           </div>
         </nav>
       </header>
 
-      <NavMobile
-        showNavMobile={showNavMobile}
-        handleToggleNav={handleToggleNav}
-      />
-      <CartInfo showCart={showCart} handleToggleCart={handleToggleCart} />
+      <NavMobile showNavMobile={showNavMobile} handleToggleNav={handleToggleNav} closeNav={() => setShowNavMobile(false)} />
+      <CartInfo showCart={showCart} handleToggleCart={handleToggleCart} closeCart={() => setShowCart(false)} />
     </>
   );
 }
+
+
+
+

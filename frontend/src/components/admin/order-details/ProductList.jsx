@@ -12,7 +12,7 @@ export default function ProductList({ table, isPending }) {
         isPending={isPending}
         arrLength={3}
       >
-        <thead>
+        <thead className="bg-[#f5f0e6]/50">
           {table.getHeaderGroups().map((headerGroup) => (
             <THead key={headerGroup.id} headerGroup={headerGroup} />
           ))}

@@ -1,12 +1,32 @@
 import { MinusIcon, PlusIcon, TagIcon, TrashIcon, XIcon } from "lucide-react";
 import { useNavigate } from "react-router";
-import { formatCurrency, getDiscountedPrice } from "../../../lib/helper";
+import { useEffect, useRef } from "react";
+import { formatCurrency, getDiscountedPrice, getOptimizedCloudinaryUrl } from "../../../lib/helper";
 import { useCartStore } from "../../../store/useCartStore";
 
-export default function CartInfo({ showCart, handleToggleCart }) {
-  const { cart, removeFromCart, decreaseQuantity, addToCart, clearCart } =
-    useCartStore();
+export default function CartInfo({ showCart, handleToggleCart, closeCart }) {
+  const { cart, removeFromCart, decreaseQuantity, addToCart, clearCart } = useCartStore();
   const navigate = useNavigate();
+  const cartRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (
+        cartRef.current &&
+        !cartRef.current.contains(event.target) &&
+        !event.target.closest('#cart-btn')
+      ) {
+        if (showCart && closeCart) {
+          closeCart();
+        }
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showCart, closeCart]);
 
   const handleCheckout = () => {
     handleToggleCart();
@@ -15,9 +35,9 @@ export default function CartInfo({ showCart, handleToggleCart }) {
 
   return (
     <aside
-      className={`fixed top-0 right-0 h-dvh flex flex-col border-l border-gray-100 bg-white z-50 w-[80%] sm:w-md transition-transform duration-300 shadow-lg ${
-        showCart ? "translate-x-0" : "translate-x-full"
-      }`}
+      ref={cartRef}
+      className={`fixed top-0 right-0 h-dvh flex flex-col border-l border-gray-100 bg-white z-50 w-[80%] sm:w-md transition-transform duration-300 shadow-lg ${showCart ? "translate-x-0" : "translate-x-full"
+        }`}
     >
       <div className="flex justify-between border-b border-b-gray-200 p-4">
         <h2 className="text-lg font-semibold">Carrito de Compras</h2>
@@ -35,7 +55,7 @@ export default function CartInfo({ showCart, handleToggleCart }) {
           <p>Tu carrito está vacío.</p>
         ) : (
           cart.map((item) => {
-            const { hasDiscount, price, discountedPrice } = getDiscountedPrice(
+            const { hasDiscount, discountedPrice } = getDiscountedPrice(
               item.price,
               item.discountPercentage,
             );
@@ -49,7 +69,7 @@ export default function CartInfo({ showCart, handleToggleCart }) {
                   <div className="bg-gray-100 overflow-hidden rounded-xl p-2 shrink-0">
                     <img
                       loading="lazy"
-                      src={item.images.find((img) => img.isMain)?.url}
+                      src={getOptimizedCloudinaryUrl(item.images.find((img) => img.isMain)?.url, 200)}
                       className="w-17 h-17 object-contain bg-gray-100 rounded-xl"
                       alt={item.name}
                     />
@@ -122,3 +142,5 @@ export default function CartInfo({ showCart, handleToggleCart }) {
     </aside>
   );
 }
+
+

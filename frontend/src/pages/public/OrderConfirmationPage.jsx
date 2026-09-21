@@ -22,6 +22,7 @@ import { useGetOrderById } from "../../hooks/orders/queries";
 import {
   formatCurrency,
   formatLongDateToString,
+  getOptimizedCloudinaryUrl,
   IVA_RATE,
   ORDER_STATUS,
 } from "../../lib/helper";
@@ -106,7 +107,7 @@ export default function OrderConfirmationPage() {
                     <div className="bg-gray-100 overflow-hidden rounded-xl p-2 shrink-0">
                       <img
                         loading="lazy"
-                        src={item.image}
+                        src={getOptimizedCloudinaryUrl(item.image, 100)}
                         className="w-12 h-12 object-contain bg-gray-100 rounded-xl"
                         alt={item.name}
                       />
@@ -212,9 +213,7 @@ export default function OrderConfirmationPage() {
                   <span className="text-gray-500 leading-tight">
                     Envío Estándar - {formatCurrency(order.shippingPrice)}
                   </span>
-                  {/* <span className="text-gray-500 leading-tight">
-                    Envío gratis en pedidos superiores a {formatCurrency(999)}.
-                  </span> */}
+                  
                 </div>
               </div>
               <div className="flex gap-3">
@@ -319,7 +318,7 @@ export default function OrderConfirmationPage() {
                         className={`size-7 flex items-center justify-center rounded-full ${getStatusDate(ORDER_STATUS.PROCESSING) ? "bg-indigo-500" : "bg-gray-200"}`}
                       >
                         {getStatusDate(ORDER_STATUS.SHIPPED) ||
-                        getStatusDate(ORDER_STATUS.DELIVERED) ? (
+                          getStatusDate(ORDER_STATUS.DELIVERED) ? (
                           <CheckIcon className="w-4 h-4 text-white" />
                         ) : (
                           <LoaderIcon
@@ -405,13 +404,13 @@ export default function OrderConfirmationPage() {
                         Entregado
                       </span>
                       {order.isDelivered ||
-                      getStatusDate(ORDER_STATUS.DELIVERED) ? (
+                        getStatusDate(ORDER_STATUS.DELIVERED) ? (
                         <span className="text-emerald-600 font-medium leading-tight">
                           Entregado el{" "}
                           {formatLongDateToString(
                             new Date(
                               order.deliveredAt ||
-                                getStatusDate(ORDER_STATUS.DELIVERED),
+                              getStatusDate(ORDER_STATUS.DELIVERED),
                             ),
                             true,
                           )}
@@ -501,3 +500,4 @@ export default function OrderConfirmationPage() {
     </>
   );
 }
+

@@ -6,14 +6,11 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import {
-  CircleXIcon,
   EllipsisIcon,
   FileTextIcon,
-  LoaderIcon,
-  PackageCheckIcon,
-  TruckElectricIcon,
 } from "lucide-react";
 import { useMemo, useState } from "react";
+import { useDebounce } from "../../hooks/useDebounce";
 import { Link } from "react-router";
 import TableWrapper, {
   SearchInput,
@@ -22,19 +19,26 @@ import TableWrapper, {
   TNoData,
 } from "../../components/common/TableWrapper";
 import { useGetAllOrders } from "../../hooks/orders/queries";
+import OrderStatusBadge from "../../components/admin/orders/OrderStatusBadge";
 import {
   formatCurrency,
   formatShortDateToString,
-  ORDER_STATUS,
   PAYMENT_STATUS,
 } from "../../lib/helper";
 
 const fallbackData = [];
 
 export default function OrdersPage() {
-  const { isPending, orders } = useGetAllOrders();
   const [columnFilters, setColumnFilters] = useState([]);
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
+  const [globalFilter, setGlobalFilter] = useState("");
+  const debouncedSearch = useDebounce(globalFilter, 500);
+
+  const { isPending, orders, pagination: backendPagination } = useGetAllOrders({
+    page: pagination.pageIndex + 1,
+    limit: pagination.pageSize,
+    search: debouncedSearch,
+  });
 
   const columns = useMemo(
     () => [
@@ -63,36 +67,7 @@ export default function OrdersPage() {
         header: "Estado",
         accessorKey: "status",
         cell: ({ row }) => {
-          const { status, isReturned, deliveredAt, returnedAt } = row.original;
-
-          const statusStyles =
-            status === ORDER_STATUS.DELIVERED
-              ? {
-                  color: "text-[#3f6b4c]",
-                  icon: <PackageCheckIcon className="w-4 h-4" />,
-                }
-              : status === ORDER_STATUS.SHIPPED
-                ? {
-                    color: "text-blue-600",
-                    icon: <TruckElectricIcon className="w-4 h-4" />,
-                  }
-                : status === ORDER_STATUS.PROCESSING
-                  ? {
-                      color: "text-[#4b2e2e]",
-                      icon: <LoaderIcon className="w-4 h-4" />,
-                    }
-                  : {
-                      color: "text-rose-600",
-                      icon: <CircleXIcon className="w-4 h-4" />,
-                    };
-
-          return (
-            <div className={statusStyles.color}>
-              <p className="flex leading-tight items-center gap-1 font-semibold">
-                {statusStyles.icon} {status}
-              </p>
-            </div>
-          );
+          return <OrderStatusBadge status={row.original.status} />;
         },
       },
       {
@@ -110,7 +85,7 @@ export default function OrdersPage() {
         header: "Total",
         accessorKey: "totalPrice",
         cell: ({ row }) => (
-          <div className="text-[#3f6b4c] font-bold text-nowrap text-right">
+          <div className="text-emerald-600 font-medium text-nowrap text-right">
             {formatCurrency(row.original.totalPrice)}
           </div>
         ),
@@ -128,13 +103,13 @@ export default function OrdersPage() {
 
           const statusStyles =
             status === PAYMENT_STATUS.PAID
-              ? "text-[#3f6b4c]"
+              ? "text-emerald-600"
               : status === PAYMENT_STATUS.PENDING
                 ? "text-yellow-600"
                 : "text-rose-600";
 
           return (
-            <span className={`font-semibold ${statusStyles}`}>{status}</span>
+            <span className={`font-medium ${statusStyles}`}>{status}</span>
           );
         },
       },
@@ -201,8 +176,14 @@ export default function OrdersPage() {
     state: {
       pagination,
       columnFilters,
+      globalFilter,
     },
     onPaginationChange: setPagination,
+    onGlobalFilterChange: setGlobalFilter,
+    manualPagination: true,
+    manualFiltering: true,
+    pageCount: backendPagination?.pages ?? -1,
+    rowCount: backendPagination?.total ?? 0,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -211,13 +192,13 @@ export default function OrdersPage() {
   });
 
   return (
-    <section className="space-y-3">
+    <section className="space-y-3 pb-4">
       <div className="flex flex-col md:flex-row flex-wrap justify-between items-start lg:items-end gap-4 bg-gray-50 pb-3 pt-4 sticky top-15 z-10">
         <div>
           <h1 className="text-2xl font-bold">Pedidos</h1>
-          <div className="text-gray-600 text-sm">
+          <p className="text-sm text-gray-600">
             Administra todos los pedidos realizados en la tienda.
-          </div>
+          </p>
         </div>
         <div className="flex gap-2 w-full md:w-auto">
           <SearchInput table={table} placeholder="Buscar pedidos..." />
@@ -232,7 +213,7 @@ export default function OrdersPage() {
       </div>
 
       <TableWrapper isPending={isPending} pagination={table}>
-        <thead>
+        <thead className="bg-[#f5f0e6]/50">
           {table.getHeaderGroups().map((headerGroup) => (
             <THead key={headerGroup.id} headerGroup={headerGroup} />
           ))}

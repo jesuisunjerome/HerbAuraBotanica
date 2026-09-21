@@ -1,4 +1,3 @@
-import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import NoData from "../../common/NoData";
 import ProductCard from "./ProductCard";
 
@@ -6,13 +5,16 @@ export default function ProductList({
   filteredProducts,
   handleAddToCart,
   searchTerm,
+  fetchNextPage,
+  hasNextPage,
+  isFetchingNextPage,
 }) {
   return (
     <>
       <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-10">
         {filteredProducts.length === 0 && (
           <NoData
-            img="/images/no-products.png"
+            img="/images/no-products.webp"
             message="No se encontraron productos."
           />
         )}
@@ -27,29 +29,18 @@ export default function ProductList({
         ))}
       </div>
 
-      {/* {filteredProducts.length > 10 && <Pagination />} */}
+      {hasNextPage && (
+        <div className="flex justify-center mt-20">
+          <button
+            onClick={() => fetchNextPage()}
+            disabled={isFetchingNextPage}
+            className="py-3 px-8 rounded-full border-2 border-[#3f6b4c] bg-white text-[#3f6b4c] font-semibold hover:bg-[#3f6b4c] hover:text-white hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-[#3f6b4c] focus:ring-offset-2 transition-all duration-300 transform hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isFetchingNextPage ? "Cargando..." : "Cargar más productos"}
+          </button>
+        </div>
+      )}
     </>
   );
 }
 
-function Pagination() {
-  return (
-    <div className="flex justify-center items-center gap-3 mt-20">
-      <button className="py-3 px-5 rounded-lg bg-gray-200 hover:bg-gray-300">
-        <ChevronLeftIcon className="w-5 h-5" />
-      </button>
-      <button className="py-3 px-5 rounded-lg bg-[#3f6b4c] text-white hover:bg-[#2e4d36] focus:outline-none focus:ring-2 focus:ring-[#3f6b4c] focus:ring-offset-2 transition">
-        1
-      </button>
-      <button className="py-3 px-5 rounded-lg bg-gray-200 hover:bg-gray-300">
-        2
-      </button>
-      <button className="py-3 px-5 rounded-lg bg-gray-200 hover:bg-gray-300">
-        3
-      </button>
-      <button className="py-3 px-5 rounded-lg bg-gray-200 hover:bg-gray-300">
-        <ChevronRightIcon className="w-5 h-5" />
-      </button>
-    </div>
-  );
-}
