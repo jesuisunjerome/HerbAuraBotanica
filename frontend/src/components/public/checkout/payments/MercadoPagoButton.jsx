@@ -2,7 +2,7 @@ import { useCreateOrder } from "../../../../hooks/orders/mutations";
 import { COUNTRY_LIST } from "../../../../lib/helper";
 import { useCartStore } from "../../../../store/useCartStore";
 
-export default function MercadoPagoButton({ formData, disabled, onSuccess }) {
+export default function MercadoPagoButton({ formData, disabled }) {
   const { cart } = useCartStore();
   const { isCreatingOrder, createOrder } = useCreateOrder();
 

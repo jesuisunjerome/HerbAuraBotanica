@@ -14,7 +14,7 @@ export default function Gallery() {
       <GradientBg />
       <img
         loading="lazy"
-        src="/images/vector.png"
+        src="/images/vector.webp"
         className="absolute -top-4 left-0 h-8 w-full rotate-180 pointer-events-none"
         alt="Decorative vector graphic"
       />
@@ -58,10 +58,11 @@ export default function Gallery() {
       </div>
       <img
         loading="lazy"
-        src="/images/vector.png"
+        src="/images/vector.webp"
         className="absolute -bottom-4 left-0 h-8 w-full rotate-180 z-10 pointer-events-none"
         alt="Decorative vector graphic"
       />
     </section>
   );
 }
+

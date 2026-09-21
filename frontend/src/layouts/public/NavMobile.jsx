@@ -1,9 +1,34 @@
 import { XIcon } from "lucide-react";
 import { Link, NavLink } from "react-router";
+import { useEffect, useRef } from "react";
 
-export default function NavMobile({ showNavMobile, handleToggleNav }) {
+export default function NavMobile({ showNavMobile, handleToggleNav, closeNav }) {
+  const navRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (
+        navRef.current && 
+        !navRef.current.contains(event.target) &&
+        !event.target.closest('#hamburger-btn')
+      ) {
+        if (showNavMobile && closeNav) {
+          closeNav();
+        }
+      }
+    }
+
+    // Bind the event listener
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      // Unbind the event listener on clean up
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showNavMobile, closeNav]);
+
   return (
     <aside
+      ref={navRef}
       className={`md:hidden fixed top-0 h-dvh left-0 w-1/2 sm:w-2/5 bg-white z-50 border-r border-gray-100 flex flex-col transition-transform duration-300 shadow-lg ${
         showNavMobile ? "translate-x-0" : "-translate-x-full"
       }`}
@@ -20,7 +45,7 @@ export default function NavMobile({ showNavMobile, handleToggleNav }) {
         <button
           className="text-gray-500 hover:text-gray-700"
           onClick={handleToggleNav}
-          aria-label="Close Navigation"
+          aria-label="Cerrar menú de navegación"
         >
           <XIcon className="w-6 h-6" />
         </button>
@@ -63,3 +88,4 @@ export default function NavMobile({ showNavMobile, handleToggleNav }) {
     </aside>
   );
 }
+

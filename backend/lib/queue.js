@@ -1,18 +1,22 @@
 import { Agenda } from "agenda";
-import "dotenv/config";
+import { MongoBackend } from "@agendajs/mongo-backend";
 
-// Setup Agenda instance connecting to MongoDB
-export const agenda = new Agenda({
-  db: { address: process.env.MONGO_URI, collection: "agendaJobs" },
-  processEvery: "30 seconds", // How often to check for jobs
-  maxConcurrency: 20 // Max concurrent jobs
-});
+export let agenda;
 
-// Event listeners for monitoring
-agenda.on('ready', () => {
-  console.log("Agenda.js connected to MongoDB and ready.");
-});
+export const initAgenda = (mongoDb) => {
+  agenda = new Agenda({
+    backend: new MongoBackend({ mongo: mongoDb }),
+    processEvery: "30 seconds",
+    maxConcurrency: 20
+  });
 
-agenda.on('error', (error) => {
-  console.error("Agenda.js connection error:", error.message);
-});
+  agenda.on('ready', () => {
+    console.log("Agenda.js connected to MongoDB and ready.");
+  });
+
+  agenda.on('error', (error) => {
+    console.error("Agenda.js connection error:", error.message);
+  });
+
+  return agenda;
+};

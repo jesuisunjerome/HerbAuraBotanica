@@ -2,7 +2,7 @@ export default function NoData({ message, img }) {
   return (
     <div className="col-span-full text-center py-20 min-h-80 flex flex-col justify-center items-center gap-4 bg-gray-100d rounded-2xl">
       <img
-        src={img || "/images/no-data.png"}
+        src={img || "/images/no-data.webp"}
         className="h-70 object-contain"
         alt={message}
       />
@@ -12,3 +12,4 @@ export default function NoData({ message, img }) {
     </div>
   );
 }
+

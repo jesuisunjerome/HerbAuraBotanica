@@ -12,6 +12,7 @@
     "test:integration": "node --test tests/integration/**/*.test.js"
   },
   "dependencies": {
+    "@agendajs/mongo-backend": "^4.0.3",
     "agenda": "^6.2.6",
     "bcrypt": "^6.0.0",
     "cloudinary": "^2.8.0",

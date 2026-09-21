@@ -15,7 +15,7 @@ import PaymentStatus from "../../components/admin/order-details/PaymentStatus";
 import ProductList from "../../components/admin/order-details/ProductList";
 import Timeline from "../../components/admin/order-details/Timeline";
 import { useGetOrderById } from "../../hooks/orders/queries";
-import { formatCurrency } from "../../lib/helper";
+import { formatCurrency, getOptimizedCloudinaryUrl } from "../../lib/helper";
 
 const fallbackData = [];
 
@@ -35,7 +35,7 @@ export default function OrderDetailsPage() {
             <div className="p-1 rounded-xl overflow-hidden bg-gray-100 shrink-0">
               <img
                 loading="lazy"
-                src={row.original.image}
+                src={getOptimizedCloudinaryUrl(row.original.image, 50)}
                 alt={row.original.name}
                 className="w-10 h-10 object-contain bg-gray-100 rounded-lg"
               />
@@ -98,7 +98,7 @@ export default function OrderDetailsPage() {
   });
 
   return (
-    <section className="space-y-3">
+    <section className="space-y-3 pb-4">
       <Header order={order} isPending={isPending} />
       <BasicDetails order={order} isPending={isPending} />
 
@@ -121,3 +121,4 @@ export default function OrderDetailsPage() {
     </section>
   );
 }
+

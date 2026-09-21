@@ -33,14 +33,14 @@ export default function HomePage() {
       <section className="py-25 bg-white px-3 lg:px-20 md:px-5 relative">
         <img
           loading="lazy"
-          src="/images/vector.png"
+          src="/images/vector.webp"
           className="absolute -top-4 left-0 h-8 w-full rotate-180 pointer-events-none"
           alt="Decorative vector graphic"
         />
         <div
           className="absolute -top-8 left-0 z-10 w-full h-8 pointer-events-none"
           style={{
-            background: "url(/images/vector.png)",
+            background: "url(/images/vector.webp)",
             backgroundRepeat: "repeat",
             backgroundSize: "cover",
           }}
@@ -138,3 +138,4 @@ export default function HomePage() {
     </>
   );
 }
+

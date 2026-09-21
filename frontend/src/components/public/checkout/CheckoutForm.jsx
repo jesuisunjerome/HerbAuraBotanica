@@ -2,7 +2,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronLeftIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
-// import { mocckCheckoutClientData } from "../../../lib/data";
 import {
   calculateCartTotals,
   CART,
@@ -29,7 +28,6 @@ export default function CheckoutForm() {
     setValue,
     watch,
   } = useForm({
-    // defaultValues: mocckCheckoutClientData,
     resolver: zodResolver(checkoutSchema),
     mode: "all",
   });
@@ -156,13 +154,6 @@ export default function CheckoutForm() {
               />
             </div>
             <div>
-              {/* <RHFInput
-                label="País"
-                id="country"
-                required={true}
-                register={register}
-                error={errors.country}
-              /> */}
               <RHFSelect
                 label="País"
                 id="country"
@@ -242,20 +233,8 @@ export default function CheckoutForm() {
         </div>
       </form>
 
-      {/* {(isCreatingSession || isUpdatingPaymentStatus || isFinalizing) && (
-        <div className="fixed top-0 left-0 w-full z-50 h-full bg-black/60 flex justify-center items-center">
-          <div className="flex items-center justify-center min-h-[60vh]">
-            <div className="bg-gray-800 text-center p-8 rounded-lg flex flex-col items-center">
-              <LoaderIcon className="w-8 h-8 animate-spin text-amber-500" />
-              <p className="text-white mt-4 text-center">
-                {isCreatingSession && "Creando sesión de pago..."}
-                {isUpdatingPaymentStatus && "Actualizando estado de pago..."}
-                {isFinalizing && "Finalizando pedido..."}
-              </p>
-            </div>
-          </div>
-        </div>
-      )} */}
+      
     </>
   );
 }
+

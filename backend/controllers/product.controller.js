@@ -3,9 +3,15 @@ import { AppError } from "../lib/error.js";
 import Order from "../models/Order.js";
 import Product from "../models/Product.js";
 import { CLOUDINARY_PRODUCTS_FOLDER } from "../lib/constants.js";
+import NodeCache from "node-cache";
 
-// Helper for SSRF prevention
+// Cache for products (5 minutes TTL)
+const productCache = new NodeCache({ stdTTL: 300 });
+
 const isValidImageUrl = (urlString) => {
+  // Permitir subidas de imágenes en base64 (Data URIs) enviadas desde el frontend
+  if (urlString.startsWith("data:image/")) return true;
+
   try {
     const url = new URL(urlString);
     if (!["http:", "https:"].includes(url.protocol)) return false;
@@ -24,13 +30,22 @@ const isValidImageUrl = (urlString) => {
 // @route   GET /api/products
 // @access  Private (Admin)
 export const getAllProducts = async (req, res) => {
-  const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 10;
+  const page = Number.parseInt(req.query.page) || 1;
+  const limit = Number.parseInt(req.query.limit) || 10;
+  const { search } = req.query;
   const skip = (page - 1) * limit;
 
-  const total = await Product.countDocuments();
-  const products = await Product.find().skip(skip).limit(limit).lean();
-  
+  const query = {};
+  if (search) {
+    query.$or = [
+      { name: { $regex: search, $options: "i" } },
+      { category: { $regex: search, $options: "i" } },
+    ];
+  }
+
+  const total = await Product.countDocuments(query);
+  const products = await Product.find(query).skip(skip).limit(limit).lean();
+
   res.json({ data: products, total, page, pages: Math.ceil(total / limit) });
 };
 
@@ -38,56 +53,95 @@ export const getAllProducts = async (req, res) => {
 // @route   GET /api/products/active
 // @access  Public
 export const getAllActiveProducts = async (req, res) => {
-  const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 10;
+  const page = Number.parseInt(req.query.page) || 1;
+  const limit = Number.parseInt(req.query.limit) || 10;
+  const { search, sortBy } = req.query;
   const skip = (page - 1) * limit;
 
-  const total = await Product.countDocuments({ isActive: true });
-  const products = await Product.find({ isActive: true }).skip(skip).limit(limit).lean();
-  
-  res.json({ data: products, total, page, pages: Math.ceil(total / limit) });
+  const cacheKey = `active_products_${page}_${limit}_${search || "none"}_${sortBy || "none"}`;
+  const cachedData = productCache.get(cacheKey);
+  if (cachedData) {
+    return res.json(cachedData);
+  }
+
+  const query = { isActive: true };
+  if (search) {
+    query.$or = [
+      { name: { $regex: search, $options: "i" } },
+      { description: { $regex: search, $options: "i" } },
+      { category: { $regex: search, $options: "i" } },
+    ];
+  }
+
+  let sortCriteria = {};
+  if (sortBy === "priceAsc") {
+    sortCriteria = { price: 1 };
+  } else if (sortBy === "priceDesc") {
+    sortCriteria = { price: -1 };
+  } else if (sortBy === "newest") {
+    sortCriteria = { createdAt: -1 };
+  }
+
+  const total = await Product.countDocuments(query);
+  const products = await Product.find(query)
+    .sort(sortCriteria)
+    .skip(skip)
+    .limit(limit)
+    .lean();
+
+  const responseData = { data: products, total, page, pages: Math.ceil(total / limit) };
+  productCache.set(cacheKey, responseData);
+  res.json(responseData);
 };
 
 // @desc    Get best sellers, if no sales return last 3 created products
 // @route   GET /api/products/best-sellers
 // @access  Public
 export const getBestSellers = async (_, res) => {
-  // Best seller logic based on sales data
-  const orders = await Order.find({ isPaid: true })
-    .populate("orderItems.product")
-    .lean();
+  const cacheKey = "best_sellers";
+  const cachedData = productCache.get(cacheKey);
+  if (cachedData) return res.json(cachedData);
 
-  // If there are no orders, return last 3 created products
-  if (orders.length === 0) {
+  const aggregatedSales = await Order.aggregate([
+    { $match: { isPaid: true } },
+    { $unwind: "$orderItems" },
+    {
+      $group: {
+        _id: "$orderItems.product",
+        quantity: { $sum: "$orderItems.quantity" },
+      },
+    },
+    { $sort: { quantity: -1 } },
+    { $limit: 3 },
+  ]);
+
+  if (aggregatedSales.length === 0) {
     const products = await Product.find({ isActive: true })
       .sort({ createdAt: -1 })
       .limit(3)
       .lean();
 
-    // Return in the same format as bestSellers for consistency
     const bestSellers = products.map((product) => ({
       product,
-      quantity: 0, // No sales, so quantity is 0
+      quantity: 0,
     }));
+    productCache.set(cacheKey, bestSellers);
     return res.json(bestSellers);
   }
 
-  const productSales = {};
-  orders.forEach((order) => {
-    order.orderItems.forEach((item) => {
-      if (!item.product) return; // Guard in case product was deleted
-      const productId = item.product._id.toString();
-      if (!productSales[productId]) {
-        productSales[productId] = { product: item.product, quantity: 0 };
-      }
-      productSales[productId].quantity += item.quantity;
-    });
+  // Populate product details for the aggregated results
+  const populatedSales = await Product.populate(aggregatedSales, {
+    path: "_id",
   });
 
-  const bestSellers = Object.values(productSales)
-    .sort((a, b) => b.quantity - a.quantity)
-    .slice(0, 3);
+  const bestSellers = populatedSales
+    .filter((item) => item._id != null) // Guard in case product was deleted
+    .map((item) => ({
+      product: item._id,
+      quantity: item.quantity,
+    }));
 
+  productCache.set(cacheKey, bestSellers);
   res.json(bestSellers);
 };
 
@@ -95,11 +149,16 @@ export const getBestSellers = async (_, res) => {
 // @route   GET /api/products/new-arrivals
 // @access  Public
 export const getNewArrivals = async (_, res) => {
+  const cacheKey = "new_arrivals";
+  const cachedData = productCache.get(cacheKey);
+  if (cachedData) return res.json(cachedData);
+
   const products = await Product.find({ isActive: true })
     .sort({ createdAt: -1 })
     .limit(5)
     .lean();
 
+  productCache.set(cacheKey, products);
   res.json(products);
 };
 
@@ -182,6 +241,7 @@ export const createProduct = async (req, res) => {
     images: formattedImages || [],
   });
 
+  productCache.flushAll(); // Clear cache on product creation
   res.status(201).json(newProduct);
 };
 
@@ -192,7 +252,7 @@ export const updateProductById = async (req, res) => {
   const { id } = req.params;
   const { images, ...updatedData } = req.body;
 
-  if (images && images.some((img) => !isValidImageUrl(img.url))) {
+  if (images?.some((img) => !isValidImageUrl(img.url))) {
     throw new AppError("Una o más URLs de imágenes son inválidas o inseguras", 400);
   }
 
@@ -253,6 +313,7 @@ export const updateProductById = async (req, res) => {
     new: true,
   }).lean();
 
+  productCache.flushAll(); // Clear cache on product update
   res.json(updatedProduct);
 };
 
@@ -270,6 +331,7 @@ export const updateProductStatusById = async (req, res) => {
   product.isActive = !product.isActive;
   await product.save();
 
+  productCache.flushAll(); // Clear cache on status change
   res.json({ message: "Estado del producto actualizado exitosamente" });
 };
 

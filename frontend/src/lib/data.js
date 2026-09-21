@@ -1,7 +1,7 @@
 export const productos = [
   {
     productId: 1,
-    img: "/images/products/1.png",
+    img: "/images/products/1.webp",
     name: "Tónico Capilar de Romero y Menta",
     price: 15.99,
     createdAt: "2024-06-01",
@@ -10,7 +10,7 @@ export const productos = [
   },
   {
     productId: 2,
-    img: "/images/products/2.png",
+    img: "/images/products/2.webp",
     name: "Shampoo Natural de Aloe Vera y Jengibre",
     price: 12.99,
     createdAt: "2024-05-15",
@@ -19,7 +19,7 @@ export const productos = [
   },
   {
     productId: 3,
-    img: "/images/products/3.png",
+    img: "/images/products/3.webp",
     name: "Aceite de Argán Puro para el Cabello",
     price: 18.99,
     createdAt: "2024-06-10",
@@ -28,7 +28,7 @@ export const productos = [
   },
   {
     productId: 4,
-    img: "/images/products/4.png",
+    img: "/images/products/4.webp",
     name: "Mascarilla Capilar de Aguacate y Miel",
     price: 14.99,
     createdAt: "2024-04-20",
@@ -37,7 +37,7 @@ export const productos = [
   },
   {
     productId: 5,
-    img: "/images/products/5.png",
+    img: "/images/products/5.webp",
     name: "Spray Desenredante de Manzanilla",
     price: 10.99,
     createdAt: "2024-05-05",
@@ -46,7 +46,7 @@ export const productos = [
   },
   {
     productId: 6,
-    img: "/images/products/6.png",
+    img: "/images/products/6.webp",
     name: "Sérum Reparador de Puntas con Vitamina E",
     price: 16.99,
     createdAt: "2024-06-12",
@@ -55,7 +55,7 @@ export const productos = [
   },
   {
     productId: 7,
-    img: "/images/products/7.png",
+    img: "/images/products/7.webp",
     name: "Champú Sólido de Lavanda y Té Verde",
     price: 13.99,
     createdAt: "2024-03-30",
@@ -64,7 +64,7 @@ export const productos = [
   },
   {
     productId: 8,
-    img: "/images/products/8.png",
+    img: "/images/products/8.webp",
     name: "Acondicionador Hidratante de Coco y Karité",
     price: 14.49,
     createdAt: "2024-05-22",
@@ -73,7 +73,7 @@ export const productos = [
   },
   {
     productId: 9,
-    img: "/images/products/9.png",
+    img: "/images/products/9.webp",
     name: "Tónico Capilar Anticaída de Ortiga",
     price: 17.49,
     createdAt: "2024-06-08",
@@ -82,7 +82,7 @@ export const productos = [
   },
   {
     productId: 10,
-    img: "/images/products/10.png",
+    img: "/images/products/10.webp",
     name: "Gel Fijador Natural de Aloe y Romero",
     price: 11.99,
     createdAt: "2024-04-10",
@@ -91,7 +91,7 @@ export const productos = [
   },
   {
     productId: 11,
-    img: "/images/products/11.png",
+    img: "/images/products/11.webp",
     name: "Exfoliante Capilar de Sal Marina y Aceite de Jojoba",
     price: 15.49,
     createdAt: "2024-05-18",
@@ -100,7 +100,7 @@ export const productos = [
   },
   {
     productId: 12,
-    img: "/images/products/12.png",
+    img: "/images/products/12.webp",
     name: "Spray Voluminizador de Castaño de Indias",
     price: 12.49,
     createdAt: "2024-06-03",
@@ -109,7 +109,7 @@ export const productos = [
   },
   {
     productId: 13,
-    img: "/images/products/13.png",
+    img: "/images/products/13.webp",
     name: "Mascarilla Capilar Reparadora de Plátano y Miel",
     price: 14.99,
     createdAt: "2024-04-25",
@@ -118,7 +118,7 @@ export const productos = [
   },
   {
     productId: 14,
-    img: "/images/products/14.png",
+    img: "/images/products/14.webp",
     name: "Aceite Esencial de Lavanda para el Cabello",
     price: 19.99,
     createdAt: "2024-05-30",
@@ -128,14 +128,14 @@ export const productos = [
 ];
 
 export const galleryImages = [
-  "/images/modelos/modelo-3.jpeg",
-  "/images/modelos/modelo-7.jpeg",
-  "/images/modelos/modelo-1.jpeg",
-  "/images/modelos/modelo-8.jpeg",
-  "/images/modelos/modelo-9.jpeg",
-  "/images/modelos/modelo-12.jpeg",
-  "/images/modelos/modelo-10.jpeg",
-  "/images/modelos/modelo-11.jpeg",
+  "/images/modelos/modelo-3.webp",
+  "/images/modelos/modelo-7.webp",
+  "/images/modelos/modelo-1.webp",
+  "/images/modelos/modelo-8.webp",
+  "/images/modelos/modelo-9.webp",
+  "/images/modelos/modelo-12.webp",
+  "/images/modelos/modelo-10.webp",
+  "/images/modelos/modelo-11.webp",
 ];
 
 export const mocckCheckoutClientData = {
@@ -162,3 +162,4 @@ export const newProduct = {
   discountPercentage: 0,
   tags: "ejemplo, producto",
 };
+

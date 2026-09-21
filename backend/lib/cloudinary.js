@@ -9,7 +9,13 @@ cloudinary.config({
 
 export async function uploadImage(file, folder = "HerbAuraBotanica/products") {
   try {
-    const result = await cloudinary.uploader.upload(file, { folder });
+    const result = await cloudinary.uploader.upload(file, { 
+      folder,
+      format: "webp", // Forzar conversión a webp
+      transformation: [
+        { width: 1200, height: 1200, crop: "limit" } // Evitar tamaños absurdos
+      ]
+    });
     return result.secure_url;
   } catch (error) {
     console.error("Cloudinary upload error:", error);

@@ -30,7 +30,7 @@ export default function LoginPage() {
         <div
           className="h-full flex gap-5 p-5 rounded-lg overflow-hidden relative"
           style={{
-            background: "url('/images/img-4.jpeg')",
+            background: "url('/images/img-4.webp')",
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
@@ -132,3 +132,4 @@ export default function LoginPage() {
     </section>
   );
 }
+

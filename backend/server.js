@@ -8,8 +8,8 @@ import rateLimit from "express-rate-limit";
 import mongoSanitize from "express-mongo-sanitize";
 import connectDB from "./lib/db.js";
 import logger from "./lib/logger.js";
-import { agenda } from "./lib/queue.js";
-import "./jobs/email.job.js"; // Import workers so they are registered
+import { initAgenda } from "./lib/queue.js";
+import { defineEmailJob } from "./jobs/email.job.js";
 
 import authRoutes from "./routes/auth.route.js";
 import productRoutes from "./routes/product.route.js";
@@ -38,7 +38,21 @@ app.use(
 );
 
 // Sanitización de NoSQL Injection (reemplaza o elimina keys con '$' y '.')
-app.use(mongoSanitize());
+// Usamos un middleware personalizado para evitar el error "Cannot set property query of #<IncomingMessage> which has only a getter" en Express
+app.use((req, res, next) => {
+  if (req.body) req.body = mongoSanitize.sanitize(req.body);
+  if (req.params) req.params = mongoSanitize.sanitize(req.params);
+  if (req.query) {
+    const sanitizedQuery = mongoSanitize.sanitize(req.query);
+    Object.defineProperty(req, "query", {
+      value: sanitizedQuery,
+      writable: true,
+      configurable: true,
+      enumerable: true,
+    });
+  }
+  next();
+});
 
 // Rate Limiting Global
 const globalLimiter = rateLimit({
@@ -52,7 +66,7 @@ app.use(globalLimiter);
 
 // Rate Limiting específico para Autenticación (Previene fuerza bruta)
 const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, 
+  windowMs: 15 * 60 * 1000,
   max: 20, // Solo 20 intentos de login/registro por IP cada 15 min
   message: { message: "Demasiados intentos de autenticación, intente en 15 minutos." },
 });
@@ -144,10 +158,12 @@ const startServer = async () => {
   try {
     // Conectar a BD primero antes de abrir el puerto
     await connectDB();
-    
+
     // Iniciar Workers de fondo
-    await agenda.start();
-    
+    const agendaInstance = initAgenda(mongoose.connection.getClient().db());
+    defineEmailJob(agendaInstance);
+    await agendaInstance.start();
+
     app.listen(PORT, () => {
       logger.info(`Server is running on port ${PORT}`);
     });

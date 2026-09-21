@@ -24,7 +24,7 @@ export default function AboutPage() {
                   fontFamily: "Playfair Display, serif",
                 }}
               >
-                HerbAura
+                HerbAura{" "}
                 <span className="absolute -bottom-1 left-0 w-full h-2 bg-amber-200 rounded-lg animate-pulse"></span>
               </span>{" "}
               <span
@@ -33,9 +33,9 @@ export default function AboutPage() {
                   fontFamily: "Playfair Display, serif",
                 }}
               >
-                Botanica
+                Botanica{" "}
                 <span className="absolute -bottom-1 left-0 w-full h-2 bg-amber-200 rounded-lg animate-pulse"></span>
-              </span>
+              </span>{" "}
               ?
             </h1>
             <p className="text-2xl lg:text-3xl mt-2">
@@ -80,7 +80,7 @@ export default function AboutPage() {
         <div className="h-120">
           <img
             loading="lazy"
-            src="/images/10.png"
+            src="/images/10.webp"
             alt="HerbAura Botanica - Cuidado Natural del Cabello"
             className="w-full h-full object-cover rounded-lg"
           />
@@ -105,7 +105,7 @@ export default function AboutPage() {
               <div>
                 <img
                   loading="lazy"
-                  src="/images/4.png"
+                  src="/images/4.webp"
                   alt="HerbAura Botanica - Cuidado Natural del Cabello"
                   className="w-full h-60 object-cover rounded-lg"
                 />
@@ -113,7 +113,7 @@ export default function AboutPage() {
               <div>
                 <img
                   loading="lazy"
-                  src="/images/modelos/modelo-1.jpeg"
+                  src="/images/modelos/modelo-1.webp"
                   alt="HerbAura Botanica - Cuidado Natural del Cabello"
                   className="w-full h-60 object-cover rounded-lg"
                 />
@@ -121,7 +121,7 @@ export default function AboutPage() {
               <div className="col-span-2">
                 <img
                   loading="lazy"
-                  src="/images/modelos/modelo-3.jpeg"
+                  src="/images/modelos/modelo-3.webp"
                   alt="HerbAura Botanica - Cuidado Natural del Cabello"
                   className="w-full h-80 object-cover rounded-lg"
                 />
@@ -189,7 +189,7 @@ export default function AboutPage() {
         <NewsLetter />
         <img
           loading="lazy"
-          src="/images/vector.png"
+          src="/images/vector.webp"
           className="absolute -bottom-4 left-0 h-8 w-full z-10 pointer-events-none"
           alt="Decorative vector graphic"
         />
@@ -198,3 +198,4 @@ export default function AboutPage() {
     </>
   );
 }
+

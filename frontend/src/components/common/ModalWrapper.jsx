@@ -2,7 +2,8 @@ import { X } from "lucide-react";
 import { MODAL_BUTTONS, MODAL_SIZES } from "../../lib/helper";
 
 export function ModalWrapper({
-  as: Component = "div",
+  // eslint-disable-next-line no-unused-vars
+  as: WrapperElement = "div",
   isOpen,
   size,
   children,
@@ -13,11 +14,11 @@ export function ModalWrapper({
   if (!isOpen) return null;
 
   return (
-    <Component className="modal-wrapper" {...props}>
+    <WrapperElement className="modal-wrapper" {...props}>
       <div className={`modal-dialog ${sizeClass}`}>
         <div className={`modal-content`}>{children}</div>
       </div>
-    </Component>
+    </WrapperElement>
   );
 }
 
@@ -55,45 +56,40 @@ export function ModalButton({
   let bgColor, textColor, bgHoverColor, ringColor;
 
   switch (mode) {
+    case MODAL_BUTTONS.close:
     case MODAL_BUTTONS.cancel:
-      bgColor = "gray-200";
-      textColor = "gray-900";
-      bgHoverColor = "gray-300";
-      ringColor = "gray-500";
-      break;
-    case MODAL_BUTTONS.close || MODAL_BUTTONS.cancel:
-      bgColor = "gray-200";
-      textColor = "gray-900";
-      bgHoverColor = "gray-300";
-      ringColor = "gray-500";
+      bgColor = "bg-gray-200";
+      textColor = "text-gray-900";
+      bgHoverColor = "hover:bg-gray-300";
+      ringColor = "focus:ring-gray-500";
       break;
     case MODAL_BUTTONS.delete:
-      bgColor = "red-600";
-      textColor = "white";
-      bgHoverColor = "red-700";
-      ringColor = "red-500";
+      bgColor = "bg-red-600";
+      textColor = "text-white";
+      bgHoverColor = "hover:bg-red-700";
+      ringColor = "focus:ring-red-500";
       break;
     case MODAL_BUTTONS.warning:
-      bgColor = "orange-600";
-      textColor = "white";
-      bgHoverColor = "orange-700";
-      ringColor = "orange-500";
+      bgColor = "bg-orange-600";
+      textColor = "text-white";
+      bgHoverColor = "hover:bg-orange-700";
+      ringColor = "focus:ring-orange-500";
       break;
     case MODAL_BUTTONS.success:
-      bgColor = "green-600";
-      textColor = "white";
-      bgHoverColor = "green-700";
-      ringColor = "green-500";
+      bgColor = "bg-green-600";
+      textColor = "text-white";
+      bgHoverColor = "hover:bg-green-700";
+      ringColor = "focus:ring-green-500";
       break;
     default:
-      bgColor = "[#3f6b4c]";
-      textColor = "white";
-      bgHoverColor = "[#2e4d36]";
-      ringColor = "[#3f6b4c]";
+      bgColor = "bg-[#3f6b4c]";
+      textColor = "text-white";
+      bgHoverColor = "hover:bg-[#2e4d36]";
+      ringColor = "focus:ring-[#3f6b4c]";
       break;
   }
 
-  let buttonClass = `bg-${bgColor} text-${textColor} px-4 py-2 rounded-md hover:bg-${bgHoverColor} focus:outline-none focus:ring-2 focus:ring-${ringColor} focus:ring-offset-2 transition flex items-center justify-center disabled:opacity-50 disabled:pointer-events-none`;
+  let buttonClass = `${bgColor} ${textColor} px-4 py-2 rounded-md ${bgHoverColor} focus:outline-none focus:ring-2 ${ringColor} focus:ring-offset-2 transition flex items-center justify-center disabled:opacity-50 disabled:pointer-events-none`;
 
   return (
     <button
@@ -102,7 +98,7 @@ export function ModalButton({
       className={buttonClass}
       onClick={onClick}
     >
-      {children ? children : <>{text || mode || "Guardar"}</>}
+      {children || text || mode || "Guardar"}
     </button>
   );
 }

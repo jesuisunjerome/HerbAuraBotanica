@@ -63,13 +63,13 @@ export default function Banner() {
         <div className="sm:w-[70%] md:w-[60%] lg:w-[75%] xl:w-[65%] h-150 lg:h-[90vh] mx-auto rounded-t-full overflow-hidden mt-10 lg:mt-0 relative">
           <img
             loading="lazy"
-            src="/images/8.png"
+            src="/images/8.webp"
             alt="HerbAura Botanica - Cuidado Natural del Cabello"
             className="w-full h-full object-cover bg-gray-200"
           />
           <img
             loading="lazy"
-            src="/images/vector-1.png"
+            src="/images/vector-1.webp"
             className="absolute bottom-0 left-0 h-8 w-full pointer-events-none"
             alt="Decorative vector graphic"
           />
@@ -79,3 +79,4 @@ export default function Banner() {
     </header>
   );
 }
+

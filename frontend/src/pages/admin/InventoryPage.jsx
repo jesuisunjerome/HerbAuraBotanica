@@ -6,6 +6,8 @@ import {
   useInventoryHistory,
   useLowStockProducts,
 } from "../../hooks/products/queries";
+import { formatShortDateToString } from "../../lib/helper";
+import SearchableSelect from "../../components/common/form/SearchableSelect";
 
 const movementOptions = [
   { value: "IN", label: "Entrada" },
@@ -19,6 +21,7 @@ export default function InventoryPage() {
   const [reason, setReason] = useState("");
 
   const { products = [], isPending: isLoadingProducts } = useFetchProducts({
+    limit: 1000,
     refetchInterval: 30000,
   });
   const { lowStockProducts = [] } = useLowStockProducts();
@@ -57,19 +60,21 @@ export default function InventoryPage() {
   };
 
   return (
-    <section className="space-y-6 py-4">
-      <div className="flex flex-col gap-1">
-        <h1 className="text-2xl font-bold">Control de inventario</h1>
-        <p className="text-sm text-gray-600">
-          Ajusta entradas y salidas de productos con historial auditable en
-          tiempo real.
-        </p>
+    <section className="space-y-6 pb-4">
+      <div className="flex flex-col md:flex-row flex-wrap justify-between items-start lg:items-end gap-4 bg-gray-50 pb-3 pt-4 sticky top-15 z-10">
+        <div>
+          <h1 className="text-2xl font-bold">Control de inventario</h1>
+          <p className="text-sm text-gray-600">
+            Ajusta entradas y salidas de productos con historial auditable en
+            tiempo real.
+          </p>
+        </div>
       </div>
 
-      <div className="rounded-xl border border-[#3f6b4c]/15 bg-white p-4 shadow-sm">
+      <div className="rounded-2xl shadow-lg shadow-gray-100 bg-white px-5 py-4">
         <div className="mb-3 flex items-center gap-2">
           <AlertTriangleIcon className="h-4 w-4 text-amber-600" />
-          <p className="font-semibold">Alertas de bajo inventario</p>
+          <p className="text-lg font-semibold">Alertas de bajo inventario</p>
         </div>
 
         {lowStockProducts.length === 0 ? (
@@ -98,32 +103,30 @@ export default function InventoryPage() {
       <div className="grid gap-4 lg:grid-cols-2">
         <form
           onSubmit={handleSubmit}
-          className="rounded-xl border border-[#3f6b4c]/15 bg-white p-4 shadow-sm"
+          className="rounded-2xl shadow-lg shadow-gray-100 bg-white px-5 py-4"
         >
           <h2 className="mb-4 text-lg font-semibold">Registrar movimiento</h2>
 
           <div className="space-y-3">
             <div>
               <label className="mb-1 block text-sm font-medium">Producto</label>
-              <select
+              <SearchableSelect
+                options={products.map((p) => ({
+                  value: p._id,
+                  label: `${p.name} (${p.stockQuantity})`,
+                }))}
                 value={selectedProductId}
-                onChange={(e) => setSelectedProductId(e.target.value)}
-                className="w-full rounded-md border border-[#3f6b4c]/25 px-3 py-2 text-sm"
-                disabled={isLoadingProducts}
-              >
-                <option value="">Selecciona un producto</option>
-                {products.map((product) => (
-                  <option key={product._id} value={product._id}>
-                    {product.name} ({product.stockQuantity})
-                  </option>
-                ))}
-              </select>
+                onChange={setSelectedProductId}
+                placeholder={isLoadingProducts ? "Cargando..." : "Busca o selecciona un producto"}
+                className="w-full"
+              />
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="mb-1 block text-sm font-medium">Tipo</label>
+                <label htmlFor="movementType" className="mb-1 block text-sm font-medium">Tipo</label>
                 <select
+                  id="movementType"
                   value={movementType}
                   onChange={(e) => setMovementType(e.target.value)}
                   className="w-full rounded-md border border-[#3f6b4c]/25 px-3 py-2 text-sm"
@@ -136,10 +139,11 @@ export default function InventoryPage() {
                 </select>
               </div>
               <div>
-                <label className="mb-1 block text-sm font-medium">
+                <label htmlFor="quantity" className="mb-1 block text-sm font-medium">
                   Cantidad
                 </label>
                 <input
+                  id="quantity"
                   type="number"
                   min={1}
                   value={quantity}
@@ -180,7 +184,7 @@ export default function InventoryPage() {
           </div>
         </form>
 
-        <div className="rounded-xl border border-[#3f6b4c]/15 bg-white p-4 shadow-sm">
+        <div className="rounded-2xl shadow-lg shadow-gray-100 bg-white px-5 py-4">
           <h2 className="mb-4 text-lg font-semibold">Historial reciente</h2>
 
           {!selectedProductId ? (
@@ -189,28 +193,28 @@ export default function InventoryPage() {
             </p>
           ) : history?.items?.length ? (
             <div className="max-h-105 overflow-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-[#3f6b4c]/15 text-left text-xs uppercase text-gray-500">
-                    <th className="px-2 py-2">Fecha</th>
-                    <th className="px-2 py-2">Tipo</th>
-                    <th className="px-2 py-2">Cant.</th>
-                    <th className="px-2 py-2">Antes</th>
-                    <th className="px-2 py-2">Después</th>
+              <table className="w-full text-left text-sm whitespace-nowrap">
+                <thead className="bg-[#f5f0e6]/50">
+                  <tr>
+                    <th className="p-2 font-semibold">Fecha</th>
+                    <th className="p-2 font-semibold">Tipo</th>
+                    <th className="p-2 font-semibold">Cant.</th>
+                    <th className="p-2 font-semibold">Antes</th>
+                    <th className="p-2 font-semibold">Después</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="divide-y divide-gray-100">
                   {history.items.map((item) => (
-                    <tr key={item._id} className="border-b border-[#3f6b4c]/10">
-                      <td className="px-2 py-2">
-                        {new Date(item.createdAt).toLocaleString()}
+                    <tr key={item._id} className="">
+                      <td className="p-2">
+                        {formatShortDateToString(new Date(item.createdAt), true)}
                       </td>
-                      <td className="px-2 py-2 font-semibold">
+                      <td className="p-2 font-medium text-gray-900">
                         {item.movementType}
                       </td>
-                      <td className="px-2 py-2">{item.quantity}</td>
-                      <td className="px-2 py-2">{item.beforeQuantity}</td>
-                      <td className="px-2 py-2">{item.afterQuantity}</td>
+                      <td className="p-2">{item.quantity}</td>
+                      <td className="p-2">{item.beforeQuantity}</td>
+                      <td className="p-2">{item.afterQuantity}</td>
                     </tr>
                   ))}
                 </tbody>

@@ -16,6 +16,9 @@ export default function CatalogPage() {
     handleSearchChange,
     handleSortChange,
     handleAddToCart,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
   } = useRenderCatalog();
 
   return (
@@ -40,6 +43,9 @@ export default function CatalogPage() {
             filteredProducts={filteredProducts}
             handleAddToCart={handleAddToCart}
             searchTerm={searchTerm}
+            fetchNextPage={fetchNextPage}
+            hasNextPage={hasNextPage}
+            isFetchingNextPage={isFetchingNextPage}
           />
         )}
       </section>
@@ -50,7 +56,7 @@ export default function CatalogPage() {
 
         <img
           loading="lazy"
-          src="/images/vector.png"
+          src="/images/vector.webp"
           className="absolute -bottom-4 left-0 h-8 w-full z-10 pointer-events-none"
           alt="Decorative vector graphic"
         />
@@ -59,3 +65,4 @@ export default function CatalogPage() {
     </>
   );
 }
+

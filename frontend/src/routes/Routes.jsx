@@ -1,25 +1,34 @@
 import { createBrowserRouter, Navigate } from "react-router";
+import { lazy } from "react";
 import UserProvider from "../contexts/UserContext";
-import AdminLayout from "../layouts/admin/AdminLayout";
-import MainLayout from "../layouts/public/MainLayout";
-import DashboardPage from "../pages/admin/DashboardPage";
-import InventoryPage from "../pages/admin/InventoryPage";
-import OrderDetailsPage from "../pages/admin/OrderDetailsPage";
-import OrdersPage from "../pages/admin/OrdersPage";
-import ProductsPage from "../pages/admin/ProductsPage";
-import ReportsPage from "../pages/admin/ReportsPage";
-import AboutPage from "../pages/public/AboutPage";
-import CatalogPage from "../pages/public/CatalogPage";
-import CheckoutPage from "../pages/public/CheckoutPage";
-import ContactPage from "../pages/public/ContactPage";
-import HomePage from "../pages/public/HomePage";
-import LoginPage from "../pages/public/LoginPage";
-import OrderConfirmationPage from "../pages/public/OrderConfirmationPage";
-import OrderTrakingPage from "../pages/public/OrderTrakingPage";
-import PolicyPage from "../pages/public/PolicyPage";
-import ProductDetailsPage from "../pages/public/ProductDetailsPage";
-import RegisterPage from "../pages/public/RegisterPage";
-import ErrorPage from "../pages/public/ErrorPage";
+import { Loadable } from "../components/common/Loadable";
+
+
+// Layouts
+const AdminLayout = Loadable(lazy(() => import("../layouts/admin/AdminLayout")));
+const MainLayout = Loadable(lazy(() => import("../layouts/public/MainLayout")));
+
+// Admin Pages
+const DashboardPage = Loadable(lazy(() => import("../pages/admin/DashboardPage")));
+const InventoryPage = Loadable(lazy(() => import("../pages/admin/InventoryPage")));
+const OrderDetailsPage = Loadable(lazy(() => import("../pages/admin/OrderDetailsPage")));
+const OrdersPage = Loadable(lazy(() => import("../pages/admin/OrdersPage")));
+const ProductsPage = Loadable(lazy(() => import("../pages/admin/ProductsPage")));
+const ReportsPage = Loadable(lazy(() => import("../pages/admin/ReportsPage")));
+
+// Public Pages
+const AboutPage = Loadable(lazy(() => import("../pages/public/AboutPage")));
+const CatalogPage = Loadable(lazy(() => import("../pages/public/CatalogPage")));
+const CheckoutPage = Loadable(lazy(() => import("../pages/public/CheckoutPage")));
+const ContactPage = Loadable(lazy(() => import("../pages/public/ContactPage")));
+const HomePage = Loadable(lazy(() => import("../pages/public/HomePage")));
+const LoginPage = Loadable(lazy(() => import("../pages/public/LoginPage")));
+const OrderConfirmationPage = Loadable(lazy(() => import("../pages/public/OrderConfirmationPage")));
+const OrderTrakingPage = Loadable(lazy(() => import("../pages/public/OrderTrakingPage")));
+const PolicyPage = Loadable(lazy(() => import("../pages/public/PolicyPage")));
+const ProductDetailsPage = Loadable(lazy(() => import("../pages/public/ProductDetailsPage")));
+const RegisterPage = Loadable(lazy(() => import("../pages/public/RegisterPage")));
+const ErrorPage = Loadable(lazy(() => import("../pages/public/ErrorPage")));
 
 const router = createBrowserRouter([
   {
@@ -75,7 +84,7 @@ const router = createBrowserRouter([
       </UserProvider>
     ),
     path: "/admin",
-    errorElement: <AdminLayout><ErrorPage pathName="/admin" /></AdminLayout>,
+    errorElement: <ErrorPage pathName="/admin" />,
     children: [
       {
         index: true,

@@ -5,14 +5,14 @@ export default function BannerCTA() {
     <div
       className="rounded-lg flex flex-col lg:flex-row overflow-hidden"
       // style={{
-      //   background: "url(/images/6.png) no-repeat center center",
+      //   background: "url(/images/6.webp) no-repeat center center",
       //   backgroundSize: "cover",
       // }}
     >
       <div className="lg:w-1/2 lg:max-h-150">
         <img
           loading="lazy"
-          src="/images/6.png"
+          src="/images/6.webp"
           alt="Banner CTA HerbAura Botanica"
           className="w-full h-80 lg:h-full object-cover"
         />
@@ -39,3 +39,4 @@ export default function BannerCTA() {
     </div>
   );
 }
+

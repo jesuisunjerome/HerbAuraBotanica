@@ -13,6 +13,7 @@ import {
   SquarePenIcon,
 } from "lucide-react";
 import { useMemo, useState } from "react";
+import { useDebounce } from "../../../hooks/useDebounce";
 import { Link, useNavigate } from "react-router";
 import { useUpdateProductStatus } from "../../../hooks/products/mutations";
 import { useFetchProducts } from "../../../hooks/products/queries";
@@ -20,6 +21,7 @@ import {
   formatCurrency,
   formatShortDateToString,
   getDiscountedPrice,
+  getOptimizedCloudinaryUrl,
 } from "../../../lib/helper";
 import TableWrapper, {
   SearchInput,
@@ -31,11 +33,18 @@ import TableWrapper, {
 const fallbackData = [];
 export default function ProductList() {
   const navigate = useNavigate();
-  const { isPending, products } = useFetchProducts();
-  const { isUpdatingStatus, updateProductStatus } = useUpdateProductStatus();
-
   const [columnFilters, setColumnFilters] = useState([]);
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
+  const [globalFilter, setGlobalFilter] = useState("");
+  const debouncedSearch = useDebounce(globalFilter, 500);
+
+  const { isUpdatingStatus, updateProductStatus } = useUpdateProductStatus();
+
+  const { isPending, products, pagination: backendPagination } = useFetchProducts({
+    page: pagination.pageIndex + 1,
+    limit: pagination.pageSize,
+    search: debouncedSearch,
+  });
 
   const columns = useMemo(
     () => [
@@ -47,7 +56,7 @@ export default function ProductList() {
             <div className="p-2 rounded-xl overflow-hidden bg-gray-100 shrink-0">
               <img
                 loading="lazy"
-                src={row.original.images.find((img) => img.isMain)?.url}
+                src={getOptimizedCloudinaryUrl(row.original.images.find((img) => img.isMain)?.url, 50)}
                 alt={row.original.name}
                 className="w-10 h-10 object-contain bg-gray-100 rounded-lg"
               />
@@ -100,13 +109,12 @@ export default function ProductList() {
             <div className="flex flex-col">
               <span className="font-medium">{stock}</span>
               <span
-                className={`text-xs font-semibold ${
-                  isOut
-                    ? "text-rose-700"
-                    : isLow
-                      ? "text-amber-700"
-                      : "text-[#3f6b4c]"
-                }`}
+                className={`text-xs font-semibold ${isOut
+                  ? "text-rose-700"
+                  : isLow
+                    ? "text-amber-700"
+                    : "text-[#3f6b4c]"
+                  }`}
               >
                 {isOut ? "Agotado" : isLow ? "Bajo" : "Normal"}
               </span>
@@ -173,11 +181,10 @@ export default function ProductList() {
                 title={isActive ? "Desactivar producto" : "Activar producto"}
                 disabled={isUpdatingStatus}
                 onClick={() => updateProductStatus(productId)}
-                className={`rounded-md p-1 h-8 w-8 flex items-center justify-center transition-colors ${
-                  isActive
-                    ? "bg-[#f4c95d]/20 hover:bg-[#f4c95d]/30"
-                    : "bg-gray-200 hover:bg-gray-300 text-gray-800"
-                }`}
+                className={`rounded-md p-1 h-8 w-8 flex items-center justify-center transition-colors ${isActive
+                  ? "bg-[#f4c95d]/20 hover:bg-[#f4c95d]/30"
+                  : "bg-gray-200 hover:bg-gray-300 text-gray-800"
+                  }`}
               >
                 {isActive ? (
                   <LightbulbIcon className="h-4 w-4" />
@@ -190,7 +197,7 @@ export default function ProductList() {
         },
       },
     ],
-    [],
+    [isUpdatingStatus, navigate, updateProductStatus],
   );
 
   // eslint-disable-next-line react-hooks/incompatible-library
@@ -200,8 +207,14 @@ export default function ProductList() {
     state: {
       pagination,
       columnFilters,
+      globalFilter,
     },
     onPaginationChange: setPagination,
+    onGlobalFilterChange: setGlobalFilter,
+    manualPagination: true,
+    manualFiltering: true,
+    pageCount: backendPagination?.pages ?? -1,
+    rowCount: backendPagination?.total ?? 0,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     onColumnFiltersChange: setColumnFilters,
@@ -210,13 +223,13 @@ export default function ProductList() {
   });
 
   return (
-    <section className="space-y-3">
+    <section className="space-y-3 pb-4">
       <div className="flex flex-col md:flex-row flex-wrap justify-between items-start lg:items-end gap-4 bg-gray-50 pb-3 pt-4 sticky top-15 z-10">
         <div>
           <h1 className="text-2xl font-bold">Productos</h1>
-          <div className="text-gray-600 text-sm">
+          <p className="text-sm text-gray-600">
             Administra todos los productos disponibles en la tienda.
-          </div>
+          </p>
         </div>
         <div className="flex gap-2 w-full md:w-auto">
           <SearchInput table={table} placeholder="Buscar productos..." />
@@ -237,7 +250,7 @@ export default function ProductList() {
       </div>
 
       <TableWrapper isPending={isPending} pagination={table}>
-        <thead>
+        <thead className="bg-[#f5f0e6]/50">
           {table.getHeaderGroups().map((headerGroup) => (
             <THead key={headerGroup.id} headerGroup={headerGroup} />
           ))}
@@ -252,6 +265,7 @@ export default function ProductList() {
           )}
         </tbody>
       </TableWrapper>
-    </section>
+    </section >
   );
 }
+

@@ -4,6 +4,7 @@ import { Link } from "react-router";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
+import { getOptimizedCloudinaryUrl } from "../../../lib/helper";
 
 export default function BestSeller({ isPending, bestSellers }) {
   const sliderRef = useRef(null);
@@ -50,7 +51,7 @@ export default function BestSeller({ isPending, bestSellers }) {
                   <div className="col-span-2 xl:col-span-1 lg:col-start-2">
                     <img
                       loading="lazy"
-                      src={product.images[0].url}
+                      src={getOptimizedCloudinaryUrl(product.images[0].url, 500)}
                       className="h-140 object-cover w-full lg:w-[90%] rounded-2xl bg-gray-200"
                       alt={product.name}
                     />
@@ -96,3 +97,4 @@ const LoadingSkeleton = () => (
     </div>
   </div>
 );
+

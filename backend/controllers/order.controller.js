@@ -1,7 +1,6 @@
-import { IVA, ORDER_STATUS, SHIPPING_COST } from "../lib/constants.js";
+import { ALLOWED_STATUS_TRANSITIONS, IVA, ORDER_STATUS, SHIPPING_COST } from "../lib/constants.js";
 import Order from "../models/Order.js";
 import Product from "../models/Product.js";
-import User from "../models/User.js";
 import {
   applyInventoryForPaidOrder,
   restoreInventoryForCancelledOrder,
@@ -16,21 +15,38 @@ import { createStripePaymentIntent } from "../services/stripe.service.js";
 import mongoose from "mongoose";
 import { AppError } from "../lib/error.js";
 
-// @desc    Get all orders
+export const getPendingOrdersCount = async (req, res) => {
+  // Contamos los pedidos que están en estado Processing y ya fueron pagados
+  // o simplemente los que tengan status 'Processing' si así lo maneja el negocio
+  const count = await Order.countDocuments({ status: "Processing" });
+  res.json({ count });
+};
+
+// @desc    Get all orders (with pagination & search)
 // @route   GET /api/orders
 // @access  Admin
 export const getAllOrders = async (req, res) => {
-  const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 10;
+  const page = Number.parseInt(req.query.page) || 1;
+  const limit = Number.parseInt(req.query.limit) || 10;
+  const { search } = req.query;
   const skip = (page - 1) * limit;
 
-  const total = await Order.countDocuments();
-  const orders = await Order.find()
+  const query = {};
+  if (search) {
+    query.$or = [
+      { confirmationNumber: { $regex: search, $options: "i" } },
+      { "customer.name": { $regex: search, $options: "i" } },
+      { "customer.email": { $regex: search, $options: "i" } },
+    ];
+  }
+
+  const total = await Order.countDocuments(query);
+  const orders = await Order.find(query)
     .sort({ createdAt: -1 })
     .skip(skip)
     .limit(limit)
     .lean();
-    
+
   res.json({ data: orders, total, page, pages: Math.ceil(total / limit) });
 };
 
@@ -60,7 +76,7 @@ export const createOrder = async (req, res) => {
 
       for (const item of orderItems) {
         const product = products.find((p) => p._id.toString() === item.product.toString());
-        
+
         if (!product) {
           throw new AppError(`Producto no encontrado: ${item.name}`, 404);
         }
@@ -249,6 +265,12 @@ export const updateOrderStatus = async (req, res) => {
   }
 
   const previousStatus = order.status;
+
+  const allowedTransitions = ALLOWED_STATUS_TRANSITIONS[previousStatus] || [];
+  if (!allowedTransitions.includes(status) && previousStatus !== status) {
+    throw new AppError(`Transición de estatus no permitida de ${previousStatus} a ${status}`, 400);
+  }
+
   order.status = status;
   order.statusHistory.push({
     status,
@@ -261,8 +283,10 @@ export const updateOrderStatus = async (req, res) => {
 
   if (
     previousStatus !== ORDER_STATUS.CANCELLED &&
-    status === ORDER_STATUS.CANCELLED
+    previousStatus !== ORDER_STATUS.RETURNED &&
+    (status === ORDER_STATUS.CANCELLED || status === ORDER_STATUS.RETURNED)
   ) {
+    // Reutilizamos la lógica para devolver inventario si se cancela o se devuelve la orden
     updatedOrder = await restoreInventoryForCancelledOrder(
       updatedOrder,
       req.user?._id || null,
