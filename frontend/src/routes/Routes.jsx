@@ -28,7 +28,7 @@ const OrderConfirmationPage = Loadable(lazy(() => import("../pages/public/OrderC
 const OrderTrakingPage = Loadable(lazy(() => import("../pages/public/OrderTrakingPage")));
 const PolicyPage = Loadable(lazy(() => import("../pages/public/PolicyPage")));
 const ProductDetailsPage = Loadable(lazy(() => import("../pages/public/ProductDetailsPage")));
-const RegisterPage = Loadable(lazy(() => import("../pages/public/RegisterPage")));
+// const RegisterPage = Loadable(lazy(() => import("../pages/public/RegisterPage")));
 const ErrorPage = Loadable(lazy(() => import("../pages/public/ErrorPage")));
 
 const router = createBrowserRouter([
