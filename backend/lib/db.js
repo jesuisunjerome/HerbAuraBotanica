@@ -1,7 +1,11 @@
 import mongoose from "mongoose";
+import logger from "./logger.js";
+
+import dns from "node:dns";
+dns.setServers(["1.1.1.1", "8.8.8.8"]);
 
 // Detectar si estamos en un entorno serverless (Vercel, AWS Lambda, etc.)
-const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
+const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME || process.env.NETLIFY);
 
 // Cache global para reutilizar la conexión entre ejecuciones (cold/warm starts)
 let cached = global.mongoose;
@@ -32,7 +36,7 @@ const connectDB = async () => {
     };
 
     cached.promise = mongoose.connect(process.env.MONGO_URI, opts).then((m) => {
-      console.log("MongoDB connected successfully");
+      logger.info("MongoDB connected successfully");
       return m.connection;
     });
   }
@@ -42,7 +46,7 @@ const connectDB = async () => {
     return cached.conn;
   } catch (error) {
     cached.promise = null; // Limpiar para permitir reintento en el siguiente request
-    console.error("MongoDB connection error:", error.message);
+    logger.error("MongoDB connection error:", error.message);
     // NUNCA llamar process.exit(1) aquí; se lanza el error para manejarlo según el entorno
     throw error;
   }

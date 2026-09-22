@@ -51,7 +51,7 @@ export default function MercadoPagoButton({ formData, disabled }) {
     >
       {isCreatingOrder ? (
         <>
-          <span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></span>
+          <span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></span>{" "}
           Procesando...
         </>
       ) : (

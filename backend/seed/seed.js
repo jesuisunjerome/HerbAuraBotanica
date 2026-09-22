@@ -2,11 +2,9 @@ import express from "express";
 import "dotenv/config";
 import connectDB from "../lib/db.js";
 import Product from "../models/Product.js";
+import User from "../models/User.js";
 import sampleProducts from "./ecommerce_db.products.json" with { type: "json" };
 import sampleUsers from "./ecommerce_db.users.json" with { type: "json" };
-import dns from 'node:dns';
-import User from "../models/User.js";
-dns.setServers(['1.1.1.1', '8.8.8.8']);
 
 const app = express();
 const PORT = process.env.PORT || 3000;

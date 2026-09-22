@@ -55,7 +55,7 @@ export default function HomePage() {
                   fontFamily: "Playfair Display, serif",
                 }}
               >
-                naturaleza
+                naturaleza{" "}
                 <span className="absolute -bottom-1 left-0 w-full h-2 bg-amber-200 rounded-lg animate-pulse"></span>
               </span>{" "}
               para{" "}
@@ -65,7 +65,7 @@ export default function HomePage() {
                   fontFamily: "Playfair Display, serif",
                 }}
               >
-                cabello
+                cabello{" "}
                 <span className="absolute -bottom-1 left-0 w-full h-2 bg-amber-200 rounded-lg animate-pulse"></span>
               </span>{" "}
               <span
@@ -74,7 +74,7 @@ export default function HomePage() {
                   fontFamily: "Playfair Display, serif",
                 }}
               >
-                saludable
+                saludable{" "}
                 <span className="absolute -bottom-1 left-0 w-full h-2 bg-amber-200 rounded-lg animate-pulse"></span>
               </span>{" "}
               y{" "}
@@ -84,7 +84,7 @@ export default function HomePage() {
                   fontFamily: "Playfair Display, serif",
                 }}
               >
-                hermoso
+                hermoso{" "}
                 <span className="absolute -bottom-1 left-0 w-full h-2 bg-amber-200 rounded-lg animate-pulse"></span>
               </span>{" "}
               🌙
@@ -121,7 +121,7 @@ export default function HomePage() {
             to="/products"
             className="mt-10 inline-block bg-amber-600 text-white px-5 text-sm py-3 rounded group hover:bg-amber-700 transition hover:shadow-lg hover:-translate-y-0.5"
           >
-            Ver Todos los Productos{" "}
+            Ver todos los productos{" "}
             <ChevronRightIcon className="inline w-4 h-4 ml-2 group-hover:translate-x-2 transition-all" />
           </Link>
         </div>

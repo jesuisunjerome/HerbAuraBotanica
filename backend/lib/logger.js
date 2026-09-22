@@ -13,10 +13,14 @@ const logger = winston.createLogger({
     new winston.transports.Console({
       format: combine(colorize(), timestamp(), logFormat),
     }),
-    // Here you can add file transports for production
-    // new winston.transports.File({ filename: 'error.log', level: 'error' }),
-    // new winston.transports.File({ filename: 'combined.log' }),
   ],
 });
+
+if (process.env.NODE_ENV === "Production") {
+  logger.add(
+    new winston.transports.File({ filename: 'error.log', level: 'error' }),
+    new winston.transports.File({ filename: 'combined.log' }),
+  )
+}
 
 export default logger;

@@ -3,6 +3,7 @@ import { lazy } from "react";
 import UserProvider from "../contexts/UserContext";
 import { Loadable } from "../components/common/Loadable";
 
+const NotFoundPage = Loadable(lazy(() => import("../layouts/public/NotFound")));
 
 // Layouts
 const AdminLayout = Loadable(lazy(() => import("../layouts/admin/AdminLayout")));
@@ -73,7 +74,7 @@ const router = createBrowserRouter([
       },
       {
         path: "*",
-        element: <div>404 Not Found</div>,
+        element: <NotFoundPage />,
       },
     ],
   },
@@ -113,7 +114,7 @@ const router = createBrowserRouter([
       },
       {
         path: "*",
-        element: <div>Admin 404 Not Found</div>,
+        element: <NotFoundPage />,
       },
     ],
   },
@@ -121,9 +122,10 @@ const router = createBrowserRouter([
     path: "/login",
     element: <LoginPage />,
   },
-  {
-    path: "/register",
-    element: <RegisterPage />,
-  },
+  // {
+  //   path: "/register",
+  //   element: <RegisterPage />,
+  // },
 ]);
+
 export default router;

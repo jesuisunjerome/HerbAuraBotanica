@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { ORDER_STATUS, PAYMENT_STATUS } from "../lib/constants.js";
+import { ORDER_STATUS } from "../lib/constants.js";
 
 const statusHistorySchema = new mongoose.Schema(
   {

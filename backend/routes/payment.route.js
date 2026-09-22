@@ -6,10 +6,7 @@ import {
   handlePayPalWebhook,
 } from "../controllers/payment.controller.js";
 import { validateRequest } from "../middleware/validation.middleware.js";
-import {
-  stripeWebhookSchema,
-  mercadoPagoWebhookSchema,
-} from "../schemas/payment.schema.js";
+import { mercadoPagoWebhookSchema, } from "../schemas/payment.schema.js";
 
 const router = express.Router();
 

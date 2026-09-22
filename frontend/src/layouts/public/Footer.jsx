@@ -14,26 +14,30 @@ export default function Footer() {
           {socialLinks.map((link) => {
             const Icon = link.icon;
             return (
-            <a
-              href={link.href}
-              key={link.label}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={link.label}
-              className="flex items-center gap-1 hover:text-white transition-all hover:underline"
-            // className="size-13 flex items-center bg-[#4b2626] hover:bg-(--color-beige) hover:text-(--color-brown) justify-center rounded-full hover:-translate-y-0.5 transition-all"
-            >
-              <Icon className="w-5 h-5" />
-              <span className="sr-only">{link.label}</span>
-              <span>{link.label}</span>
-            </a>
-          )})}
+              <a
+                href={link.href}
+                key={link.label}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={link.label}
+                className="flex items-center gap-1 hover:text-white transition-all hover:underline"
+              // className="size-13 flex items-center bg-[#4b2626] hover:bg-(--color-beige) hover:text-(--color-brown) justify-center rounded-full hover:-translate-y-0.5 transition-all"
+              >
+                <Icon className="w-5 h-5" />
+                <span className="sr-only">{link.label}</span>
+                <span>{link.label}</span>
+              </a>
+            )
+          })}
         </div>
       </div>
       <div className="opacity-80 pt-5 pb-10 px-3 lg:px-20 md:px-5 text-center">
         <p className="text-sm">
           &copy; {new Date().getFullYear()} HerbAura Botanica. Todos los
           derechos reservados.
+        </p>
+        <p className="text-sm">
+          Hecho con ❤️ por <a href="https://logenik.com" target="_blank" rel="noopener noreferrer" className="underline">Logenik</a>
         </p>
       </div>
 

@@ -113,7 +113,7 @@ export default function LoginPage() {
               )}
             </button>
           </form>
-          <div className="space-y-6">
+          <div className="space-y-6 hidden">
             <p className="uppercase text-center">O</p>
             <div className="grid md:grid-cols-2 gap-4">
               <GoogleButton />

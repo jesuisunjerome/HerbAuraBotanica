@@ -19,9 +19,6 @@ import inventoryRoutes from "./routes/inventory.route.js";
 import reportingRoutes from "./routes/reporting.route.js";
 import subscriberRoutes from "./routes/subscriber.route.js";
 
-import dns from "node:dns";
-dns.setServers(["1.1.1.1", "8.8.8.8"]);
-
 // Initialize Express app
 const app = express();
 app.disable("x-powered-by");
@@ -36,23 +33,6 @@ app.use(
     credentials: true,
   }),
 );
-
-// Sanitización de NoSQL Injection (reemplaza o elimina keys con '$' y '.')
-// Usamos un middleware personalizado para evitar el error "Cannot set property query of #<IncomingMessage> which has only a getter" en Express
-app.use((req, res, next) => {
-  if (req.body) req.body = mongoSanitize.sanitize(req.body);
-  if (req.params) req.params = mongoSanitize.sanitize(req.params);
-  if (req.query) {
-    const sanitizedQuery = mongoSanitize.sanitize(req.query);
-    Object.defineProperty(req, "query", {
-      value: sanitizedQuery,
-      writable: true,
-      configurable: true,
-      enumerable: true,
-    });
-  }
-  next();
-});
 
 // Rate Limiting Global
 const globalLimiter = rateLimit({
@@ -108,6 +88,23 @@ app.use(
   }),
 );
 
+// Sanitización de NoSQL Injection (reemplaza o elimina keys con '$' y '.')
+// Usamos un middleware personalizado para evitar el error "Cannot set property query of #<IncomingMessage> which has only a getter" en Express
+app.use((req, res, next) => {
+  if (req.body) req.body = mongoSanitize.sanitize(req.body);
+  if (req.params) req.params = mongoSanitize.sanitize(req.params);
+  if (req.query) {
+    const sanitizedQuery = mongoSanitize.sanitize(req.query);
+    Object.defineProperty(req, "query", {
+      value: sanitizedQuery,
+      writable: true,
+      configurable: true,
+      enumerable: true,
+    });
+  }
+  next();
+});
+
 app.use(cookieParser());
 
 // Routes
@@ -118,7 +115,7 @@ app.use("/api/payments", paymentRoutes);
 app.use("/api/inventory", inventoryRoutes);
 app.use("/api/reports", reportingRoutes);
 app.use("/api/subscribe", subscriberRoutes);
-app.use("/", (req, res) => {
+app.use("/", (_, res) => {
   res.send("API is running..." + process.env.CLIENT_URL + " " + PORT);
 });
 
@@ -151,7 +148,6 @@ app.use((err, req, res, next) => {
 
   res.status(status).json({ message });
 });
-
 
 // Función de arranque para servidor tradicional (VPS, Render, Railway, Docker, Local)
 const startServer = async () => {

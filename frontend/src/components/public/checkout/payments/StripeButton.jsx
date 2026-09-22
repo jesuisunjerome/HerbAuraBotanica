@@ -6,7 +6,7 @@ import { COUNTRY_LIST } from "../../../../lib/helper";
 import { useCartStore } from "../../../../store/useCartStore";
 
 export default function StripeButton({ formData, disabled, onSuccess }) {
-  const stripe = useStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+  const stripe = useStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
   const elements = useElements();
   const [isProcessing, setIsProcessing] = useState(false);
   const { cart, clearCart } = useCartStore();
@@ -89,9 +89,9 @@ export default function StripeButton({ formData, disabled, onSuccess }) {
   return (
     <div className="space-y-6">
       <div className="p-4 border border-slate-200 bg-slate-50 rounded-lg">
-        <label className="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-3">
+        <span className="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-3">
           Información de Tarjeta
-        </label>
+        </span>
         <div className="p-3 bg-white border border-slate-200 rounded shadow-sm">
           <CardElement
             options={{
@@ -120,7 +120,7 @@ export default function StripeButton({ formData, disabled, onSuccess }) {
         >
           {isProcessing ? (
             <>
-              <span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full font-bold"></span>
+              <span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full font-bold"></span>{" "}
               Procesando Pago...
             </>
           ) : (
